@@ -17,7 +17,7 @@ public class Food implements Serializable {
     /**
        noarg Constructor for objects of class Food
      */
-    public Food(){
+    public Food() {
 	boolean fileLoaded = true;
     
 	try{
