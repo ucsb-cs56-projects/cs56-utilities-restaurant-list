@@ -1,7 +1,9 @@
 /**
    A program that finds open retaurants depending on the current time. User can also find restaurants that are open are a later hour. Users can also input in new restaurants
    
-   @author Ameya Savale, Andrew Pang, Brandon Hammel
+   @author Ameya Savale
+   @author Brandon Hammel
+   @author Andrew Pang
    @version issue 485, CS56, Winter 2014
  */
 package edu.ucsb.cs56.projects.utilities.restaurant_list;

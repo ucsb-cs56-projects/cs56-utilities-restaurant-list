@@ -1,9 +1,10 @@
 /**
- *  Gui for the restaurant program, interacts with user
- *
- *
- *  @author   Ameya Savale, Andrew Pang, Brandon Hammel
- *  @version  issue485, CS56, Winter 2014  
+	Gui for the restaurant program, interacts with user
+
+	@author   Ameya Savale
+	@author   Brandon Hammel
+	@author   Andrew Pang
+	@version  issue485, CS56, Winter 2014  
  */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;

@@ -1,7 +1,9 @@
 /**
    Getters and setter for the restaurant objects
 
-   @author Ameya Savale, Andrew Pang, Brandon Hammel
+   @author Ameya Savale
+   @author Brandon Hammel
+   @author Andrew Pang
    @version issue 398, CS56, W14
  */
 
