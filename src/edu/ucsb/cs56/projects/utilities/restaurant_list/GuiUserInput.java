@@ -438,7 +438,7 @@ public class GuiUserInput extends JPanel {
     			while ((line = br.readLine()) != null) {
     			    // use comma as separator
     				info = line.split(csvSplitBy);
-    				food.createNew(info);
+    				food.createCSVNew(info);
     			}
     	 
     		} catch (FileNotFoundException e) {

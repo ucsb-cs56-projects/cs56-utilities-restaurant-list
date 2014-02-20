@@ -167,7 +167,21 @@ public class Food implements Serializable {
 
     public void createCSVNew(String[] info)
     {
-    	
+    	Restaurant r = new Restaurant();
+    	String[] withoutQuotes = new String[6];
+
+    	for (int i = 0; i < 6; i++) {
+    		withoutQuotes[i] = info[i].substring(1, info[i].length() - 1);
+    	}
+
+    	r.setName(withoutQuotes[0]);
+		r.setStartTime(withoutQuotes[1]);
+		r.setEndTime(withoutQuotes[2]);
+		r.setPhone(withoutQuotes[3]);
+		r.setAddress(withoutQuotes[4]);
+		r.setType(withoutQuotes[5]);
+        
+		allRestaurants.add(r);
     }
 
     /**
