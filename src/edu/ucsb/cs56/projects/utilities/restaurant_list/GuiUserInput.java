@@ -2,8 +2,8 @@
  *  Gui for the restaurant program, interacts with user
  *
  *
- *  @author   Ameya Savale
- *  @version  issue485, CS56, Winter 2012  
+ *  @author   Ameya Savale, Andrew Pang, Brandon Hammel
+ *  @version  issue485, CS56, Winter 2014  
  */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;

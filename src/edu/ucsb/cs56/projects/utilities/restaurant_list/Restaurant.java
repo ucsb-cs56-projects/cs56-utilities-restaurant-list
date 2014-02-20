@@ -1,8 +1,8 @@
 /**
    Getters and setter for the restaurant objects
 
-   @author Ameya Savale
-   @version issue 398, CS56, W12
+   @author Ameya Savale, Andrew Pang, Brandon Hammel
+   @version issue 398, CS56, W14
  */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
