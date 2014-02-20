@@ -1,5 +1,5 @@
 /**
-   A program that finds open retaurants depending on the current time. User can also find restaurants that are open are a later hour. Users can also input in new restaurants
+   A program that finds open retaurants depending on the current time. User can also find restaurants that are open are a later hour. Users can also input in new restaurants.
    
    @author Ameya Savale
    @author Brandon Hammel
@@ -20,44 +20,43 @@ public class Food implements Serializable {
        noarg Constructor for objects of class Food
      */
     public Food() {
-	boolean fileLoaded = true;
+		boolean fileLoaded = true;
     
-	try{
-	    fileLoaded = this.readSavedList();
-	}catch(Exception e){
-	    System.out.println("Could not load the file");
-	}
+		try {
+	    	fileLoaded = this.readSavedList();
+		} catch(Exception e) {
+	    	System.out.println("Could not load the file");
+		}
 	
-	if(fileLoaded ==false){
-	    //Default objects to add to arrayLists
-	    Restaurant a = new Restaurant("9","22","Panda Express","805-683-1857","131,N. Fairview Ave,Goleta,CA,93117","chinese");
-	    Restaurant b = new Restaurant("0","23","Ming Dynasty","805-968-1308","290-G,Storke Road,Goleta,Ca,93117","chinese");
-	    Restaurant c = new Restaurant("0","24", "Subway (I.V.)","805-685-8600","888,Embarcadero Del norte,Isla Vista,CA,93117","burgers");
-	    Restaurant d = new Restaurant("11","22", "Javan's(I.V.)", "805-968-2180","938,Embarcadero Del norte,Isla Vista,CA,93117","burgers");
+		if (fileLoaded == false) {
+	    	//Default objects to add to arrayLists
+	    	Restaurant a = new Restaurant("9","22","Panda Express","805-683-1857","131,N. Fairview Ave,Goleta,CA,93117","chinese");
+	    	Restaurant b = new Restaurant("0","23","Ming Dynasty","805-968-1308","290-G,Storke Road,Goleta,Ca,93117","chinese");
+	    	Restaurant c = new Restaurant("0","24", "Subway (I.V.)","805-685-8600","888,Embarcadero Del norte,Isla Vista,CA,93117","burgers");
+	    	Restaurant d = new Restaurant("11","22", "Javan's(I.V.)", "805-968-2180","938,Embarcadero Del norte,Isla Vista,CA,93117","burgers");
 
-	    //Adding the default Restaurant objects to arraylist
-	    this.addNew(a);
-	    this.addNew(b);
-	    this.addNew(c);
-	    this.addNew(d);
-	    
-	}
+	    	//Adding the default Restaurant objects to arraylist
+	    	this.addNew(a);
+	    	this.addNew(b);
+	    	this.addNew(c);
+	    	this.addNew(d);
+		}
     }
 
 
-    public boolean readSavedList(){
-	boolean load=true;
+    public boolean readSavedList() {
+		boolean load = true;
 
-	try{
-	    FileInputStream fileStream = new FileInputStream("RestaurantList.ser");
-	    ObjectInputStream is = new ObjectInputStream(fileStream);
-	    Object list = is.readObject();
-	    allRestaurants = (ArrayList) list;
-	}catch(Exception ex){
-	    load=false;
-	    System.out.println("Could not read the saved file.");
-	}
-	return load;
+		try {
+	    	FileInputStream fileStream = new FileInputStream("RestaurantList.ser");
+	    	ObjectInputStream is = new ObjectInputStream(fileStream);
+	    	Object list = is.readObject();
+	    	allRestaurants = (ArrayList) list;
+		} catch(Exception ex) {
+	    	load = false;
+	    	System.out.println("Could not read the saved file.");
+		}
+		return load;
     }
 
     /** 
@@ -69,46 +68,48 @@ public class Food implements Serializable {
 
 	@return choice    The restaurant which the user wnats the information for
     */
-    public String[] showOptions(String cuisine, String time){
+    public String[] showOptions(String cuisine, String time) {
 	
-	String cuisineType="";
-	int start, end, presentTime = 0;
-	ArrayList<String> cuisineList = new ArrayList<String>();
+		String cuisineType = "";
+		int start, end, presentTime = 0;
+		ArrayList<String> cuisineList = new ArrayList<String>();
 	
-	presentTime = Integer.parseInt(time);
-	for(int i = 0; i < allRestaurants.size(); i++){
-	    cuisineType = (allRestaurants.get(i)).getType();
-	    start = Integer.parseInt(allRestaurants.get(i).getStartTime());
-	    end = Integer.parseInt(allRestaurants.get(i).getEndTime());
-	    if(cuisineType.equals(cuisine)&& start < presentTime && presentTime < end){
-		cuisineList.add(allRestaurants.get(i).getName());
-	    }
-	}
+		presentTime = Integer.parseInt(time);
 
-	String [] chosenCuisine = new String[cuisineList.size()+1];
-	chosenCuisine[0] = "-Select Restaurant-";
-	for(int j = 0; j < cuisineList.size(); j++){
-	    
-	    chosenCuisine[j+1] = cuisineList.get(j);
-	}
+		for (int i = 0; i < allRestaurants.size(); i++) {
+	    	cuisineType = (allRestaurants.get(i)).getType();
+	    	start = Integer.parseInt(allRestaurants.get(i).getStartTime());
+	    	end = Integer.parseInt(allRestaurants.get(i).getEndTime());
+
+	    	if (cuisineType.equals(cuisine) && start < presentTime && presentTime < end) {
+				cuisineList.add(allRestaurants.get(i).getName());
+	    	}
+		}
+
+		String[] chosenCuisine = new String[cuisineList.size()+1];
+		chosenCuisine[0] = "-Select Restaurant-";
+
+		for (int j = 0; j < cuisineList.size(); j++) {
+	    	chosenCuisine[j+1] = cuisineList.get(j);
+		}
 	
-	return chosenCuisine;
+		return chosenCuisine;
     }
     
     /**
      *  Saves the arrayList of restaurant objects
      */
 
-    public void saveList(){
-	try{
-	    FileOutputStream fs = new FileOutputStream("RestaurantList.ser");
-	    ObjectOutputStream os = new ObjectOutputStream(fs);
-	    os.writeObject(allRestaurants);
-	    os.close();
-	    System.out.println("Saved");
-	}catch(Exception ex){
-	    ex.printStackTrace();
-	}
+    public void saveList() {
+		try {
+	    	FileOutputStream fs = new FileOutputStream("RestaurantList.ser");
+	    	ObjectOutputStream os = new ObjectOutputStream(fs);
+	    	os.writeObject(allRestaurants);
+	    	os.close();
+	    	System.out.println("Saved");
+		} catch(Exception ex) {
+	    	ex.printStackTrace();
+		}
     }
 
     /**
@@ -116,22 +117,22 @@ public class Food implements Serializable {
        
        @param choice    The index of the restaurant the user wants to access
     */
-    public String[] showAllInfo(String choice){
+    public String[] showAllInfo(String choice) {
 
-	String[] restaurantInfo = new String[5];
+		String[] restaurantInfo = new String[5];
 
-	for(int i = 0; i < allRestaurants.size(); i++){
-	    String restaurant = allRestaurants.get(i).getName();
-	    if(restaurant.equals(choice)){
-		restaurantInfo[0] = allRestaurants.get(i).getName();
-		restaurantInfo[1] = allRestaurants.get(i).getStartTime();
-		restaurantInfo[2] = allRestaurants.get(i).getEndTime();
-		restaurantInfo[3] = allRestaurants.get(i).getAddress();
-		restaurantInfo[4] = allRestaurants.get(i).getPhone();
-	    }
-	}
+		for (int i = 0; i < allRestaurants.size(); i++) {
+	    	String restaurant = allRestaurants.get(i).getName();
+	    	if (restaurant.equals(choice)) {
+				restaurantInfo[0] = allRestaurants.get(i).getName();
+				restaurantInfo[1] = allRestaurants.get(i).getStartTime();
+				restaurantInfo[2] = allRestaurants.get(i).getEndTime();
+				restaurantInfo[3] = allRestaurants.get(i).getAddress();
+				restaurantInfo[4] = allRestaurants.get(i).getPhone();
+	    	}
+		}
 
-	return restaurantInfo;
+		return restaurantInfo;
     }
     
     /**
@@ -140,9 +141,9 @@ public class Food implements Serializable {
        @return hour   current hour of the day
     */
     
-    public int getHour(){
-	Calendar hour = new GregorianCalendar();
-	return hour.get(Calendar.HOUR_OF_DAY);
+    public int getHour() {
+		Calendar hour = new GregorianCalendar();
+		return hour.get(Calendar.HOUR_OF_DAY);
     }
     
     /**
@@ -150,19 +151,18 @@ public class Food implements Serializable {
        arrayList with the properties inputed by the user
      */
     
-    public void createNew(String[] info){
+    public void createNew(String[] info) {
 
-	Restaurant r = new Restaurant();
+		Restaurant r = new Restaurant();
 	
-	r.setName(info[0]);
-	r.setStartTime(info[1]);
-	r.setEndTime(info[2]);
-	r.setPhone(info[3]);
-	r.setAddress(info[4]);
-	r.setType(info[5]);
+		r.setName(info[0]);
+		r.setStartTime(info[1]);
+		r.setEndTime(info[2]);
+		r.setPhone(info[3]);
+		r.setAddress(info[4]);
+		r.setType(info[5]);
         
-	allRestaurants.add(r);
-	
+		allRestaurants.add(r);
     }
 
     /**
@@ -171,32 +171,30 @@ public class Food implements Serializable {
      *  @return cuisine  returns the array that contains the different cuisine types
      */
     
-    public String[] getCuisineTypes(){
-	ArrayList<String> cuisineTypes = new ArrayList<String>();
+    public String[] getCuisineTypes() {
+		ArrayList<String> cuisineTypes = new ArrayList<String>();
        	
-	for(int i = 0; i < allRestaurants.size(); i ++){
-	    String type = (allRestaurants.get(i)).getType();
-	     if(cuisineTypes.contains(type)==false){
-		 cuisineTypes.add(type);
- 	    }
-	}
+		for (int i = 0; i < allRestaurants.size(); i ++) {
+	    	String type = (allRestaurants.get(i)).getType();
+	     	if (cuisineTypes.contains(type)==false) {
+		 		cuisineTypes.add(type);
+ 	    	}
+		}
 	
-	String []cuisine = new String[cuisineTypes.size()+1];
-	cuisine[0] = "-Select Cusine-";
-	for(int i = 0; i < cuisineTypes.size(); i++){
-	    cuisine[i+1]=cuisineTypes.get(i);
-	}
+		String[] cuisine = new String[cuisineTypes.size()+1];
+		cuisine[0] = "-Select Cusine-";
+		for (int i = 0; i < cuisineTypes.size(); i++) {
+	    	cuisine[i+1] = cuisineTypes.get(i);
+		}
 	
-	return cuisine;
-	
+		return cuisine;
     }
     
     /**
        Adds the default restaurant objects to the correct arrayList
     */
-    public void addNew(Restaurant newRestaurant){
+    public void addNew(Restaurant newRestaurant) {
        	
 	   allRestaurants.add(newRestaurant);
     }
-
 }
