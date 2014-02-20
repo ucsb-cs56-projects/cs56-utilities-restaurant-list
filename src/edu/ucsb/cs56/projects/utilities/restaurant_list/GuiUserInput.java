@@ -60,6 +60,9 @@ public class GuiUserInput extends JPanel {
 	
 		JButton newButton = new JButton("Add New");
 		JPanel newPanel = new JPanel();
+
+		JButton newCSVButton = new JButton("Add New from CSV file");
+		JPanel newCSVPanel = new JPanel();
 	
 		JButton futureButton = new JButton("Future Time");
 		JPanel futurePanel = new JPanel();
@@ -69,16 +72,19 @@ public class GuiUserInput extends JPanel {
 
 		eatButton.addActionListener(new EatListener());
 		newButton.addActionListener(new NewListener());
+		newCSVButton.addActionListener(new NewCSVListener());
 		futureButton.addActionListener(new FutureListener());
 	
 		eatPanel.add(eatButton);
 		newPanel.add(newButton);
+		newCSVPanel.add(newCSVButton);
 		futurePanel.add(futureButton);
 		titlePanel.add(pageTitle);
 
 		initialScreen.add(titlePanel);
 		initialScreen.add(eatPanel);
 		initialScreen.add(newPanel);
+		initialScreen.add(newCSVPanel);
 		initialScreen.add(futurePanel);
 
 		frame.getContentPane().add(initialScreen);
@@ -419,6 +425,39 @@ public class GuiUserInput extends JPanel {
 		frame.validate();
     }
 
+    //Parse a CSV file and populates database
+    public void readCSV(File file) {
+
+    		BufferedReader br = null;
+    		String line = "";
+    		String csvSplitBy = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
+    		boolean inQuotes = false;
+    	 
+    		try {
+    			br = new BufferedReader(new FileReader(file));
+    			while ((line = br.readLine()) != null) {
+    			    // use comma as separator
+    				info = line.split(csvSplitBy);
+    				food.createNew(info);
+    			}
+    	 
+    		} catch (FileNotFoundException e) {
+    			e.printStackTrace();
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		} finally {
+    			if (br != null) {
+    				try {
+    					br.close();
+    				} catch (IOException e) {
+    					e.printStackTrace();
+    				}
+    			}
+    		}
+    		food.saveList();
+  	}
+    
+
     //Goes back to the starting screen whenever the back button is clicked
     class backButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
@@ -442,6 +481,19 @@ public class GuiUserInput extends JPanel {
     class NewListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 	    	AddNewScreen();
+		}
+    }
+
+    class NewCSVListener implements ActionListener {	
+		public void actionPerformed(ActionEvent event) {
+	    	final JFileChooser fc = new JFileChooser();
+	    	int returnVal = fc.showOpenDialog(null);
+
+        	if (returnVal == JFileChooser.APPROVE_OPTION) {
+            	File file = fc.getSelectedFile();
+            	System.out.println("Opening: " + file.toString() + ".");
+            	readCSV(file);
+        	}
 		}
     }
 

@@ -165,6 +165,11 @@ public class Food implements Serializable {
 		allRestaurants.add(r);
     }
 
+    public void createCSVNew(String[] info)
+    {
+    	
+    }
+
     /**
      *  Gets the different cuisine types
      *
@@ -197,4 +202,12 @@ public class Food implements Serializable {
        	
 	   allRestaurants.add(newRestaurant);
     }
+
+
+
+
+
+
+
+
 }
