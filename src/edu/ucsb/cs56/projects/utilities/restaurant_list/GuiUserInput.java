@@ -32,12 +32,12 @@ public class GuiUserInput extends JPanel {
     //Constructor
     public GuiUserInput() {
    
-		frame = new JFrame();
+		frame = new JFrame("Restaurant Finder");
 	
 		setup();
 	
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(500,500);
+		frame.setSize(600,400);
 		frame.setVisible(true);
     }
 
@@ -67,6 +67,9 @@ public class GuiUserInput extends JPanel {
 		JButton futureButton = new JButton("Future Time");
 		JPanel futurePanel = new JPanel();
 
+		JButton exitButton = new JButton("Exit");
+		JPanel exitPanel = new JPanel();
+
 		JPanel initialScreen = new JPanel();
 		initialScreen.setLayout(new BoxLayout(initialScreen, BoxLayout.PAGE_AXIS));
 
@@ -74,11 +77,14 @@ public class GuiUserInput extends JPanel {
 		newButton.addActionListener(new NewListener());
 		newCSVButton.addActionListener(new NewCSVListener());
 		futureButton.addActionListener(new FutureListener());
+		exitButton.addActionListener(new ExitListener());
 	
 		eatPanel.add(eatButton);
 		newPanel.add(newButton);
 		newCSVPanel.add(newCSVButton);
 		futurePanel.add(futureButton);
+		exitPanel.add(exitButton);
+
 		titlePanel.add(pageTitle);
 
 		initialScreen.add(titlePanel);
@@ -86,6 +92,7 @@ public class GuiUserInput extends JPanel {
 		initialScreen.add(newPanel);
 		initialScreen.add(newCSVPanel);
 		initialScreen.add(futurePanel);
+		initialScreen.add(exitPanel);
 
 		frame.getContentPane().add(initialScreen);
 		frame.invalidate();
@@ -96,9 +103,10 @@ public class GuiUserInput extends JPanel {
      *  Changes the gui to the addNewResataurant Screen
      */
 
-    public void AddNewScreen(){
+    public void AddNewScreen() {
 		JPanel newScreen = new JPanel();
 		newScreen.setLayout(new BorderLayout());
+		newScreen.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
 		JPanel screen = new JPanel();
 		screen.setLayout(new GridLayout(6,2));
@@ -109,11 +117,11 @@ public class GuiUserInput extends JPanel {
 		pageTitle = new JLabel("Add a New Restaurant");
 
 		JLabel nameTitle = new JLabel("Name");
-		JLabel phoneTitle = new JLabel("Phone Number ex.xxx-xxx-xxxx");
+		JLabel phoneTitle = new JLabel("Phone Number ex. xxx-xxx-xxxx");
 		JLabel addressTitle = new JLabel("Address");
-		JLabel startTitle = new JLabel("Start Time ex: 8 for 8:00 A.M.");
-		JLabel endTitle = new JLabel("End Time ex: 20 for 8:00 P.M.");
-		JLabel typeTitle = new JLabel("Type of cuisine");
+		JLabel startTitle = new JLabel("Start Time ex. 8 for 8:00 A.M.");
+		JLabel endTitle = new JLabel("End Time ex. 20 for 8:00 P.M.");
+		JLabel typeTitle = new JLabel("Type of Cuisine");
 	
 		JButton submitButton = new JButton("Submit");
 		submitButton.addActionListener(new submitButtonListener());
@@ -203,7 +211,7 @@ public class GuiUserInput extends JPanel {
 		JPanel boxPanel = new JPanel();
 		JPanel titlePanel = new JPanel();
 
-		JLabel hour = new JLabel("Hour (0-24), press enter after input");
+		JLabel hour = new JLabel("Hour (0-24), press enter after input:");
 
 		futureTime = new JTextField(5);
 		futureTime.addActionListener(new futureTimeListener());
@@ -369,6 +377,7 @@ public class GuiUserInput extends JPanel {
 	
 		JPanel choice = new JPanel();
 		choice.setLayout(new BoxLayout(choice, BoxLayout.Y_AXIS));
+		choice.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
 		JPanel infoPanel = new JPanel();
 		infoPanel.setLayout(new GridLayout(6,2));
@@ -425,36 +434,34 @@ public class GuiUserInput extends JPanel {
 		frame.validate();
     }
 
-    //Parse a CSV file and populates database
+    //Parses a CSV file and populates database.
     public void readCSV(File file) {
-
-    		BufferedReader br = null;
-    		String line = "";
-    		String csvSplitBy = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
-    		boolean inQuotes = false;
+    	BufferedReader br = null;
+    	String line = "";
+    	String csvSplitBy = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
     	 
-    		try {
-    			br = new BufferedReader(new FileReader(file));
-    			while ((line = br.readLine()) != null) {
-    			    // use comma as separator
-    				info = line.split(csvSplitBy);
-    				food.createCSVNew(info);
-    			}
-    	 
-    		} catch (FileNotFoundException e) {
-    			e.printStackTrace();
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    		} finally {
-    			if (br != null) {
-    				try {
-    					br.close();
-    				} catch (IOException e) {
-    					e.printStackTrace();
-    				}
+    	try {
+    		br = new BufferedReader(new FileReader(file));
+    		while ((line = br.readLine()) != null) {
+    			info = line.split(csvSplitBy);
+    			food.createCSVNew(info);
+    		}
+    	} catch (FileNotFoundException e) {
+    		e.printStackTrace();
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	} finally {
+    		if (br != null) {
+    			try {
+    				br.close();
+    			} catch (IOException e) {
+    				e.printStackTrace();
     			}
     		}
-    		food.saveList();
+    	}
+
+    	food.saveList();
+    	EatScreen();
   	}
     
 
@@ -491,9 +498,11 @@ public class GuiUserInput extends JPanel {
 
         	if (returnVal == JFileChooser.APPROVE_OPTION) {
             	File file = fc.getSelectedFile();
-            	System.out.println("Opening: " + file.toString() + ".");
+            	System.out.println("Opening: " + file.toString());
             	readCSV(file);
         	}
+        	else
+        		System.out.println("File open cancelled.");
 		}
     }
 
@@ -501,5 +510,11 @@ public class GuiUserInput extends JPanel {
 		public void actionPerformed(ActionEvent event) {
 	    	FutureScreen();
 		}
+    }
+
+    class ExitListener implements ActionListener {
+    	public void actionPerformed(ActionEvent event) {
+    		frame.dispose();
+    	}
     }
 }

@@ -154,10 +154,10 @@ public class Food implements Serializable {
     public void createNew(String[] info) {
 
 		Restaurant r = new Restaurant();
-	
-		r.setName(info[0]);
-		r.setStartTime(info[1]);
-		r.setEndTime(info[2]);
+
+		r.setStartTime(info[0]);
+		r.setEndTime(info[1]);
+		r.setName(info[2]);
 		r.setPhone(info[3]);
 		r.setAddress(info[4]);
 		r.setType(info[5]);
@@ -174,9 +174,9 @@ public class Food implements Serializable {
     		withoutQuotes[i] = info[i].substring(1, info[i].length() - 1);
     	}
 
-    	r.setName(withoutQuotes[0]);
-		r.setStartTime(withoutQuotes[1]);
-		r.setEndTime(withoutQuotes[2]);
+		r.setStartTime(withoutQuotes[0]);
+		r.setEndTime(withoutQuotes[1]);
+		r.setName(withoutQuotes[2]);
 		r.setPhone(withoutQuotes[3]);
 		r.setAddress(withoutQuotes[4]);
 		r.setType(withoutQuotes[5]);
