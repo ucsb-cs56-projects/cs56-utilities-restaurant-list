@@ -129,13 +129,18 @@ public class GuiUserInput extends JPanel {
 		back = new JButton("Go Back");
 		back.addActionListener(new backButtonListener());
 
-		//Textfields to read in user input
+		// Textfields to read in user input.
 		name = new JTextField(20);
 		phoneNumber = new JTextField(15);
 		address = new JTextField(30);
 		startTime = new JTextField(10);
 		endTime = new JTextField(10);
 		type = new JTextField(20);
+
+		// Set the verifiers for user input validation.
+		phoneNumber.setInputVerifier(new phoneVerifier());
+		startTime.setInputVerifier(new timeVerifier());
+		endTime.setInputVerifier(new timeVerifier());
 
 		screen.add(nameTitle);
 		screen.add(name);
@@ -167,6 +172,48 @@ public class GuiUserInput extends JPanel {
 		frame.getContentPane().add(newScreen);
 		frame.invalidate();
 		frame.validate();
+    }
+
+    class phoneVerifier extends InputVerifier {
+    	public boolean verify(JComponent input) {
+    		JTextField tf = (JTextField) input;
+    		String pn = tf.getText();
+    		try {
+    			String[] parts = pn.split("-");
+    			if (parts[0].length() != 3 || parts[1].length() != 3 || parts[2].length() != 4) {
+    				input.setBackground(Color.red);
+    				return false;
+    			}
+    			for (int i = 0; i < 3; i++) {
+    				Integer.parseInt(parts[i]);
+    			}
+    		} catch (Exception e) {
+    			input.setBackground(Color.red);
+    			return false;
+    		}
+    		input.setBackground(UIManager.getColor("TextField.background"));
+    		return true;
+    	}
+    }
+
+    class timeVerifier extends InputVerifier {
+    	public boolean verify(JComponent input) {
+    		JTextField tf = (JTextField) input;
+    		try {
+    			int time = Integer.parseInt(tf.getText());
+    			if (time >= 0 && time <= 24) {
+	    			input.setBackground(UIManager.getColor("TextField.background"));
+	    			return true;
+	    		}
+	    		else {
+	    			input.setBackground(Color.red);
+	    			return false;
+	    		}
+    		} catch (NumberFormatException e) {
+    			input.setBackground(Color.red);
+	    		return false;
+    		}
+    	}
     }
 
     class submitButtonListener implements ActionListener {
@@ -514,7 +561,7 @@ public class GuiUserInput extends JPanel {
 
     class ExitListener implements ActionListener {
     	public void actionPerformed(ActionEvent event) {
-    		frame.dispose();
+    		System.exit(0);
     	}
     }
 }
