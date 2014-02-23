@@ -32,8 +32,8 @@ public class Food implements Serializable {
 	    	//Default objects to add to arrayLists
 	    	Restaurant a = new Restaurant("9","22","Panda Express","805-683-1857","131,N. Fairview Ave,Goleta,CA,93117","chinese");
 	    	Restaurant b = new Restaurant("0","23","Ming Dynasty","805-968-1308","290-G,Storke Road,Goleta,Ca,93117","chinese");
-	    	Restaurant c = new Restaurant("0","24", "Subway (I.V.)","805-685-8600","888,Embarcadero Del norte,Isla Vista,CA,93117","burgers");
-	    	Restaurant d = new Restaurant("11","22", "Javan's(I.V.)", "805-968-2180","938,Embarcadero Del norte,Isla Vista,CA,93117","burgers");
+	    	Restaurant c = new Restaurant("0","24","Subway (I.V.)","805-685-8600","888,Embarcadero Del norte,Isla Vista,CA,93117","burgers");
+	    	Restaurant d = new Restaurant("11","22","Javan's (I.V.)","805-968-2180","938,Embarcadero Del norte,Isla Vista,CA,93117","burgers");
 
 	    	//Adding the default Restaurant objects to arraylist
 	    	this.addNew(a);
@@ -86,7 +86,7 @@ public class Food implements Serializable {
 	    	}
 		}
 
-		String[] chosenCuisine = new String[cuisineList.size()+1];
+		String[] chosenCuisine = new String[cuisineList.size() + 1];
 		chosenCuisine[0] = "-Select Restaurant-";
 
 		for (int j = 0; j < cuisineList.size(); j++) {
@@ -193,14 +193,14 @@ public class Food implements Serializable {
     public String[] getCuisineTypes() {
 		ArrayList<String> cuisineTypes = new ArrayList<String>();
        	
-		for (int i = 0; i < allRestaurants.size(); i ++) {
+		for (int i = 0; i < allRestaurants.size(); i++) {
 	    	String type = (allRestaurants.get(i)).getType();
-	     	if (cuisineTypes.contains(type)==false) {
+	     	if (cuisineTypes.contains(type) == false) {
 		 		cuisineTypes.add(type);
  	    	}
 		}
 	
-		String[] cuisine = new String[cuisineTypes.size()+1];
+		String[] cuisine = new String[cuisineTypes.size() + 1];
 		cuisine[0] = "-Select Cusine-";
 		for (int i = 0; i < cuisineTypes.size(); i++) {
 	    	cuisine[i+1] = cuisineTypes.get(i);
@@ -216,12 +216,4 @@ public class Food implements Serializable {
        	
 	   allRestaurants.add(newRestaurant);
     }
-
-
-
-
-
-
-
-
 }
