@@ -182,6 +182,8 @@ public class GuiUserInput extends JPanel {
     			String[] parts = pn.split("-");
     			if (parts[0].length() != 3 || parts[1].length() != 3 || parts[2].length() != 4) {
     				input.setBackground(Color.red);
+    				JOptionPane.showMessageDialog(frame, "Make sure you use this format: xxx-xxx-xxxx (include dashes)",
+    											  "Formatting error", JOptionPane.ERROR_MESSAGE);
     				return false;
     			}
     			for (int i = 0; i < 3; i++) {
@@ -189,6 +191,8 @@ public class GuiUserInput extends JPanel {
     			}
     		} catch (Exception e) {
     			input.setBackground(Color.red);
+    			JOptionPane.showMessageDialog(frame, "Make sure you use this format: xxx-xxx-xxxx (include dashes)",
+    											  "Formatting error", JOptionPane.ERROR_MESSAGE);
     			return false;
     		}
     		input.setBackground(UIManager.getColor("TextField.background"));
@@ -207,10 +211,14 @@ public class GuiUserInput extends JPanel {
 	    		}
 	    		else {
 	    			input.setBackground(Color.red);
+	    			JOptionPane.showMessageDialog(frame, "Please set a valid time (0-24)",
+    										  	  "Formatting error", JOptionPane.ERROR_MESSAGE);
 	    			return false;
 	    		}
     		} catch (NumberFormatException e) {
     			input.setBackground(Color.red);
+    			JOptionPane.showMessageDialog(frame, "Please set a valid time (0-24)",
+    										  "Formatting error", JOptionPane.ERROR_MESSAGE);
 	    		return false;
     		}
     	}
