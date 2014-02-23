@@ -192,7 +192,7 @@ public class GuiUserInput extends JPanel {
     		} catch (Exception e) {
     			input.setBackground(Color.red);
     			JOptionPane.showMessageDialog(frame, "Make sure you use this format: xxx-xxx-xxxx (include dashes)",
-    											  "Formatting error", JOptionPane.ERROR_MESSAGE);
+    										  "Formatting error", JOptionPane.ERROR_MESSAGE);
     			return false;
     		}
     		input.setBackground(UIManager.getColor("TextField.background"));
