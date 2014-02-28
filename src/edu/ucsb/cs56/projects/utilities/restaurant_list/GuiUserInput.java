@@ -270,6 +270,7 @@ public class GuiUserInput extends JPanel {
 
 		futureTime = new JTextField(5);
 		futureTime.addActionListener(new futureTimeListener());
+		futureTime.setInputVerifier(new timeVerifier());
 	
 		futureCuisine = new JComboBox();
 		futureCuisine.setEnabled(false);
