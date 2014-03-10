@@ -81,7 +81,7 @@ public class Food implements Serializable {
 	    	start = Integer.parseInt(allRestaurants.get(i).getStartTime());
 	    	end = Integer.parseInt(allRestaurants.get(i).getEndTime());
 
-	    	if (cuisineType.equals(cuisine) && start < presentTime && presentTime < end) {
+	    	if (cuisineType.equals(cuisine) && start <= presentTime && presentTime < end) {
 				cuisineList.add(allRestaurants.get(i).getName());
 	    	}
 		}

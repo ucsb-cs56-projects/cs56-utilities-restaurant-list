@@ -6,7 +6,7 @@
 
   <property environment="env"/> <!-- load the environment variables --> 
   <property name="webRoot" value="${env.HOME}/public_html/" />
-  <property name="webBaseUrl" value="http://www.cs.ucsb.edu/~${env.USER}/" />
+  <property name="webBaseUrl" value="http://www.cs.ucsb.edu/~${env.USER}" />
 
   <property name="course" value="cs56" />
   <property name="quarter" value="W14" />

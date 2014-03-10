@@ -61,8 +61,11 @@ public class GuiUserInput extends JPanel {
 		JButton newButton = new JButton("Add New");
 		JPanel newPanel = new JPanel();
 
-		JButton newCSVButton = new JButton("Add New from CSV file");
+		JButton newCSVButton = new JButton("Load from CSV file");
 		JPanel newCSVPanel = new JPanel();
+
+		JButton CSVSaveButton = new JButton("Save to CSV file");
+		JPanel CSVSavePanel = new JPanel();
 	
 		JButton futureButton = new JButton("Future Time");
 		JPanel futurePanel = new JPanel();
@@ -76,21 +79,23 @@ public class GuiUserInput extends JPanel {
 		eatButton.addActionListener(new EatListener());
 		newButton.addActionListener(new NewListener());
 		newCSVButton.addActionListener(new NewCSVListener());
+		CSVSaveButton.addActionListener(new CSVSaveListener());
 		futureButton.addActionListener(new FutureListener());
 		exitButton.addActionListener(new ExitListener());
 	
+		titlePanel.add(pageTitle);
 		eatPanel.add(eatButton);
 		newPanel.add(newButton);
 		newCSVPanel.add(newCSVButton);
+		CSVSavePanel.add(CSVSaveButton);
 		futurePanel.add(futureButton);
 		exitPanel.add(exitButton);
-
-		titlePanel.add(pageTitle);
 
 		initialScreen.add(titlePanel);
 		initialScreen.add(eatPanel);
 		initialScreen.add(newPanel);
 		initialScreen.add(newCSVPanel);
+		initialScreen.add(CSVSavePanel);
 		initialScreen.add(futurePanel);
 		initialScreen.add(exitPanel);
 
@@ -226,20 +231,20 @@ public class GuiUserInput extends JPanel {
 
     class submitButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
+		String st = startTime.getText();
+	    	info[0] = st;
+
+	    	String et = endTime.getText();
+	    	info[1] = et;
+
 	    	String n = name.getText();
-	    	info[0] = n;
+	    	info[2] = n;
 
 	    	String p = phoneNumber.getText();
 	    	info[3] = p;
 	   
 	    	String a = address.getText();
 	    	info[4] = a;
-	   
-	    	String st = startTime.getText();
-	    	info[1] = st;
-
-	    	String et = endTime.getText();
-	    	info[2] = et;
 
 	    	String cuisineType = type.getText();
 	    	info[5] = cuisineType;
@@ -560,6 +565,36 @@ public class GuiUserInput extends JPanel {
         	else
         		System.out.println("File open cancelled.");
 		}
+    }
+
+    class CSVSaveListener implements ActionListener {
+	public void actionPerformed(ActionEvent event) {
+	    try {
+		FileWriter fw = new FileWriter("RestaurantList.csv");
+		PrintWriter pw = new PrintWriter(fw);
+		for (int i = 0; i < food.allRestaurants.size(); i++) {
+		    String startTime = food.allRestaurants.get(i).getStartTime();
+		    String endTime = food.allRestaurants.get(i).getEndTime();
+		    String name = food.allRestaurants.get(i).getName();
+		    String phone = food.allRestaurants.get(i).getPhone();
+		    String address = food.allRestaurants.get(i).getAddress();
+		    String type = food.allRestaurants.get(i).getType();
+		    pw.println('"' + startTime + '"' + "," +
+			       '"' + endTime + '"' + "," +
+			       '"' + name + '"' + "," +
+			       '"' + phone + '"' + "," +
+			       '"' + address + '"' + "," +
+			       '"' + type + '"');
+		    pw.flush();
+		}
+		pw.close();
+		fw.close();
+		JOptionPane.showMessageDialog(frame, "Restaurant list saved to RestaurantList.csv",
+    					      "Save successful", JOptionPane.INFORMATION_MESSAGE);
+	    } catch (IOException ex) {
+		ex.printStackTrace();
+	    }
+	}
     }
 
     class FutureListener implements ActionListener {
