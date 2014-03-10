@@ -2,14 +2,14 @@
 <project default="compile">
 
   <!-- build.xml for Mantis issue 0000398
-       name: Ameya Savale for CS56, W12 -->
+       name: Brandon Hammel & Andrew Pang for CS56, W14 -->
 
   <property environment="env"/> <!-- load the environment variables --> 
   <property name="webRoot" value="${env.HOME}/public_html/" />
   <property name="webBaseUrl" value="http://www.cs.ucsb.edu/~${env.USER}/" />
 
   <property name="course" value="cs56" />
-  <property name="quarter" value="W12" />
+  <property name="quarter" value="W14" />
   <property name="issueNum" value="0000485" />
   <property name="mainClass" value="edu.ucsb.cs56.projects.utilities.restaurant_list.GuiUserInput" />
 
