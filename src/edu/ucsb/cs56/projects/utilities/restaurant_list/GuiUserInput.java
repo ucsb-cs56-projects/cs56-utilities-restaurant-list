@@ -4,7 +4,9 @@
 	@author   Ameya Savale
 	@author   Brandon Hammel
 	@author   Andrew Pang
-	@version  issue485, CS56, Winter 2014  
+	@author   Thien Hoang
+	@authod   Brenda Flores
+	@version  CS56, Winter 2016  
  */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;

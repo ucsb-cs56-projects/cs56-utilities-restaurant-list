@@ -4,7 +4,9 @@
    @author Ameya Savale
    @author Brandon Hammel
    @author Andrew Pang
-   @version issue 398, CS56, W14
+   @author Thien Hoang
+   @author Brenda Flores
+   @version issue 398, CS56, W16
  */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
@@ -15,7 +17,7 @@ import java.io.*;
 public class Restaurant implements Serializable {
     String starttime, endtime;
     String name, phonenumber, address, type;
-
+    String imagePath;
     /**
        no arg constructor 
      */
@@ -26,6 +28,7 @@ public class Restaurant implements Serializable {
       phonenumber = "";
       address = "";
       type = "";
+      imagePath = "";
     }
 
     /**
@@ -45,8 +48,9 @@ public class Restaurant implements Serializable {
       this.phonenumber = phonenumber;
       this.address = address;
       this.type = type;
+      this.imagePath = "";
     }
-
+    
     //getters for the instance variables
     public String getName() {
       return name;
@@ -71,12 +75,16 @@ public class Restaurant implements Serializable {
     public String getType() {
       return type;
     }
+
+    public String getImagePath(){
+	return imagePath;
+    }
     
     //setters for the instance variables
     public void setName(String name) {
       this.name = name;
     }
-
+`
     public void setStartTime(String starttime) {
       this.starttime = starttime;
     }
@@ -95,5 +103,9 @@ public class Restaurant implements Serializable {
 
     public void setType(String type) {
       this.type = type;
+    }
+
+    public void setImagePath(String imagePath){
+	this.imagePath = imagePath;
     }
 }
