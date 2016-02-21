@@ -13,6 +13,19 @@ package edu.ucsb.cs56.projects.utilities.restaurant_list;
 import java.util.*;
 import java.io.*;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.scribe.builder.ServiceBuilder;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Token;
+import org.scribe.model.Verb;
+import org.scribe.oauth.OAuthService;
+
+import edu.ucsb.cs56.projects.utilities.YelpAPI.*;
+
 public class Food implements Serializable {
 
     ArrayList<Restaurant> allRestaurants = new ArrayList<Restaurant>();
@@ -218,4 +231,7 @@ public class Food implements Serializable {
        	
 	   allRestaurants.add(newRestaurant);
     }
+
+    
+
 }
