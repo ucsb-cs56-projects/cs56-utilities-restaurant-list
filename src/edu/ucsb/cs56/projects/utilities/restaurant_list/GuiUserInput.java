@@ -362,7 +362,7 @@ public class GuiUserInput extends JPanel {
 	
 		String[] type = food.getCuisineTypes();
 		back = new JButton("Go Back");
-		back.addActionListener(new backButtonListener());
+		  back.addActionListener(new backButtonListener());
 
 		//JComboBox listing the cuisines
 		JComboBox cuisineList = new JComboBox(type);
@@ -448,8 +448,11 @@ public class GuiUserInput extends JPanel {
 		JPanel titlePanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
 	
+		/*		back = new JButton("Go Back");
+				back.addActionListener(new backButtonListener());*/
+
 		back = new JButton("Go Back");
-		back.addActionListener(new backButtonListener());
+		back.addActionListener(new EatListener());
 
 		JLabel nameTitle = new JLabel("Name");
 		JLabel startTimeTitle = new JLabel("Opens");
@@ -485,8 +488,8 @@ public class GuiUserInput extends JPanel {
 		infoPanel.add(phoneTitle);
 		infoPanel.add(phone);
 	
+		//buttonPanel.add(back);
 		buttonPanel.add(back);
-	
 		//Adding the panels to the choice panel
 		choice.add(titlePanel);
 		choice.add(infoPanel);
