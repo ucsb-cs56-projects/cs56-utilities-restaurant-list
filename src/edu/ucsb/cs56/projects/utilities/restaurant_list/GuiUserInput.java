@@ -447,9 +447,6 @@ public class GuiUserInput extends JPanel {
 
 		JPanel titlePanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
-	
-		/*		back = new JButton("Go Back");
-				back.addActionListener(new backButtonListener());*/
 
 		back = new JButton("Go Back");
 		back.addActionListener(new EatListener());
