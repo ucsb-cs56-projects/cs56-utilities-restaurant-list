@@ -1,3 +1,5 @@
+package edu.ucsb.cs56.projects.utilities.YelpAPI;
+
 import org.scribe.builder.api.DefaultApi10a;
 import org.scribe.model.Token;
 
