@@ -233,27 +233,27 @@ public class GuiUserInput extends JPanel {
 
     class submitButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-		String st = startTime.getText();
-	    	info[0] = st;
-
-	    	String et = endTime.getText();
-	    	info[1] = et;
-
-	    	String n = name.getText();
-	    	info[2] = n;
-
-	    	String p = phoneNumber.getText();
-	    	info[3] = p;
-	   
-	    	String a = address.getText();
-	    	info[4] = a;
-
-	    	String cuisineType = type.getText();
-	    	info[5] = cuisineType;
-	
-	    	food.createNew(info);
-	    	food.saveList();
-	    	EatScreen();
+		    String st = startTime.getText();
+		    info[0] = st;
+		    
+		    String et = endTime.getText();
+		    info[1] = et;
+		    
+		    String n = name.getText();
+		    info[2] = n;
+		    
+		    String p = phoneNumber.getText();
+		    info[3] = p;
+		    
+		    String a = address.getText();
+		    info[4] = a;
+		    
+		    String cuisineType = type.getText();
+		    info[5] = cuisineType;
+		    
+		    food.createNew(info);
+		    food.saveList();
+		    EatScreen();
 		}
     }
 
@@ -362,7 +362,7 @@ public class GuiUserInput extends JPanel {
 	
 		String[] type = food.getCuisineTypes();
 		back = new JButton("Go Back");
-		  back.addActionListener(new backButtonListener());
+		back.addActionListener(new backButtonListener());
 
 		//JComboBox listing the cuisines
 		JComboBox cuisineList = new JComboBox(type);
@@ -404,10 +404,10 @@ public class GuiUserInput extends JPanel {
 	    	restaurantList.removeAllItems();
 	    
 	    	for (int i = 0; i < listOfRestaurants.length; i++) {
-				System.out.println(listOfRestaurants[i]);
-				restaurantList.addItem(listOfRestaurants[i]);
+		    System.out.println(listOfRestaurants[i]);
+		    restaurantList.addItem(listOfRestaurants[i]);
 	    	}
-
+		
 	    	restaurantList.setEnabled(true);
 		}
     }
@@ -419,14 +419,14 @@ public class GuiUserInput extends JPanel {
     //inner class
     class restaurantListListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-	    	JComboBox cb = (JComboBox)event.getSource();
-	    	int index = restaurantList.getSelectedIndex();
-	    	System.out.println(index);
-	    	if (index > 0) {
-	    		String restaurantChoice = (String)cb.getSelectedItem();
-				System.out.println(restaurantChoice);
-				showChoice(restaurantChoice);
-	    	} 
+		    JComboBox cb = (JComboBox)event.getSource();
+		    int index = restaurantList.getSelectedIndex();
+		    System.out.println(index);
+		    if (index > 0) {
+			String restaurantChoice = (String)cb.getSelectedItem();
+			System.out.println(restaurantChoice);
+			showChoice(restaurantChoice);
+		    } 
 		}
     }
     
