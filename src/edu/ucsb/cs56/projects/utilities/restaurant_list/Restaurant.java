@@ -36,7 +36,7 @@ public class Restaurant implements Serializable {
 	    this.name = "Panda Express";
 	    this.phonenumber = "805-683-1857";
 	    this.address = "131,N. Fairview Ave,Goleta,CA,93117";
-	    this.type = "chinese";
+	    this.type = "Chinese";
 	    this.imagePath = "";
 	}else{
 	    this.starttime = starttime;

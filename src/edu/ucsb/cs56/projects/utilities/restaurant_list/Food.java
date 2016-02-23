@@ -44,10 +44,10 @@ public class Food implements Serializable {
 	
 		if (fileLoaded == false) {
 	    	//Default objects to add to arrayLists
-	    	Restaurant a = new Restaurant("9","22","Panda Express","805-683-1857","131,N. Fairview Ave,Goleta,CA,93117","chinese");
-	    	Restaurant b = new Restaurant("0","23","Ming Dynasty","805-968-1308","290-G,Storke Road,Goleta,Ca,93117","chinese");
-	    	Restaurant c = new Restaurant("0","24","Subway (I.V.)","805-685-8600","888,Embarcadero Del norte,Isla Vista,CA,93117","burgers");
-	    	Restaurant d = new Restaurant("11","22","Javan's (I.V.)","805-968-2180","938,Embarcadero Del norte,Isla Vista,CA,93117","burgers");
+	    	Restaurant a = new Restaurant("9","22","Panda Express","805-683-1857","131,N. Fairview Ave,Goleta,CA,93117","Chinese");
+	    	Restaurant b = new Restaurant("0","23","Ming Dynasty","805-968-1308","290-G,Storke Road,Goleta,Ca,93117","Chinese");
+	    	Restaurant c = new Restaurant("0","24","Subway (I.V.)","805-685-8600","888,Embarcadero Del norte,Isla Vista,CA,93117","Burgers");
+	    	Restaurant d = new Restaurant("11","22","Javan's (I.V.)","805-968-2180","938,Embarcadero Del norte,Isla Vista,CA,93117","Burgers");
 
 	    	//Adding the default Restaurant objects to arraylist
 	    	this.addNew(a);

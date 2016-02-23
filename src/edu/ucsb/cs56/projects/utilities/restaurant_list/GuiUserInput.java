@@ -249,7 +249,8 @@ public class GuiUserInput extends JPanel {
 		    info[4] = a;
 		    
 		    String cuisineType = type.getText();
-		    info[5] = cuisineType;
+		    String properCuisineType = cuisineType.substring(0,1).toUpperCase() + cuisineType.substring(1).toLowerCase();
+		    info[5] = properCuisineType;
 		    
 		    food.createNew(info);
 		    food.saveList();
