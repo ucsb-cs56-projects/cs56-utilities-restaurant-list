@@ -181,7 +181,7 @@ public class GuiUserInput extends JPanel {
 		frame.validate();
     }
 
-    class phoneVerifier extends InputVerifier {
+    /*class phoneVerifier extends InputVerifier {
     	public boolean verify(JComponent input) {
     		JTextField tf = (JTextField) input;
     		String pn = tf.getText();
@@ -229,7 +229,63 @@ public class GuiUserInput extends JPanel {
 	    		return false;
     		}
     	}
+    }*/
+
+
+    class phoneVerifier extends InputVerifier {
+        public boolean verify(JComponent input) {
+	    JTextField tf = (JTextField) input;
+	    String pn = tf.getText();
+	    try {
+		String[] parts = pn.split("-");
+		if (parts[0].length() != 3 || parts[1].length() != 3 || parts[2].length() != 4) {
+		    input.setBackground(Color.red);
+		    JOptionPane.showMessageDialog(frame, "Make sure you use this format: xxx-xxx-xxxx (include dashes)",
+						  "Formatting error", JOptionPane.ERROR_MESSAGE);
+		    tf.setText(null);
+		    return true;
+		}
+		for (int i = 0; i < 3; i++) {
+		    Integer.parseInt(parts[i]);
+		}
+	    } catch (Exception e) {
+		input.setBackground(Color.red);
+		JOptionPane.showMessageDialog(frame, "Make sure you use this format: xxx-xxx-xxxx (include dashes)",
+					      "Formatting error", JOptionPane.ERROR_MESSAGE);
+		tf.setText(null);
+		return true;
+	    }
+	    input.setBackground(UIManager.getColor("TextField.background"));
+	    return true;
+        }
     }
+
+    class timeVerifier extends InputVerifier {
+        public boolean verify(JComponent input) {
+	    JTextField tf = (JTextField) input;
+	    try {
+		int time = Integer.parseInt(tf.getText());
+		if (time >= 0 && time <= 24) {
+		    input.setBackground(UIManager.getColor("TextField.background"));
+		    return true;
+		}
+		else {
+		    input.setBackground(Color.red);
+		    JOptionPane.showMessageDialog(frame, "Please set a valid time (0-24)",
+						  "Formatting error", JOptionPane.ERROR_MESSAGE);
+		    tf.setText(null);
+		    return true;
+		}
+	    } catch (NumberFormatException e) {
+		input.setBackground(Color.red);
+		JOptionPane.showMessageDialog(frame, "Please set a valid time (0-24)",
+					      "Formatting error", JOptionPane.ERROR_MESSAGE);
+		tf.setText(null);
+		return true;
+	    }
+        }
+    }
+
 
     class submitButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
