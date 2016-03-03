@@ -22,8 +22,8 @@ import javax.swing.*;
 public class GuiUserInput extends JPanel {
 
     JLabel restaurant, pageTitle;
-    JPanel  eatScreen, future;
-    JButton back;
+    JPanel  eatScreen, editScreen, future; 
+    JButton back, edit;
     JFrame frame;
     Food food = new Food();
     JTextField name, address, phoneNumber, startTime, endTime, type, futureTime;
@@ -63,6 +63,9 @@ public class GuiUserInput extends JPanel {
 		JButton newButton = new JButton("Add New");
 		JPanel newPanel = new JPanel();
 
+		JButton editButton = new JButton("Editing Existing Entries");
+		JPanel editPanel = new JPanel();
+
 		JButton newCSVButton = new JButton("Load from CSV file");
 		JPanel newCSVPanel = new JPanel();
 
@@ -80,6 +83,7 @@ public class GuiUserInput extends JPanel {
 
 		eatButton.addActionListener(new EatListener());
 		newButton.addActionListener(new NewListener());
+		editButton.addActionListener(new EditListener());
 		newCSVButton.addActionListener(new NewCSVListener());
 		CSVSaveButton.addActionListener(new CSVSaveListener());
 		futureButton.addActionListener(new FutureListener());
@@ -88,6 +92,7 @@ public class GuiUserInput extends JPanel {
 		titlePanel.add(pageTitle);
 		eatPanel.add(eatButton);
 		newPanel.add(newButton);
+		editPanel.add(editButton);
 		newCSVPanel.add(newCSVButton);
 		CSVSavePanel.add(CSVSaveButton);
 		futurePanel.add(futureButton);
@@ -96,6 +101,7 @@ public class GuiUserInput extends JPanel {
 		initialScreen.add(titlePanel);
 		initialScreen.add(eatPanel);
 		initialScreen.add(newPanel);
+		initialScreen.add(editPanel);
 		initialScreen.add(newCSVPanel);
 		initialScreen.add(CSVSavePanel);
 		initialScreen.add(futurePanel);
@@ -257,19 +263,82 @@ public class GuiUserInput extends JPanel {
 		    EatScreen();
 		}
     }
+    
+    //inner class
+    class EditListener implements ActionListener {
+	public void actionPerformed(ActionEvent event) {
+	    EditScreen();
+	}
+    }
+    
+    public void EditScreen(){
+	editScreen = new JPanel();
+	editScreen.setLayout(new BoxLayout(editScreen, BoxLayout.Y_AXIS));
+	frame.getContentPane().removeAll();
+	
+	JPanel boxPanel = new JPanel();
+	JPanel buttonPanel = new JPanel();
+	JPanel titlePanel = new JPanel();
+	
+	pageTitle = new JLabel("Editing Existing Restaurant Entries");
+	
+	String[] type = food.getCuisineTypes();
+	back = new JButton("Go Back");
+	back.addActionListener(new backButtonListener());
 
+	edit = new JButton("Edit");
+	edit.addActionListener(new backButtonListener());
+	edit.setEnabled(false);
+	//JComboBox listing the cuisines
+	cuisineList = new JComboBox(type);
+	
+	restaurantList = new JComboBox();
+	restaurantList.setEnabled(false);
+	
+	cuisineList.addActionListener(new comboBoxListener());	
+	
+	restaurantList.addActionListener(new EditRestaurantListListener());
+	
+	boxPanel.add(cuisineList);
+	boxPanel.add(restaurantList);
+	buttonPanel.add(back);
+	buttonPanel.add(edit);
+	titlePanel.add(pageTitle);
+	
+	editScreen.add(titlePanel);
+	editScreen.add(boxPanel);
+	editScreen.add(buttonPanel);
+		
+	frame.getContentPane().add(editScreen);
+	frame.invalidate();
+	frame.validate();
+    }
+
+    class EditRestaurantListListener implements ActionListener{
+	public void actionPerformed(ActionEvent event){
+	    JComboBox cb = (JComboBox)event.getSource();
+	    int index = restaurantList.getSelectedIndex();
+	    System.out.println(index);
+	    if(index > 0){
+		String restaurantChoice = (String)cb.getSelectedItem();
+		System.out.println(restaurantChoice);
+		edit.setEnabled(true);
+	    }
+	}
+    }
+    
     public void FutureScreen() {
 		frame.getContentPane().removeAll();
 		future = new JPanel();
 		future.setLayout(new GridLayout(2,1));
-
+		
 		pageTitle = new JLabel("Find a Later Time");
 
 		JPanel buttonPanel = new JPanel();
-	
+		
 		JPanel futurePanel = new JPanel();
 		futurePanel.setLayout(new BoxLayout(futurePanel, BoxLayout.Y_AXIS));
-	
+		
 		JPanel textPanel = new JPanel();
 		JPanel boxPanel = new JPanel();
 		JPanel titlePanel = new JPanel();
@@ -364,9 +433,9 @@ public class GuiUserInput extends JPanel {
 		String[] type = food.getCuisineTypes();
 		back = new JButton("Go Back");
 		back.addActionListener(new backButtonListener());
-
+		
 		//JComboBox listing the cuisines
-		JComboBox cuisineList = new JComboBox(type);
+		cuisineList = new JComboBox(type);
 
 		restaurantList = new JComboBox();
 		restaurantList.setEnabled(false);
@@ -602,7 +671,7 @@ public class GuiUserInput extends JPanel {
 
     class FutureListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-	    	FutureScreen();
+		    FutureScreen();
 		}
     }
 
