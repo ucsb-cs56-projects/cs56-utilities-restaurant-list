@@ -155,7 +155,7 @@ public class YelpAPI {
    * <p>
    * After entering your OAuth credentials, execute <tt><b>run.sh</b></tt> to run this example.
    */
-    public static ArrayList<NameAndID> LocalBusinessesNames(String term, String location) {
+    public static ArrayList<NameAndID> LocalRestaurantNamesAndID(String term, String location) {
 	YelpAPI yelpApi = new YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
 	if(term == null)
 	    term = DEFAULT_TERM;

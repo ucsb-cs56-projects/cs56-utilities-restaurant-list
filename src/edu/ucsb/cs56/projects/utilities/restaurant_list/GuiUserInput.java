@@ -19,6 +19,9 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import edu.ucsb.cs56.projects.utilities.YelpAPI.YelpAPI;
+import edu.ucsb.cs56.projects.utilities.YelpAPI.NameAndID;
+
 public class GuiUserInput extends JPanel {
 
     JLabel restaurant, pageTitle;
@@ -186,57 +189,6 @@ public class GuiUserInput extends JPanel {
 		frame.invalidate();
 		frame.validate();
     }
-
-    /*class phoneVerifier extends InputVerifier {
-    	public boolean verify(JComponent input) {
-    		JTextField tf = (JTextField) input;
-    		String pn = tf.getText();
-    		try {
-    			String[] parts = pn.split("-");
-    			if (parts[0].length() != 3 || parts[1].length() != 3 || parts[2].length() != 4) {
-    				input.setBackground(Color.red);
-    				JOptionPane.showMessageDialog(frame, "Make sure you use this format: xxx-xxx-xxxx (include dashes)",
-    											  "Formatting error", JOptionPane.ERROR_MESSAGE);
-    				return false;
-    			}
-    			for (int i = 0; i < 3; i++) {
-    				Integer.parseInt(parts[i]);
-    			}
-    		} catch (Exception e) {
-    			input.setBackground(Color.red);
-    			JOptionPane.showMessageDialog(frame, "Make sure you use this format: xxx-xxx-xxxx (include dashes)",
-    										  "Formatting error", JOptionPane.ERROR_MESSAGE);
-    			return false;
-    		}
-    		input.setBackground(UIManager.getColor("TextField.background"));
-    		return true;
-    	}
-    }
-
-    class timeVerifier extends InputVerifier {
-    	public boolean verify(JComponent input) {
-    		JTextField tf = (JTextField) input;
-    		try {
-    			int time = Integer.parseInt(tf.getText());
-    			if (time >= 0 && time <= 24) {
-	    			input.setBackground(UIManager.getColor("TextField.background"));
-	    			return true;
-	    		}
-	    		else {
-	    			input.setBackground(Color.red);
-	    			JOptionPane.showMessageDialog(frame, "Please set a valid time (0-24)",
-    										  	  "Formatting error", JOptionPane.ERROR_MESSAGE);
-	    			return false;
-	    		}
-    		} catch (NumberFormatException e) {
-    			input.setBackground(Color.red);
-    			JOptionPane.showMessageDialog(frame, "Please set a valid time (0-24)",
-    										  "Formatting error", JOptionPane.ERROR_MESSAGE);
-	    		return false;
-    		}
-    	}
-    }*/
-
 
     class phoneVerifier extends InputVerifier {
         public boolean verify(JComponent input) {
@@ -470,50 +422,114 @@ public class GuiUserInput extends JPanel {
 	    	if (index > 0) {
 	    		String restaurantChoice = (String)cb.getSelectedItem();
 				System.out.println(restaurantChoice);
-				showChoice(restaurantChoice);
+				showChoiceFuture(restaurantChoice);
 	    	}
 		}
     }
 
-    public void EatScreen() {
-		eatScreen = new JPanel();
-		eatScreen.setLayout(new BoxLayout(eatScreen, BoxLayout.Y_AXIS));
-		frame.getContentPane().removeAll();
-
-		JPanel boxPanel = new JPanel();
-		JPanel buttonPanel = new JPanel();
-		JPanel titlePanel = new JPanel();
-
-		pageTitle = new JLabel("Find a restaurant open at the current time");
+    
+    public void showChoiceFuture(String cuisineName) {
+	frame.getContentPane().removeAll();
 	
-		String[] type = food.getCuisineTypes();
-		back = new JButton("Go Back");
-		back.addActionListener(new backButtonListener());
-		
-		//JComboBox listing the cuisines
-		cuisineList = new JComboBox(type);
-
-		restaurantList = new JComboBox();
-		restaurantList.setEnabled(false);
-
-		cuisineList.addActionListener(new comboBoxListener());	
+	JPanel choice = new JPanel();
+	choice.setLayout(new BoxLayout(choice, BoxLayout.Y_AXIS));
+	choice.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 	
-		restaurantList.addActionListener(new restaurantListListener());
+	JPanel infoPanel = new JPanel();
+	infoPanel.setLayout(new GridLayout(6,2));
 	
-		boxPanel.add(cuisineList);
-		boxPanel.add(restaurantList);
-		buttonPanel.add(back);
-		titlePanel.add(pageTitle);
+	JPanel titlePanel = new JPanel();
+	JPanel buttonPanel = new JPanel();
 
-		eatScreen.add(titlePanel);
-		eatScreen.add(boxPanel);
-		eatScreen.add(buttonPanel);
-	
-		frame.getContentPane().add(eatScreen);
-		frame.invalidate();
-		frame.validate();
+	back = new JButton("Go Back");
+	back.addActionListener(new FutureListener());
+
+	JLabel nameTitle = new JLabel("Name");
+	JLabel startTimeTitle = new JLabel("Opens");
+	JLabel endTimeTitle = new JLabel("Closes");
+	JLabel addressTitle = new JLabel("Address");
+	JLabel phoneTitle = new JLabel("Phone");
+	pageTitle = new JLabel("Restaurant Information");
+
+	//stores the restaurant's info in the array
+	String[] restaurantInfo = food.showAllInfo(cuisineName);
+
+	//converts the closing time to a 12 hour time frame
+	int c = Integer.parseInt(restaurantInfo[2]);
+	String t = String.valueOf(c-12);
+	JLabel name = new JLabel(restaurantInfo[0]);
+	JLabel startTime = new JLabel(restaurantInfo[1] + " A.M.");
+	JLabel endTime = new JLabel(t + " P.M.");
+	JLabel address = new JLabel(restaurantInfo[3]);
+	JLabel phone = new JLabel(restaurantInfo[4]);
+
+	//adds all the components to their respective JPanels
+	titlePanel.add(pageTitle);
+
+	infoPanel.add(nameTitle);
+	infoPanel.add(name);
+	infoPanel.add(startTimeTitle);
+	infoPanel.add(startTime);
+	infoPanel.add(endTimeTitle);
+	infoPanel.add(endTime);
+	infoPanel.add(addressTitle);
+	infoPanel.add(address);
+	infoPanel.add(phoneTitle);
+	infoPanel.add(phone);
+
+	//buttonPanel.add(back);
+	buttonPanel.add(back);
+	//Adding the panels to the choice panel
+	choice.add(titlePanel);
+	choice.add(infoPanel);
+	choice.add(buttonPanel);
+
+	frame.getContentPane().add(choice);
+	frame.invalidate();
+	frame.validate();
     }
-
+    
+    
+    
+    public void EatScreen() {
+	eatScreen = new JPanel();
+	eatScreen.setLayout(new BoxLayout(eatScreen, BoxLayout.Y_AXIS));
+	frame.getContentPane().removeAll();
+	
+	JPanel boxPanel = new JPanel();
+	JPanel buttonPanel = new JPanel();
+	JPanel titlePanel = new JPanel();
+	
+	pageTitle = new JLabel("Find a restaurant open at the current time");
+	
+	String[] type = food.getCuisineTypes();
+	back = new JButton("Go Back");
+	back.addActionListener(new backButtonListener());
+		
+	//JComboBox listing the cuisines
+	cuisineList = new JComboBox(type);
+	
+	restaurantList = new JComboBox();
+	restaurantList.setEnabled(false);
+	
+	cuisineList.addActionListener(new comboBoxListener());	
+	
+	restaurantList.addActionListener(new restaurantListListener());
+	
+	boxPanel.add(cuisineList);
+	boxPanel.add(restaurantList);
+	buttonPanel.add(back);
+	titlePanel.add(pageTitle);
+	
+	eatScreen.add(titlePanel);
+	eatScreen.add(boxPanel);
+	eatScreen.add(buttonPanel);
+		
+	frame.getContentPane().add(eatScreen);
+	frame.invalidate();
+	frame.validate();
+    }
+    
     /**
      *  Get cuisine chosen by user and adds restaurant names
      *  to the second JComboBox
@@ -539,7 +555,7 @@ public class GuiUserInput extends JPanel {
     }
 
     /**
-     *  Gets the restaurant selected by user and passes it to showChoice
+     *  Gets the restaurant selected by user and passes it to showChoiceEat
      *  from the EatScreen
      */
     //inner class
@@ -551,7 +567,7 @@ public class GuiUserInput extends JPanel {
 		    if (index > 0) {
 			String restaurantChoice = (String)cb.getSelectedItem();
 			System.out.println(restaurantChoice);
-			showChoice(restaurantChoice);
+			showChoiceEat(restaurantChoice);
 		    } 
 		}
     }
@@ -561,7 +577,7 @@ public class GuiUserInput extends JPanel {
      *  
      *  @param cuisineName  the type of cuisine chosen
      */
-    public void showChoice(String cuisineName) {
+    public void showChoiceEat(String cuisineName) {
 		frame.getContentPane().removeAll();
 	
 		JPanel choice = new JPanel();
