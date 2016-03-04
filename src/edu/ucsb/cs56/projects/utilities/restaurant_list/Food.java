@@ -24,7 +24,8 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
-import edu.ucsb.cs56.projects.utilities.YelpAPI.*;
+import edu.ucsb.cs56.projects.utilities.YelpAPI.YelpAPI;
+import edu.ucsb.cs56.projects.utilities.YelpAPI.NameAndID;
 
 public class Food implements Serializable {
 
@@ -37,27 +38,40 @@ public class Food implements Serializable {
 		boolean fileLoaded = true;
     
 		try {
-	    	fileLoaded = this.readSavedList();
+		    fileLoaded = this.readSavedList();
 		} catch(Exception e) {
-	    	System.out.println("Could not load the file");
+		    System.out.println("Could not load the file");
 		}
-	
+		
 		if (fileLoaded == false) {
 	    	//Default objects to add to arrayLists
-	    	Restaurant a = new Restaurant("9","22","Panda Express","805-683-1857","131,N. Fairview Ave,Goleta,CA,93117","Chinese");
-	    	Restaurant b = new Restaurant("0","23","Ming Dynasty","805-968-1308","290-G,Storke Road,Goleta,Ca,93117","Chinese");
-	    	Restaurant c = new Restaurant("0","24","Subway (I.V.)","805-685-8600","888,Embarcadero Del norte,Isla Vista,CA,93117","Burgers");
-	    	Restaurant d = new Restaurant("11","22","Javan's (I.V.)","805-968-2180","938,Embarcadero Del norte,Isla Vista,CA,93117","Burgers");
-
-	    	//Adding the default Restaurant objects to arraylist
-	    	this.addNew(a);
-	    	this.addNew(b);
-	    	this.addNew(c);
-	    	this.addNew(d);
+		    ArrayList<NameAndID> LocalRestaurants = YelpAPI.LocalBusinessesNames("Mexican","Isla Vista, CA");
+		    for(int i = 0; i < LocalRestaurants.size(); i++){
+			String GeneralInfo = YelpAPI.RestaurantGeneralInfo(LocalRestaurants.get(i).id);
+			System.out.println(GeneralInfo);
+			String name=(String) this.RestaurantSpecificInfo(GeneralInfo, "name");
+			System.out.println(name);
+			String phone=(String) this.RestaurantSpecificInfo(GeneralInfo,"display_phone");
+			System.out.println(phone);
+			String address=""; 
+			JSONObject location = (JSONObject) this.RestaurantSpecificInfo(GeneralInfo,"location");
+			System.out.println(location.toString());
+			List<String> DisplayAddress=(List<String>)location.get("display_address");
+			for(int j=0; j<DisplayAddress.size();j++){
+			    address += DisplayAddress.get(j);
+			    if(j<DisplayAddress.size()-1)
+				address += ", ";
+			    System.out.println(DisplayAddress.get(j));
+			}			
+			if(address.equals(""))
+			    address = "unlisted";
+			Restaurant restaurant = new Restaurant("8","22",name,phone,address,"Mexican");
+			this.addNew(restaurant);
+		    }
 		}
     }
-
-
+		
+		
     public boolean readSavedList() {
 		boolean load = true;
 
@@ -226,6 +240,16 @@ public class Food implements Serializable {
 	allRestaurants.add(newRestaurant);
     }
 
-    
-
+    private Object RestaurantSpecificInfo(String GeneralInfo, String info){
+	JSONParser parser = new JSONParser();
+	JSONObject response = null;
+	try{
+	    response = (JSONObject) parser.parse(GeneralInfo);
+	}catch (ParseException pe){
+	    System.out.println("Error: could not parse JSON response:");
+	    System.out.println(GeneralInfo);
+	    System.exit(1);
+	}
+	return response.get(info);
+    }
 }
