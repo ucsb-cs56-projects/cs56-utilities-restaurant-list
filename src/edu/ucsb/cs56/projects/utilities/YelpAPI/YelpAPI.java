@@ -1,3 +1,13 @@
+/**
+ * Original Code are from
+ * @link https://github.com/Yelp/yelp-api/tree/master/v2/java
+ *
+ * @auhor Thien Hoang 
+ * I did some simple edition. To get this code to work, please go on the following link
+ * authenticate yourself. Then fill in the appropriate area bellow. 
+ * @link https://www.yelp.com/developers/documentation/v2/overview
+ */
+
 package edu.ucsb.cs56.projects.utilities.YelpAPI;
 
 import org.json.simple.JSONArray;
@@ -152,8 +162,10 @@ public class YelpAPI {
     
   /**
    * Main entry for sample Yelp API requests.
-   * <p>
-   * After entering your OAuth credentials, execute <tt><b>run.sh</b></tt> to run this example.
+   * <p> Search Restaurants by location and cuisine and return an ArrayList of Namd,ID pairs</p>
+   * @param term        anything related to the restaurants (usually cuisine)
+   * @param location    area of the restaurants
+   * @return Businesses an ArrayList of Namd:ID pairs from the YELP API Search
    */
     public static ArrayList<NameAndID> LocalRestaurantNamesAndID(String term, String location) {
 	YelpAPI yelpApi = new YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);

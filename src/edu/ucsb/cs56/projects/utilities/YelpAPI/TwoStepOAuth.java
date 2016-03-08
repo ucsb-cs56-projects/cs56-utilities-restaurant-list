@@ -1,3 +1,7 @@
+/**
+   @link https://github.com/Yelp/yelp-api/tree/master/v2/java
+ */
+
 package edu.ucsb.cs56.projects.utilities.YelpAPI;
 
 import org.scribe.builder.api.DefaultApi10a;

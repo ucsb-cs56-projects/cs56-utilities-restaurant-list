@@ -220,7 +220,15 @@ public class Food implements Serializable {
 		return;
 	allRestaurants.add(newRestaurant);
     }
+    
 
+    /**
+       Search for a specific infomation about a restaurant from all the
+       infomration collected from using the YelpAPI
+       @param GeneralInfo  All info of the restaurant from the YelpAPI
+       @param info         The specific info wanted to get extract
+       @return Object      The specific data we look for (can be under many type)
+    */
     private Object RestaurantSpecificInfo(String GeneralInfo, String info){
 	JSONParser parser = new JSONParser();
 	JSONObject response = null;
@@ -234,18 +242,30 @@ public class Food implements Serializable {
 	return response.get(info);
     }
 
+    /**
+       Populate the restaurants database of a cuisine around an area
+       @param cuisine   cuisine that is being looked for
+       @param area      area where the restaurants are located
+     */
     public void populateRestaurantsDatabase(String cuisine, String area){
+	//Collect the cuisine-specific local restaurants around an area
+	//Implement using the YelpAPI
 	ArrayList<NameAndID> LocalRestaurants = YelpAPI.LocalRestaurantNamesAndID(cuisine,area);
+	
 	for(int i = 0; i < LocalRestaurants.size(); i++){
 	    String GeneralInfo = YelpAPI.RestaurantGeneralInfo(LocalRestaurants.get(i).id);
 	    System.out.println(GeneralInfo);
+	    //name is a string
 	    String name=(String) this.RestaurantSpecificInfo(GeneralInfo, "name");
 	    System.out.println(name);
+	    //display_phone is a string
 	    String phone=(String) this.RestaurantSpecificInfo(GeneralInfo,"display_phone");
 	    System.out.println(phone);
 	    String address="";
+	    //location is a dictionary which is on its own right a JSONObject
 	    JSONObject locationAtr = (JSONObject) this.RestaurantSpecificInfo(GeneralInfo,"location");
 	    System.out.println(locationAtr.toString());
+	    //display_address is an adress with each entry holding a specific piece of the address
 	    List<String> DisplayAddress=(List<String>)locationAtr.get("display_address");
 	    for(int j=0; j<DisplayAddress.size();j++){
 		address += DisplayAddress.get(j);
@@ -255,7 +275,10 @@ public class Food implements Serializable {
 	    }
 	    if(address.equals(""))
 		address = "unlisted";
-	    Restaurant restaurant = new Restaurant("8","22",name,phone,address, cuisine);
+	    //Potentially could use to generate a picture in the app
+	    String imageURL = (String) this.RestaurantSpecificInfo(GeneralInfo,"image_url");
+	    //YelpAPI does not have the open and closing time, thus make them all 8-22
+	    Restaurant restaurant = new Restaurant("8","22",name,phone,address, cuisine, imageURL);
 	    this.addNew(restaurant);
 	}
     }

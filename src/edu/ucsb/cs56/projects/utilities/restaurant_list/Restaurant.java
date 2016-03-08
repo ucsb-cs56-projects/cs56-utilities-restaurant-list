@@ -1,5 +1,5 @@
 /**
-   Getters and setter for the restaurant objects
+   Constructors, equals method, getters, and setter for the restaurant objects
 
    @author Ameya Savale
    @author Brandon Hammel
@@ -30,6 +30,7 @@ public class Restaurant implements Serializable {
        @param type         type of cuisine
      */
     public Restaurant(String starttime, String endtime, String name, String phonenumber, String address, String type) {
+	//Default Restaurant in case of a missing entry
 	if(starttime.equals("")||endtime.equals("")||name.equals("")||phonenumber.equals("")||address.equals("")||type.equals("")){
 	    this.starttime = "9";
 	    this.endtime = "22";
@@ -48,6 +49,29 @@ public class Restaurant implements Serializable {
 	    this.imagePath = "";
 	}
     }
+
+    /**
+       Arg Constructor creates new Restaurant object with the following values:
+
+       @param starttime    opening hour of the restaurant
+       @param endtime      closing hour of the restaurant
+       @param name         name of restaurant
+       @param phonenumber  phonenumber of the restaurant
+       @param address      address of the restaurant
+       @param type         type of cuisine
+       @param imagePath    the path to the picture of the restaurant
+    */
+
+    public Restaurant(String starttime, String endtime, String name, String phonenumber, String address, String type, String imagePath) {
+	this.starttime = starttime;
+	this.endtime = endtime;
+	this.name = name;
+	this.phonenumber = phonenumber;
+	this.address = address;
+	this.type = type;
+	this.imagePath = imagePath;
+    }
+    
     
     //getters for the instance variables
     public String getName() {
@@ -114,6 +138,10 @@ public class Restaurant implements Serializable {
 	    this.imagePath = imagePath;
     }
     
+    /**
+     * Overide the equals method
+     */
+    @Overide
     public boolean equals (Restaurant rhs){
 	boolean val1 = name.toLowerCase().equals(rhs.getName().toLowerCase()); 
 	boolean val2 = phonenumber.equals(rhs.getPhone()); 

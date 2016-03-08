@@ -19,9 +19,6 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import edu.ucsb.cs56.projects.utilities.YelpAPI.YelpAPI;
-import edu.ucsb.cs56.projects.utilities.YelpAPI.NameAndID;
-
 public class GuiUserInput extends JPanel {
 
     JLabel restaurant, pageTitle;
@@ -51,7 +48,7 @@ public class GuiUserInput extends JPanel {
     }
 
     /**
-     *  Initial screen when the gui is run
+     *  Initial home screen when the gui is run
      *
      */
 
@@ -190,6 +187,9 @@ public class GuiUserInput extends JPanel {
 		frame.validate();
     }
 
+    /**
+     * Ensure that phone number is entered in the right format
+     */
     class phoneVerifier extends InputVerifier {
         public boolean verify(JComponent input) {
 	    JTextField tf = (JTextField) input;
@@ -218,6 +218,9 @@ public class GuiUserInput extends JPanel {
         }
     }
 
+    /**
+     * Ensure that time is entered in the right format
+     */
     class timeVerifier extends InputVerifier {
         public boolean verify(JComponent input) {
 	    JTextField tf = (JTextField) input;
@@ -244,7 +247,9 @@ public class GuiUserInput extends JPanel {
         }
     }
 
-
+    /**
+     * Submit the restaurants to the database
+     */
     class submitButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 		    String st = startTime.getText();
@@ -272,13 +277,20 @@ public class GuiUserInput extends JPanel {
 		}
     }
     
-    //inner class
+    /**
+     * Allow for Editing (Work in Progress)
+     */
     class EditListener implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 	    EditScreen();
 	}
     }
     
+    /**
+     * Set up the Edit Screen
+     * NEED MAJOR WORK!
+     */
+
     public void EditScreen(){
 	editScreen = new JPanel();
 	editScreen.setLayout(new BoxLayout(editScreen, BoxLayout.Y_AXIS));
@@ -293,7 +305,9 @@ public class GuiUserInput extends JPanel {
 	String[] type = food.getCuisineTypes();
 	back = new JButton("Go Back");
 	back.addActionListener(new backButtonListener());
+	
 
+	//NEED MAJOR WORK RIGHT HERE
 	edit = new JButton("Edit");
 	edit.addActionListener(new backButtonListener());
 	edit.setEnabled(false);
@@ -322,6 +336,11 @@ public class GuiUserInput extends JPanel {
 	frame.validate();
     }
 
+    /**
+     * Enable the edit button to turn on. However, the button
+     * only leads back to the home screen.
+     * NEED MAJOR WORK!
+     */
     class EditRestaurantListListener implements ActionListener{
 	public void actionPerformed(ActionEvent event){
 	    JComboBox cb = (JComboBox)event.getSource();
@@ -335,6 +354,9 @@ public class GuiUserInput extends JPanel {
 	}
     }
     
+    /**
+     * Set up the Future Screen
+     */
     public void FutureScreen() {
 		frame.getContentPane().removeAll();
 		future = new JPanel();

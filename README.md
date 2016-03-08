@@ -8,3 +8,8 @@ project history
 ```
 
 An app to display information about restaurants from a database, including hours of operation and phone number.
+
+
+```
+ W16 | pconrad 4pm | thienhoang23,Brenda_Flores | app
+```
