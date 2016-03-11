@@ -9,6 +9,9 @@ project history
 
 An app to display information about restaurants from a database, including hours of operation and phone number.
 
+===============
+W16 Final Remarks
+===============
 
 ```
  W16 | pconrad 4pm | thienhoang23,Brenda_Flores | improves the app to integrate YelpAPI to generate the database and fix multiple bugs on add restaurants and eat features of the GUI
