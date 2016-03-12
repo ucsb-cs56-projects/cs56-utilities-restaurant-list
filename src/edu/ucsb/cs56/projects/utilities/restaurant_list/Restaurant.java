@@ -139,9 +139,9 @@ public class Restaurant implements Serializable {
     }
     
     /**
-     * Overide the equals method
+     * @Overide the equals method
+     * 
      */
-    @Overide
     public boolean equals (Restaurant rhs){
 	boolean val1 = name.toLowerCase().equals(rhs.getName().toLowerCase()); 
 	boolean val2 = phonenumber.equals(rhs.getPhone()); 
