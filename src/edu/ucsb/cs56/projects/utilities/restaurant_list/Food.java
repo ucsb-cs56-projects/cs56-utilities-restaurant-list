@@ -215,9 +215,15 @@ public class Food implements Serializable {
        Adds the default restaurant objects to the correct arrayList
     */
     public void addNew(Restaurant newRestaurant) {
+	if (newRestaurant == null) {
+	    System.out.println("error null new restaurant");
+	    return;
+	}
+
 	for(int i=0; i<allRestaurants.size();i++)
-	    if(newRestaurant.equals(allRestaurants.get(i)))
-		return;
+	    if(allRestaurants.get(i) != null)
+		if(newRestaurant.equals(allRestaurants.get(i)))
+			return;
 	allRestaurants.add(newRestaurant);
     }
     

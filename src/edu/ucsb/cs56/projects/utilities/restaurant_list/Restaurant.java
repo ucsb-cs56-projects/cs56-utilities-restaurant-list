@@ -143,9 +143,17 @@ public class Restaurant implements Serializable {
      * 
      */
     public boolean equals (Restaurant rhs){
-	boolean val1 = name.toLowerCase().equals(rhs.getName().toLowerCase()); 
-	boolean val2 = phonenumber.equals(rhs.getPhone()); 
-	boolean val3 = address.toLowerCase().equals(rhs.getAddress().toLowerCase());
+	boolean val1 = false, val2 = false, val3 = false;	
+        
+	if (rhs.getName() != null && name != null)
+		val1 = name.toLowerCase().equals(rhs.getName().toLowerCase()); 
+	
+	if (rhs.getPhone() != null && phonenumber != null)
+		val2 = phonenumber.equals(rhs.getPhone()); 
+
+	if (rhs.getAddress() != null && address != null)
+		val3 = address.toLowerCase().equals(rhs.getAddress().toLowerCase());
+	
 	return val1 && val2 && val3;
 
     }
