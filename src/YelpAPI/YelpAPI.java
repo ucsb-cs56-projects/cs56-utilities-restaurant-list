@@ -82,15 +82,30 @@ public class YelpAPI {
      * @param location <tt>String</tt> of the location
      * @return <tt>String</tt> JSON Response
      */
-  public String searchForBusinessesByLocation(String term, String location) {
-    OAuthRequest request = createOAuthRequest(SEARCH_PATH);
-    request.addQuerystringParameter("term", term);
-    request.addQuerystringParameter("location", location);
-    request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
-    return sendRequestAndGetResponse(request);
-  }
+    public String searchForBusinessesByLocation(String term, String location) {
+	OAuthRequest request = createOAuthRequest(SEARCH_PATH);
+	request.addQuerystringParameter("term", term);
+	request.addQuerystringParameter("location", location);
+	request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
+	return sendRequestAndGetResponse(request);
+    }
 
-  /**
+    /**
+   * Creates and sends a request to the Business API by business ID for menu
+   * <p>
+   * See <a href="http://www.yelp.com/developers/documentation/v2/business">Yelp Business API V2</a>
+   * for more info.
+   * 
+   * @param businessID <tt>String</tt> business ID of the requested business
+   * @return <tt>String</tt> JSON Response
+   */
+
+/*  public String getMenuByBusinessID(String businessID) {
+	OAuthRequest request = creatOAuthRequest(BUSINESS_PATH + "/" + businessID + "/" + menu_provider);
+	return sendRequestAndGetResponse(request);
+    }
+*/
+    /**
    * Creates and sends a request to the Business API by business ID.
    * <p>
    * See <a href="http://www.yelp.com/developers/documentation/v2/business">Yelp Business API V2</a>
