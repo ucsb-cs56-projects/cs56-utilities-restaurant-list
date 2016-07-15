@@ -271,6 +271,7 @@ public class Food implements Serializable {
 	    System.out.println(phone);
 	    String address="";
 	    String menu=(String) this.RestaurantSpecificInfo(GeneralInfo, "menu_provider");
+	    System.out.println(menu);
 	    //location is a dictionary which is on its own right a JSONObject
 	    JSONObject locationAtr = (JSONObject) this.RestaurantSpecificInfo(GeneralInfo,"location");
 	    System.out.println(locationAtr.toString());

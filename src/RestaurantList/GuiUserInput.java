@@ -547,7 +547,7 @@ public class GuiUserInput extends JPanel {
 
 	menuScreen.add(titlePanel);
 	menuScreen.add(menuLabel);
-	if(restaurantInfo[5] == ""){
+	if(restaurantInfo[5].equals("")){
 	    JLabel menuEmptyLabel = new JLabel("This restaurant does not have a menu online.");
 	    menuScreen.add(menuEmptyLabel);
 	}
