@@ -30,6 +30,7 @@ public class GuiUserInput extends JPanel {
     JComboBox cuisineList, restaurantList, futureCuisine, futureRestaurant;
     String time;
     String[] info = new String[6];
+    String cuisineChoice;
        
     //Constructor
     public GuiUserInput() {
@@ -448,6 +449,7 @@ public class GuiUserInput extends JPanel {
 	    	if (index > 0) {
 	    		String restaurantChoice = (String)cb.getSelectedItem();
 				System.out.println(restaurantChoice);
+				cuisineChoice = restaurantChoice;
 				showChoiceFuture(restaurantChoice);
 	    	}
 		}
@@ -490,7 +492,7 @@ public class GuiUserInput extends JPanel {
 	JLabel phone = new JLabel(restaurantInfo[4]);
 
 	menu = new JButton("Menu");
-	menu.addActionListener(new menuFutureButtonListener());
+	menu.addActionListener(new menuButtonListener());
 	//adds all the components to their respective JPanels
 	titlePanel.add(pageTitle);
 
@@ -518,38 +520,23 @@ public class GuiUserInput extends JPanel {
 	frame.invalidate();
 	frame.validate();
     }
-    class menuEatButtonListener implements ActionListener {
+    
+    class menuButtonListener implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
-	    int index = restaurantList.getSelectedIndex();
-	    if (index > 0) {
-		String restaurantChoice = (String)event.getSource().getSelectedItem();
-		System.out.println(restaurantChoice);
-		MenuScreen(restaurantChoice);
-	    }
+	    MenuScreen();
 	}
     }
-    
-    class menuFutureButtonListener implements ActionListener {
-	public void actionPerformed(ActionEvent event) {
-	    int index = futureRestaurant.getSelectedIndex();
-	    if (index > 0) {
-		String restaurantChoice =  (String)event.getSource().getSelectedItem();
-		System.out.println(restaurantChoice);
-		MenuScreen(restaurantChoice);
-	    }
-	}
-    }
-    
-    public void MenuScreen(String cuisineName) {
+        
+    public void MenuScreen() {
 	frame.getContentPane().removeAll();
 	menuScreen = new JPanel();
 	menuScreen.setLayout(new BoxLayout(menuScreen, BoxLayout.Y_AXIS));
 	//	menuScreen.setBorder
 
-	String[] restaurantInfo = food.showAllInfo(cuisineName);
+	String[] restaurantInfo = food.showAllInfo(cuisineChoice);
 	JPanel titlePanel = new JPanel();
 	JPanel buttonPanel = new JPanel();
-	JLabel menuLabel = new JLabel(restaurantInfo[6]);
+	JLabel menuLabel = new JLabel(restaurantInfo[5]);
 	
 	pageTitle = new JLabel("Menu");
 	back = new JButton("Back");
@@ -558,9 +545,12 @@ public class GuiUserInput extends JPanel {
 	titlePanel.add(pageTitle);
 	buttonPanel.add(back);
 
-	
 	menuScreen.add(titlePanel);
 	menuScreen.add(menuLabel);
+	if(restaurantInfo[5] == ""){
+	    JLabel menuEmptyLabel = new JLabel("This restaurant does not have a menu online.");
+	    menuScreen.add(menuEmptyLabel);
+	}
 	menuScreen.add(buttonPanel);
 	
 	frame.getContentPane().add(menuScreen);
@@ -644,6 +634,7 @@ public class GuiUserInput extends JPanel {
 		    if (index > 0) {
 			String restaurantChoice = (String)cb.getSelectedItem();
 			System.out.println(restaurantChoice);
+			cuisineChoice = restaurantChoice;
 			showChoiceEat(restaurantChoice);
 		    } 
 		}
@@ -692,7 +683,7 @@ public class GuiUserInput extends JPanel {
 		JLabel phone = new JLabel(restaurantInfo[4]);
 
 		menu = new JButton("Menu");
-		menu.addActionListener(new menuEatButtonListener());
+		menu.addActionListener(new menuButtonListener());
 		//adds all the components to their respective JPanels
 		titlePanel.add(pageTitle);
 
