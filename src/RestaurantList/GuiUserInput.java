@@ -22,8 +22,8 @@ import javax.swing.*;
 public class GuiUserInput extends JPanel {
 
     JLabel restaurant, pageTitle;
-    JPanel  eatScreen, editScreen, future; 
-    JButton back, edit;
+    JPanel  eatScreen, editScreen, future, menuScreen; 
+    JButton back, edit, menu;
     JFrame frame;
     Food food = new Food();
     JTextField name, address, phoneNumber, startTime, endTime, type, futureTime;
@@ -88,7 +88,8 @@ public class GuiUserInput extends JPanel {
 		CSVSaveButton.addActionListener(new CSVSaveListener());
 		futureButton.addActionListener(new FutureListener());
 		exitButton.addActionListener(new ExitListener());
-	
+
+		
 		titlePanel.add(pageTitle);
 		eatPanel.add(eatButton);
 		newPanel.add(newButton);
@@ -135,6 +136,7 @@ public class GuiUserInput extends JPanel {
 		JLabel startTitle = new JLabel("Start Time ex. 8 for 8:00 A.M.");
 		JLabel endTitle = new JLabel("End Time ex. 20 for 8:00 P.M.");
 		JLabel typeTitle = new JLabel("Type of Cuisine");
+		JLabel menuTitle = new JLabel("Menu (if available)");
 	
 		JButton submitButton = new JButton("Submit");
 		submitButton.addActionListener(new submitButtonListener());
@@ -410,7 +412,7 @@ public class GuiUserInput extends JPanel {
     }
 
     class futureTimeListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
+	        public void actionPerformed(ActionEvent event) {
 	    	time = futureTime.getText();
 	    	futureCuisine.removeAllItems();
 	    	String[] futureCuisineList = food.getCuisineTypes();
@@ -420,6 +422,8 @@ public class GuiUserInput extends JPanel {
 	    	futureCuisine.setEnabled(true);
 		}
     }
+
+
 
     class futureCuisineBoxListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
@@ -462,7 +466,7 @@ public class GuiUserInput extends JPanel {
 	
 	JPanel titlePanel = new JPanel();
 	JPanel buttonPanel = new JPanel();
-
+	
 	back = new JButton("Go Back");
 	back.addActionListener(new FutureListener());
 
@@ -485,6 +489,8 @@ public class GuiUserInput extends JPanel {
 	JLabel address = new JLabel(restaurantInfo[3]);
 	JLabel phone = new JLabel(restaurantInfo[4]);
 
+	menu = new JButton("Menu");
+	menu.addActionListener(new menuFutureButtonListener());
 	//adds all the components to their respective JPanels
 	titlePanel.add(pageTitle);
 
@@ -499,7 +505,9 @@ public class GuiUserInput extends JPanel {
 	infoPanel.add(phoneTitle);
 	infoPanel.add(phone);
 
+
 	//buttonPanel.add(back);
+	buttonPanel.add(menu);
 	buttonPanel.add(back);
 	//Adding the panels to the choice panel
 	choice.add(titlePanel);
@@ -510,8 +518,55 @@ public class GuiUserInput extends JPanel {
 	frame.invalidate();
 	frame.validate();
     }
+    class menuEatButtonListener implements ActionListener {
+	public void actionPerformed(ActionEvent event) {
+	    int index = restaurantList.getSelectedIndex();
+	    if (index > 0) {
+		String restaurantChoice = (String)event.getSource().getSelectedItem();
+		System.out.println(restaurantChoice);
+		MenuScreen(restaurantChoice);
+	    }
+	}
+    }
     
+    class menuFutureButtonListener implements ActionListener {
+	public void actionPerformed(ActionEvent event) {
+	    int index = futureRestaurant.getSelectedIndex();
+	    if (index > 0) {
+		String restaurantChoice =  (String)event.getSource().getSelectedItem();
+		System.out.println(restaurantChoice);
+		MenuScreen(restaurantChoice);
+	    }
+	}
+    }
     
+    public void MenuScreen(String cuisineName) {
+	frame.getContentPane().removeAll();
+	menuScreen = new JPanel();
+	menuScreen.setLayout(new BoxLayout(menuScreen, BoxLayout.Y_AXIS));
+	//	menuScreen.setBorder
+
+	String[] restaurantInfo = food.showAllInfo(cuisineName);
+	JPanel titlePanel = new JPanel();
+	JPanel buttonPanel = new JPanel();
+	JLabel menuLabel = new JLabel(restaurantInfo[6]);
+	
+	pageTitle = new JLabel("Menu");
+	back = new JButton("Back");
+	back.addActionListener(new backButtonListener());
+
+	titlePanel.add(pageTitle);
+	buttonPanel.add(back);
+
+	
+	menuScreen.add(titlePanel);
+	menuScreen.add(menuLabel);
+	menuScreen.add(buttonPanel);
+	
+	frame.getContentPane().add(menuScreen);
+	frame.invalidate();
+	frame.validate();
+    }
     
     public void EatScreen() {
 	eatScreen = new JPanel();
@@ -603,6 +658,7 @@ public class GuiUserInput extends JPanel {
 		frame.getContentPane().removeAll();
 	
 		JPanel choice = new JPanel();
+		
 		choice.setLayout(new BoxLayout(choice, BoxLayout.Y_AXIS));
 		choice.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
@@ -634,7 +690,9 @@ public class GuiUserInput extends JPanel {
 		JLabel endTime = new JLabel(t + " P.M.");
 		JLabel address = new JLabel(restaurantInfo[3]);
 		JLabel phone = new JLabel(restaurantInfo[4]);
-	
+
+		menu = new JButton("Menu");
+		menu.addActionListener(new menuEatButtonListener());
 		//adds all the components to their respective JPanels
 		titlePanel.add(pageTitle);
 
@@ -648,6 +706,7 @@ public class GuiUserInput extends JPanel {
 		infoPanel.add(address);
 		infoPanel.add(phoneTitle);
 		infoPanel.add(phone);
+		buttonPanel.add(menu);
 	
 		//buttonPanel.add(back);
 		buttonPanel.add(back);
@@ -692,7 +751,7 @@ public class GuiUserInput extends JPanel {
   	}
     
 
-    //Goes back to the starting screen whenever the back button is clicked
+    //Goes back to the starting screen whenever the back button is clicked    
     class backButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 	    	setup();
