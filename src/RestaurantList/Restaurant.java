@@ -16,7 +16,7 @@ import java.io.*;
 
 public class Restaurant implements Serializable {
     String starttime, endtime;
-    String name, phonenumber, address, type;
+    String name, phonenumber, address, type, menu ;
     String imagePath;
 
     /**
@@ -28,10 +28,11 @@ public class Restaurant implements Serializable {
        @param phonenumber  phonenumber of the restaurant
        @param address      address of the restaurant
        @param type         type of cuisine
+       @param menu         menu of cuisine
      */
-    public Restaurant(String starttime, String endtime, String name, String phonenumber, String address, String type) {
+    public Restaurant(String starttime, String endtime, String name, String phonenumber, String address, String type, String menu) {
 	//Default Restaurant in case of a missing entry
-	if(starttime.equals("")||endtime.equals("")||name.equals("")||phonenumber.equals("")||address.equals("")||type.equals("")){
+	if(starttime.equals("")||endtime.equals("")||name.equals("")||phonenumber.equals("")||address.equals("")||type.equals("")||menu.equals("")){
 	    this.starttime = "9";
 	    this.endtime = "22";
 	    this.name = "Panda Express";
@@ -39,6 +40,7 @@ public class Restaurant implements Serializable {
 	    this.address = "131,N. Fairview Ave,Goleta,CA,93117";
 	    this.type = "Chinese";
 	    this.imagePath = "";
+	    this.menu = "Teriyaki Chicken";
 	}else{
 	    this.starttime = starttime;
 	    this.endtime = endtime;
@@ -47,6 +49,7 @@ public class Restaurant implements Serializable {
 	    this.address = address;
 	    this.type = type;
 	    this.imagePath = "";
+	    this.menu = menu;
 	}
     }
 
@@ -60,9 +63,10 @@ public class Restaurant implements Serializable {
        @param address      address of the restaurant
        @param type         type of cuisine
        @param imagePath    the path to the picture of the restaurant
+       @param menu         menu of items of the restaurant 
     */
 
-    public Restaurant(String starttime, String endtime, String name, String phonenumber, String address, String type, String imagePath) {
+    public Restaurant(String starttime, String endtime, String name, String phonenumber, String address, String type, String imagePath, String menu  ) {
 	this.starttime = starttime;
 	this.endtime = endtime;
 	this.name = name;
@@ -70,6 +74,7 @@ public class Restaurant implements Serializable {
 	this.address = address;
 	this.type = type;
 	this.imagePath = imagePath;
+	this.menu = menu;
     }
     
     
@@ -100,6 +105,10 @@ public class Restaurant implements Serializable {
 
     public String getImagePath(){
 	return imagePath;
+    }
+    
+    public String getMenu(){
+	return menu;
     }
     
     //setters for the instance variables
@@ -138,6 +147,11 @@ public class Restaurant implements Serializable {
 	    this.imagePath = imagePath;
     }
     
+    public void setMenu(String menu){
+	if(!menu.equals(""))
+	    this.menu = menu;
+    }
+    
     /**
      * @Overide the equals method
      * 
@@ -153,7 +167,6 @@ public class Restaurant implements Serializable {
 
 	if (rhs.getAddress() != null && address != null)
 		val3 = address.toLowerCase().equals(rhs.getAddress().toLowerCase());
-	
 	return val1 && val2 && val3;
 
     }

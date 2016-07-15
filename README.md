@@ -10,6 +10,21 @@ project history
 An app to display information about restaurants from a database, including hours of operation and phone number.
 
 ===============
+How to run
+===============
+Use ant run to open the GUI which takes the user to a menu where they can find somewhere to eat or add their own restaurant entries.
+
+===============
+User capabilities
+===============
+
+At the main menu, the user can choose either the "Eat" or "Future Time" button to see what type of cuisine they want to eat. The "Eat" button takes into account the current time in order to determine whether restaurants are opened, while Future Time requires the user to enter a certain time that will determine what's open. Regardless of which button is clicked, the user is taken to a dropdown list of restaurants that are currently open. Then they can click a restaurant in order to find information about it such as address, phone number, and hours of operation. 
+
+Users are able to add a new restaurant entry and edit exisiting entry using text fields. However, editing exisiting entry has not been implemented yet. They can also save their data through a CSV importer and exporter.
+
+
+
+===============
 W16 Final Remarks
 ===============
 
