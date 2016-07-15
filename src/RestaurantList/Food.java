@@ -129,7 +129,7 @@ public class Food implements Serializable {
     */
     public String[] showAllInfo(String choice) {
 
-	String[] restaurantInfo = new String[6];
+	String[] restaurantInfo = new String[7];
 	
 	for (int i = 0; i < allRestaurants.size(); i++) {
 	    String restaurant = allRestaurants.get(i).getName();
@@ -139,7 +139,8 @@ public class Food implements Serializable {
 		restaurantInfo[2] = allRestaurants.get(i).getEndTime();
 		restaurantInfo[3] = allRestaurants.get(i).getAddress();
 		restaurantInfo[4] = allRestaurants.get(i).getPhone();
-		restaurantInfo[5] = allRestaurants.get(i).getMenu();
+		restaurantInfo[5] = allRestaurants.get(i).getImagePath();
+		restaurantInfo[6] = allRestaurants.get(i).getMenu();
 	        }
 	}
 	
@@ -168,7 +169,7 @@ public class Food implements Serializable {
 	    System.out.println("createNew failed");
 	    return;
 	}else{
-	    Restaurant r = new Restaurant(info[0],info[1],info[2],info[3],info[4],info[5],info[6]);
+	    Restaurant r = new Restaurant(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7]);
 	    this.addNew(r);
 	}
 	for(int i=0;i<allRestaurants.size();i++){
@@ -183,7 +184,7 @@ public class Food implements Serializable {
     	for (int i = 0; i < 6; i++) {
     		withoutQuotes[i] = info[i].substring(1, info[i].length() - 1);
     	}
-	Restaurant r = new Restaurant(withoutQuotes[0],withoutQuotes[1],withoutQuotes[2],withoutQuotes[3],withoutQuotes[4],withoutQuotes[5],withoutQuotes[6]);
+	Restaurant r = new Restaurant(withoutQuotes[0],withoutQuotes[1],withoutQuotes[2],withoutQuotes[3],withoutQuotes[4],withoutQuotes[5],withoutQuotes[6],withoutQuotes[7]);
 	this.addNew(r);
     }
 
