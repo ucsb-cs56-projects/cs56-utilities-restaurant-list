@@ -22,6 +22,11 @@ At the main menu, the user can choose either the "Eat" or "Future Time" button t
 
 Users are able to add a new restaurant entry and edit exisiting entry using text fields. However, editing exisiting entry has not been implemented yet. They can also save their data through a CSV importer and exporter.
 
+===============
+Yelp API Information
+===============
+
+This program utilizies the Yelp Developer API v2. Most if not all of the methods which utilize the Yelp API are from the Yelp "Business" methods.
 
 
 ===============

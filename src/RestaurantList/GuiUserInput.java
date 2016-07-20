@@ -13,9 +13,13 @@ package edu.ucsb.cs56.projects.utilities.restaurant_list;
 
 import java.util.*;
 import java.io.*;
+import java.net.URL;
+import java.net.MalformedURLException;
 
 import java.awt.event.*;
+import java.awt.image.*;
 import java.awt.*;
+import javax.imageio.*;
 
 import javax.swing.*;
 
@@ -23,7 +27,7 @@ public class GuiUserInput extends JPanel {
 
     JLabel restaurant, pageTitle;
     JPanel  eatScreen, editScreen, future, menuScreen; 
-    JButton back, edit, menu;
+    JButton back, edit, menu, image;
     JFrame frame;
     Food food = new Food();
     JTextField name, address, phoneNumber, startTime, endTime, type, futureTime;
@@ -308,7 +312,7 @@ public class GuiUserInput extends JPanel {
 	String[] type = food.getCuisineTypes();
 	back = new JButton("Go Back");
 	back.addActionListener(new backButtonListener());
-	
+
 
 	//NEED MAJOR WORK RIGHT HERE
 	edit = new JButton("Edit");
@@ -455,7 +459,48 @@ public class GuiUserInput extends JPanel {
 		}
     }
 
+    /*    class imageListener implements ActionListener {
+	public void actionPerformed(ActionEvent event){
+	    ImageScreen();
+	}
+    }
+    */
+    /*    public void ImageScreen(){
+	frame.getContentPane().removeAll();
+	String[] restaurantInfo = food.showAllInfo(cuisineChoice);
+	JPanel imagePanel = new JPanel(new BorderLayout());
+	try {
+	    URL url = new URL(restaurantInfo[5]);
+	    BufferedImage img = ImageIO.read(url);
+	    ImageIcon imagePic = new ImageIcon(img);
+
+	    JLabel imageLabel = new JLabel(imagePic, JLabel.CENTER);
+	    imagePanel.add(imageLabel, BorderLayout.CENTER);
+
+	}
+	catch (MalformedURLException e) {
+	    e.printStackTrace();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
     
+	frame.getContentPane().add(imagePanel);
+	frame.invalidate();
+	frame.validate();
+    }
+    */	
+/** Returns an ImageIcon, or null if the path was invalid. 
+    protected ImageIcon createImageIcon(String path,
+					String description) {
+	java.net.URL imgURL = getClass().getResource(path);
+	if (imgURL != null) {
+	    return new ImageIcon(imgURL, description);
+	} else {
+	    System.err.println("Couldn't find file: " + path);
+	    return null;
+	}
+    }
+*/
     public void showChoiceFuture(String cuisineName) {
 	frame.getContentPane().removeAll();
 	
@@ -468,10 +513,16 @@ public class GuiUserInput extends JPanel {
 	
 	JPanel titlePanel = new JPanel();
 	JPanel buttonPanel = new JPanel();
+
+	JPanel imagePanel = new JPanel(new BorderLayout());
 	
 	back = new JButton("Go Back");
 	back.addActionListener(new FutureListener());
 
+	/*	image = new JButton("Image");
+	image.addActionListener(new imageListener());
+	*/
+	
 	JLabel nameTitle = new JLabel("Name");
 	JLabel startTimeTitle = new JLabel("Opens");
 	JLabel endTimeTitle = new JLabel("Closes");
@@ -490,6 +541,21 @@ public class GuiUserInput extends JPanel {
 	JLabel endTime = new JLabel(t + " P.M.");
 	JLabel address = new JLabel(restaurantInfo[3]);
 	JLabel phone = new JLabel(restaurantInfo[4]);
+
+	try {
+	    URL url = new URL(restaurantInfo[5]);
+	    BufferedImage img = ImageIO.read(url);
+	    ImageIcon imagePic = new ImageIcon(img);
+
+	    JLabel imageLabel = new JLabel(imagePic);
+	    imagePanel.add(imageLabel);
+
+	}
+	catch (MalformedURLException e) {
+	    e.printStackTrace();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
 
 	menu = new JButton("Menu");
 	menu.addActionListener(new menuButtonListener());
@@ -510,9 +576,11 @@ public class GuiUserInput extends JPanel {
 
 	//buttonPanel.add(back);
 	buttonPanel.add(menu);
+	//	buttonPanel.add(image);
 	buttonPanel.add(back);
 	//Adding the panels to the choice panel
 	choice.add(titlePanel);
+	choice.add(imagePanel);
 	choice.add(infoPanel);
 	choice.add(buttonPanel);
 
@@ -536,7 +604,7 @@ public class GuiUserInput extends JPanel {
 	String[] restaurantInfo = food.showAllInfo(cuisineChoice);
 	JPanel titlePanel = new JPanel();
 	JPanel buttonPanel = new JPanel();
-	JLabel menuLabel = new JLabel(restaurantInfo[5]);
+	JLabel menuLabel = new JLabel(restaurantInfo[6]);
 	
 	pageTitle = new JLabel("Menu");
 	back = new JButton("Back");
@@ -659,9 +727,15 @@ public class GuiUserInput extends JPanel {
 		JPanel titlePanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
 
+		JPanel imagePanel = new JPanel(new BorderLayout());
+
 		back = new JButton("Go Back");
 		back.addActionListener(new EatListener());
 
+		/*	image = new JButton("Image");
+		image.addActionListener(new imageListener());
+		*/
+		
 		JLabel nameTitle = new JLabel("Name");
 		JLabel startTimeTitle = new JLabel("Opens");
 		JLabel endTimeTitle = new JLabel("Closes");
@@ -682,11 +756,26 @@ public class GuiUserInput extends JPanel {
 		JLabel address = new JLabel(restaurantInfo[3]);
 		JLabel phone = new JLabel(restaurantInfo[4]);
 
+		try {
+		    URL url = new URL(restaurantInfo[5]);
+		    BufferedImage img = ImageIO.read(url);
+		    ImageIcon imagePic = new ImageIcon(img);
+		    
+		    JLabel imageLabel = new JLabel(imagePic, JLabel.CENTER);
+		    imagePanel.add(imageLabel, BorderLayout.CENTER);
+
+		}
+		catch (MalformedURLException e) {
+		    e.printStackTrace();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+
 		menu = new JButton("Menu");
 		menu.addActionListener(new menuButtonListener());
 		//adds all the components to their respective JPanels
 		titlePanel.add(pageTitle);
-
+		
 		infoPanel.add(nameTitle);
 		infoPanel.add(name);
 		infoPanel.add(startTimeTitle);
@@ -700,9 +789,11 @@ public class GuiUserInput extends JPanel {
 		buttonPanel.add(menu);
 	
 		//buttonPanel.add(back);
+		//	buttonPanel.add(image);
 		buttonPanel.add(back);
 		//Adding the panels to the choice panel
 		choice.add(titlePanel);
+		choice.add(imagePanel);
 		choice.add(infoPanel);
 		choice.add(buttonPanel);
 
