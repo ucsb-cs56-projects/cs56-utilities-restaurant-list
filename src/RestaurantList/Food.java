@@ -7,6 +7,10 @@
    @author Thien Hoang
    @author Brenda Flores
    @version CS56, Winter 2016
+
+   @author Timothy Kwong
+   @author Alan Tran
+   @version CS56, Summer 2016
  */
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
 
