@@ -44,7 +44,7 @@ public class Food implements Serializable {
 		}
 		
 		if (fileLoaded == false) {
-		    /*Default objects to add to arrayLists
+		    /*Default objects to add to arrayLists. Obsolete now because of new methods to add restaurants upon choosing cuisines
 		    this.populateRestaurantsDatabase("Mexican","Isla Vista, CA");
 		    this.populateRestaurantsDatabase("Chinese","Isla Vista, CA");
 		    this.populateRestaurantsDatabase("Thai","Isla Vista, CA");
