@@ -44,12 +44,17 @@ public class Food implements Serializable {
 		}
 		
 		if (fileLoaded == false) {
-	    	//Default objects to add to arrayLists
+		    /*Default objects to add to arrayLists
 		    this.populateRestaurantsDatabase("Mexican","Isla Vista, CA");
 		    this.populateRestaurantsDatabase("Chinese","Isla Vista, CA");
 		    this.populateRestaurantsDatabase("Thai","Isla Vista, CA");
 		    this.populateRestaurantsDatabase("Fast Food","Isla Vista, CA");
-		}
+		    this.populateRestaurantsDatabase("Sandwiches","Isla Vista, CA");
+		    this.populateRestaurantsDatabase("Pizza","Isla Vista, CA");
+		    this.populateRestaurantsDatabase("Italian","Isla Vista, CA");
+		    this.populateRestaurantsDatabase("Coffee & Tea","Isla Vista, CA");
+		    this.populateRestaurantsDatabase("Vegetarian","Isla Vista, CA");
+		    */}
     }
 		
 		

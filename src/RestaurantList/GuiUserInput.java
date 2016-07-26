@@ -30,12 +30,13 @@ public class GuiUserInput extends JPanel {
     JButton back, edit, menu, image;
     JFrame frame;
     Food food = new Food();
-    JTextField name, address, phoneNumber, startTime, endTime, type, futureTime;
+    JTextField name, address, phoneNumber, startTime, endTime, type, futureTime, location;
     JComboBox cuisineList, restaurantList, futureCuisine, futureRestaurant;
     String time;
     String[] info = new String[6];
     String cuisineChoice;
-       
+    String[] types = new String[]{"Mexican","Chinese","Thai","Fast Food","Sandwiches","Pizza","Italian","Coffee & Tea","Vegetarian"};
+    
     //Constructor
     public GuiUserInput() {
    
@@ -635,14 +636,15 @@ public class GuiUserInput extends JPanel {
 	JPanel buttonPanel = new JPanel();
 	JPanel titlePanel = new JPanel();
 	
-	pageTitle = new JLabel("Find a restaurant open at the current time");
+	pageTitle = new JLabel("Find a restaurant open at the current time\nEnter a location (ex. Isla Vista, CA)");
 	
-	String[] type = food.getCuisineTypes();
+	//String[] type = food.getCuisineTypes();
 	back = new JButton("Go Back");
 	back.addActionListener(new backButtonListener());
 		
 	//JComboBox listing the cuisines
-	cuisineList = new JComboBox(type);
+	cuisineList = new JComboBox(types);
+	location = new JTextField(30);
 	
 	restaurantList = new JComboBox();
 	restaurantList.setEnabled(false);
@@ -673,10 +675,12 @@ public class GuiUserInput extends JPanel {
     class comboBoxListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 	    	JComboBox cb = (JComboBox)event.getSource();
-	    
+		String lct = (String)location.getText();
+		
 	    	String type = (String)cb.getSelectedItem();
 	    	String currentTime = String.valueOf(food.getHour());
-	    
+
+		food.populateRestaurantsDatabase(type, lct);
 	    	String[] listOfRestaurants = food.showOptions(type, currentTime);
 	    	restaurantList.removeAllItems();
 	    
