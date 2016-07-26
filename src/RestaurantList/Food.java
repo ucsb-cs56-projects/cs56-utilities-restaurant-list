@@ -233,7 +233,10 @@ public class Food implements Serializable {
 			return;
 	allRestaurants.add(newRestaurant);
     }
-    
+
+    public void clearEntries() {
+	allRestaurants.clear();
+    }
 
     /**
        Search for a specific infomation about a restaurant from all the
