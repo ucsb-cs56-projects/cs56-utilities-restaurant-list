@@ -485,48 +485,7 @@ public class GuiUserInput extends JPanel {
 		}
     }
 
-    /*    class imageListener implements ActionListener {
-	public void actionPerformed(ActionEvent event){
-	    ImageScreen();
-	}
-    }
-    */
-    /*    public void ImageScreen(){
-	frame.getContentPane().removeAll();
-	String[] restaurantInfo = food.showAllInfo(cuisineChoice);
-	JPanel imagePanel = new JPanel(new BorderLayout());
-	try {
-	    URL url = new URL(restaurantInfo[5]);
-	    BufferedImage img = ImageIO.read(url);
-	    ImageIcon imagePic = new ImageIcon(img);
 
-	    JLabel imageLabel = new JLabel(imagePic, JLabel.CENTER);
-	    imagePanel.add(imageLabel, BorderLayout.CENTER);
-
-	}
-	catch (MalformedURLException e) {
-	    e.printStackTrace();
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-    
-	frame.getContentPane().add(imagePanel);
-	frame.invalidate();
-	frame.validate();
-    }
-    */	
-/** Returns an ImageIcon, or null if the path was invalid. 
-    protected ImageIcon createImageIcon(String path,
-					String description) {
-	java.net.URL imgURL = getClass().getResource(path);
-	if (imgURL != null) {
-	    return new ImageIcon(imgURL, description);
-	} else {
-	    System.err.println("Couldn't find file: " + path);
-	    return null;
-	}
-    }
-*/
     public void showChoiceFuture(String cuisineName) {
 	frame.getContentPane().removeAll();
 	
