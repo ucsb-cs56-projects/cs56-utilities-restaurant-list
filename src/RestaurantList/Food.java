@@ -7,6 +7,10 @@
    @author Thien Hoang
    @author Brenda Flores
    @version CS56, Winter 2016
+
+   @author Timothy Kwong
+   @author Alan Tran
+   @version CS56, Summer 2016
  */
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
 
@@ -44,12 +48,17 @@ public class Food implements Serializable {
 		}
 		
 		if (fileLoaded == false) {
-	    	//Default objects to add to arrayLists
+		    /*Default objects to add to arrayLists. Obsolete now because of new methods to add restaurants upon choosing cuisines
 		    this.populateRestaurantsDatabase("Mexican","Isla Vista, CA");
 		    this.populateRestaurantsDatabase("Chinese","Isla Vista, CA");
 		    this.populateRestaurantsDatabase("Thai","Isla Vista, CA");
 		    this.populateRestaurantsDatabase("Fast Food","Isla Vista, CA");
-		}
+		    this.populateRestaurantsDatabase("Sandwiches","Isla Vista, CA");
+		    this.populateRestaurantsDatabase("Pizza","Isla Vista, CA");
+		    this.populateRestaurantsDatabase("Italian","Isla Vista, CA");
+		    this.populateRestaurantsDatabase("Coffee & Tea","Isla Vista, CA");
+		    this.populateRestaurantsDatabase("Vegetarian","Isla Vista, CA");
+		    */}
     }
 		
 		
@@ -228,7 +237,10 @@ public class Food implements Serializable {
 			return;
 	allRestaurants.add(newRestaurant);
     }
-    
+
+    public void clearEntries() {
+	allRestaurants.clear();
+    }
 
     /**
        Search for a specific infomation about a restaurant from all the
