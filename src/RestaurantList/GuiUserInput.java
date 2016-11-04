@@ -688,9 +688,14 @@ public class GuiUserInput extends JPanel {
 	    	String currentTime = String.valueOf(food.getHour());
             
 		food.clearEntries();
+            String storedTitle = pageTitle.getText();
+            pageTitle.setText("Loading...");
+            // Cause it doesn't update in time otherwise
+            pageTitle.paintImmediately(pageTitle.getVisibleRect());
             // TODO: This blocks the main thread
 		food.populateRestaurantsDatabase(type, lct);
-
+            pageTitle.setText(storedTitle);
+            pageTitle.paintImmediately(pageTitle.getVisibleRect());
 		String[] listOfRestaurants = food.showOptions(type, currentTime);
 	    	restaurantList.removeAllItems();
 	    
