@@ -18,10 +18,12 @@ package edu.ucsb.cs56.projects.utilities.restaurant_list;
 import java.util.*;
 import java.io.*;
 
+
 public class Restaurant implements Serializable {
     String starttime, endtime;
     String name, phonenumber, address, type, menu ;
     String imagePath;
+    
 
     /**
        Arg Constructor creates new Restaurant object with the values

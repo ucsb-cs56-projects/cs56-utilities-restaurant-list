@@ -11,6 +11,10 @@
 	@author   Timothy Kwong
 	@author   Alan Tran
 	@version  CS56, Summer 2016
+ 
+    @author   John Rehbein
+    @author   Colin Mai
+    @version  CS56, Fall 2016
  */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
@@ -19,6 +23,8 @@ import java.util.*;
 import java.io.*;
 import java.net.URL;
 import java.net.MalformedURLException;
+
+
 
 import java.awt.event.*;
 import java.awt.image.*;
@@ -680,8 +686,9 @@ public class GuiUserInput extends JPanel {
 		String lct = (String)location.getText();
 	    	String type = (String)cb.getSelectedItem();
 	    	String currentTime = String.valueOf(food.getHour());
-
+            
 		food.clearEntries();
+            // TODO: This blocks the main thread
 		food.populateRestaurantsDatabase(type, lct);
 
 		String[] listOfRestaurants = food.showOptions(type, currentTime);
@@ -752,7 +759,7 @@ public class GuiUserInput extends JPanel {
 
 		//stores the restaurant's info in the array
 		String[] restaurantInfo = food.showAllInfo(cuisineName);
-	
+        
 		//converts the closing time to a 12 hour time frame
 		int c = Integer.parseInt(restaurantInfo[2]);
 		String t = String.valueOf(c-12);

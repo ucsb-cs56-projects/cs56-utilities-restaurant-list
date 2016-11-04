@@ -17,6 +17,9 @@ package edu.ucsb.cs56.projects.utilities.restaurant_list;
 import java.util.*;
 import java.io.*;
 
+//Google Places API helper library, Protip: you should frequently update this library because it's not officially supported by Google. Here's a link https://github.com/windy1/google-places-api-java
+import se.walkercrou.places.*;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,6 +37,15 @@ import edu.ucsb.cs56.projects.utilities.YelpAPI.NameAndID;
 public class Food implements Serializable {
 
     ArrayList<Restaurant> allRestaurants = new ArrayList<Restaurant>();
+    
+    //Google Place static constants
+    //The GooglePlaces object is the interface to the API so most functionality you need from the library can be got from that object.
+    public static final String GOOGLE_PLACES_API_KEY = "AIzaSyCcfp6MyIu6CuSlqsiF04P_LG74Vk65etQ";
+    public static final GooglePlaces googlePlacesClient;
+    
+    static {
+        googlePlacesClient = new GooglePlaces(GOOGLE_PLACES_API_KEY);
+    }
     
     /**
        noarg Constructor for objects of class Food
@@ -272,7 +284,10 @@ public class Food implements Serializable {
 	//Collect the cuisine-specific local restaurants around an area
 	//Implement using the YelpAPI
 	ArrayList<NameAndID> LocalRestaurants = YelpAPI.LocalRestaurantNamesAndID(cuisine,area);
-	
+    // Query the google Places API using the client helper object googlePlacesClient
+        List<Place> restaurantResults = googlePlacesClient.getPlacesByQuery(cuisine + " in " + area, GooglePlaces.DEFAULT_RESULTS); // This will fetch 20 results at most
+        //, Param.name("type").value("restaurant")); You could add this as a parameter but it narrows your results and removes some restaurants that aren't yet categorized as restaurants
+        
 	for(int i = 0; i < LocalRestaurants.size(); i++){
 	    String GeneralInfo = YelpAPI.RestaurantGeneralInfo(LocalRestaurants.get(i).id);
 	    System.out.println(GeneralInfo);
@@ -280,7 +295,7 @@ public class Food implements Serializable {
 	    String name=(String) this.RestaurantSpecificInfo(GeneralInfo, "name");
 	    System.out.println(name);
 	    //display_phone is a string
-	    String phone=(String) this.RestaurantSpecificInfo(GeneralInfo,"display_phone");
+	    String phone = (String) this.RestaurantSpecificInfo(GeneralInfo,"display_phone");
 	    System.out.println(phone);
 	    String address="";
 	    String menu=(String) this.RestaurantSpecificInfo(GeneralInfo, "menu_provider");
@@ -300,9 +315,13 @@ public class Food implements Serializable {
 		address = "unlisted";
 	    //Potentially could use to generate a picture in the app
 	    String imageURL = (String) this.RestaurantSpecificInfo(GeneralInfo,"image_url");
-	    //YelpAPI does not have the open and closing time, thus make them all 8-22
+	    //Use the Google Places API for operating hours cause the Yelp API doesn't have them
+        if(phone != null) {
+            //googlePlacesClient.get
+        }
 	    Restaurant restaurant = new Restaurant("8","22",name,phone,address, cuisine, imageURL, menu);
 	    this.addNew(restaurant);
 	}
+     
     }
 }
