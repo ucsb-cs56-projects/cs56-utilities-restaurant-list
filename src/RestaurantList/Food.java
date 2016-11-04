@@ -11,6 +11,10 @@
    @author Timothy Kwong
    @author Alan Tran
    @version CS56, Summer 2016
+
+   @author Colin Mai
+   @author John Rehbeim
+   @version CS56, Fall 2016
  */
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
 
@@ -296,6 +300,7 @@ public class Food implements Serializable {
 	    System.out.println(name);
 	    //display_phone is a string
 	    String phone = (String) this.RestaurantSpecificInfo(GeneralInfo,"display_phone");
+	    phone.replaceAll("\\D", "");
 	    System.out.println(phone);
 	    String address="";
 	    String menu=(String) this.RestaurantSpecificInfo(GeneralInfo, "menu_provider");
@@ -315,6 +320,8 @@ public class Food implements Serializable {
 		address = "unlisted";
 	    //Potentially could use to generate a picture in the app
 	    String imageURL = (String) this.RestaurantSpecificInfo(GeneralInfo,"image_url");
+	   
+	      
 	    //Use the Google Places API for operating hours cause the Yelp API doesn't have them
         if(phone != null) {
             //googlePlacesClient.get
