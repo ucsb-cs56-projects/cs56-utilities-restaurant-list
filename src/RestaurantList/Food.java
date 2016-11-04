@@ -292,7 +292,15 @@ public class Food implements Serializable {
         List<Place> restaurantResults = googlePlacesClient.getPlacesByQuery(cuisine + " in " + area, GooglePlaces.DEFAULT_RESULTS); // This will fetch 20 results at most
         //, Param.name("type").value("restaurant")); You could add this as a parameter but it narrows your results and removes some restaurants that aren't yet categorized as restaurants
         
+        List<Place> detailedRestaurantResults = new ArrayList<Place>();
+        for (Place restaurant : restaurantResults) {
+            detailedRestaurantResults.add(restaurant.getDetails());
+        }
+        
+        
 	for(int i = 0; i < LocalRestaurants.size(); i++){
+        String openTime = "8";
+        String closeTime = "22";
 	    String GeneralInfo = YelpAPI.RestaurantGeneralInfo(LocalRestaurants.get(i).id);
 	    System.out.println(GeneralInfo);
 	    //name is a string
@@ -300,7 +308,6 @@ public class Food implements Serializable {
 	    System.out.println(name);
 	    //display_phone is a string
 	    String phone = (String) this.RestaurantSpecificInfo(GeneralInfo,"display_phone");
-	    phone.replaceAll("\\D", "");
 	    System.out.println(phone);
 	    String address="";
 	    String menu=(String) this.RestaurantSpecificInfo(GeneralInfo, "menu_provider");
@@ -321,12 +328,33 @@ public class Food implements Serializable {
 	    //Potentially could use to generate a picture in the app
 	    String imageURL = (String) this.RestaurantSpecificInfo(GeneralInfo,"image_url");
 	   
-	      
 	    //Use the Google Places API for operating hours cause the Yelp API doesn't have them
         if(phone != null) {
-            //googlePlacesClient.get
+            String comparableYelpPhoneNumber = phone.replaceAll("\\D", "").substring(1);
+            for (Place restaurant : detailedRestaurantResults) {
+                
+                if (restaurant.getPhoneNumber() != null) {
+                    String comparableGooglePlacesPhoneNumber = restaurant.getPhoneNumber().replaceAll("\\D", "");
+                    //We use phone numbers to determine if the restaurants are the same their really isn't too much of a cleaner way to do this
+                    if (comparableYelpPhoneNumber.equals(comparableGooglePlacesPhoneNumber)) {
+                        Hours operatingHoursWeekly = restaurant.getHours();
+                        List<Hours.Period> operatingHoursByDay = operatingHoursWeekly.getPeriods();
+                        if (operatingHoursByDay.size() > 0) {
+                            Hours.Period dailyHours = operatingHoursByDay.get(0);
+                            String nonCleanedOpenTime = dailyHours.getOpeningTime(); // The library puts it in HH:MM format
+                            String nonCleanedCloseTime = dailyHours.getClosingTime();
+                            openTime = nonCleanedOpenTime.substring(0,2);
+                            System.out.println("OPENENEDD : " + openTime);
+                            closeTime = nonCleanedCloseTime.substring(0,2);
+                            System.out.println("CLOSE : " + closeTime);
+                        }
+                    }
+                }
+                
+            }
+            
         }
-	    Restaurant restaurant = new Restaurant("8","22",name,phone,address, cuisine, imageURL, menu);
+        Restaurant restaurant = new Restaurant(openTime, closeTime,name,phone,address, cuisine, imageURL, menu);
 	    this.addNew(restaurant);
 	}
      
