@@ -528,9 +528,14 @@ public class GuiUserInput extends JPanel {
 	//stores the restaurant's info in the array
 	String[] restaurantInfo = food.showAllInfo(cuisineName);
 
-	//converts the closing time to a 12 hour time frame
-	int c = Integer.parseInt(restaurantInfo[2]);
-	String t = String.valueOf(c-12);
+	int closingTime = Integer.parseInt(restaurantInfo[2]);
+        //Convert closing time to 12 hour time frame if needed
+        String t;
+        if (closingTime > 12) {
+            t = "" + (closingTime - 12); // Closing Time minus 12
+        } else {
+            t = "" + closingTime;
+        }
 	JLabel name = new JLabel(restaurantInfo[0]);
 	JLabel startTime = new JLabel(restaurantInfo[1] + " A.M.");
 	JLabel endTime = new JLabel(t + " P.M.");
@@ -765,9 +770,15 @@ public class GuiUserInput extends JPanel {
 		//stores the restaurant's info in the array
 		String[] restaurantInfo = food.showAllInfo(cuisineName);
         
-		//converts the closing time to a 12 hour time frame
-		int c = Integer.parseInt(restaurantInfo[2]);
-		String t = String.valueOf(c-12);
+		//converts the closing time to a 12 hour time frame if needed
+		int closingTime = Integer.parseInt(restaurantInfo[2]);
+        String t;
+        if (closingTime > 12) {
+            t = "" + (closingTime - 12); // Closing Time minus 12
+        } else {
+            t = "" + closingTime;
+        }
+		
 
 		JLabel name = new JLabel(restaurantInfo[0]);
 		JLabel startTime = new JLabel(restaurantInfo[1] + " A.M.");
