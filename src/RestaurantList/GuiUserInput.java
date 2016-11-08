@@ -37,7 +37,7 @@ public class GuiUserInput extends JPanel {
 
     JLabel restaurant, pageTitle;
     JPanel  eatScreen, editScreen, future, menuScreen; 
-    JButton back, edit, menu, image, locationSearchSubmitButton;
+    JButton back, edit, menu, reviewsButton, image, locationSearchSubmitButton;
     JFrame frame;
     Food food = new Food();
     JTextField name, address, phoneNumber, startTime, endTime, type, futureTime, location, futureLocation;
@@ -46,6 +46,7 @@ public class GuiUserInput extends JPanel {
     String[] info = new String[6];
     String cuisineChoice;
     String[] types = new String[]{"Mexican","Chinese","Thai","Sushi Bars","Seafood","Fast Food","Sandwiches","Pizza","Italian","Coffee & Tea","Vegetarian"};
+    Restaurant selectedRestaurant;
     
     //Constructor
     public GuiUserInput() {
@@ -532,13 +533,13 @@ public class GuiUserInput extends JPanel {
         //Convert closing time to 12 hour time frame if needed
         String t;
         if (closingTime > 12) {
-            t = "" + (closingTime - 12); // Closing Time minus 12
+            t = "" + (closingTime - 12);
         } else {
             t = "" + closingTime;
         }
         JLabel name = new JLabel(restaurantInfo[0]);
         JLabel startTime = new JLabel(restaurantInfo[1] + " A.M.");
-        JLabel endTime = new JLabel(t + " P.M.");
+        JLabel endTime = new JLabel(t + " P.M."); // TODO these wrongly assume AM & PM easy fix though
         JLabel address = new JLabel(restaurantInfo[3]);
         JLabel phone = new JLabel(restaurantInfo[4]);
         
@@ -559,6 +560,7 @@ public class GuiUserInput extends JPanel {
         
         menu = new JButton("Menu");
         menu.addActionListener(new menuButtonListener());
+        
         //adds all the components to their respective JPanels
         titlePanel.add(pageTitle);
         
@@ -733,6 +735,7 @@ public class GuiUserInput extends JPanel {
 			System.out.println(restaurantChoice);
 			cuisineChoice = restaurantChoice;
 			showChoiceEat(restaurantChoice);
+            
 		    } 
 		}
     }
@@ -779,7 +782,7 @@ public class GuiUserInput extends JPanel {
 		int closingTime = Integer.parseInt(restaurantInfo[2]);
         String t;
         if (closingTime > 12) {
-            t = "" + (closingTime - 12); // Closing Time minus 12
+            t = "" + (closingTime - 12);
         } else {
             t = "" + closingTime;
         }
@@ -787,7 +790,7 @@ public class GuiUserInput extends JPanel {
 
 		JLabel name = new JLabel(restaurantInfo[0]);
 		JLabel startTime = new JLabel(restaurantInfo[1] + " A.M.");
-		JLabel endTime = new JLabel(t + " P.M.");
+		JLabel endTime = new JLabel(t + " P.M."); // TODO this is wrong
 		JLabel address = new JLabel(restaurantInfo[3]);
 		JLabel phone = new JLabel(restaurantInfo[4]);
 
@@ -808,6 +811,8 @@ public class GuiUserInput extends JPanel {
 
 		menu = new JButton("Menu");
 		menu.addActionListener(new menuButtonListener());
+        reviewsButton = new JButton("Reviews");
+        reviewsButton.addActionListener(new reviewsButtonListener());
 		//adds all the components to their respective JPanels
 		titlePanel.add(pageTitle);
 		
@@ -822,6 +827,7 @@ public class GuiUserInput extends JPanel {
 		infoPanel.add(phoneTitle);
 		infoPanel.add(phone);
 		buttonPanel.add(menu);
+        buttonPanel.add(reviewsButton);
 	
 		//buttonPanel.add(back);
 		//	buttonPanel.add(image);
@@ -867,6 +873,14 @@ public class GuiUserInput extends JPanel {
     	EatScreen();
   	}
     
+    class reviewsButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+           Restaurant selectedRestaurant = food.getCuisineWithName(cuisineChoice);
+            System.out.println("NUMBER OF RATINGS FOR " + selectedRestaurant.getName() + " : " + selectedRestaurant.getReviews().size());
+            GuiRatings gr = new GuiRatings(selectedRestaurant.getReviews()); // creates a window with the reviews
+        }
+        
+    }
 
     //Goes back to the starting screen whenever the back button is clicked    
     class backButtonListener implements ActionListener {

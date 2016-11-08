@@ -77,7 +77,18 @@ public class Food implements Serializable {
 		    */}
     }
 		
-		
+    public Restaurant getCuisineWithName(String name) {
+        // This is a hack but needed for getting restaurant info in a reasonable fashion
+        for(Restaurant r : allRestaurants) {
+            if(r.getName().equals(name)) {
+                return r;
+            }
+        }
+        
+        int[] array = new int[1]; // crash on purpose cause theres no graceful way to handle a failure
+        array[1] = 0;
+        return allRestaurants.get(0);
+    }
     public boolean readSavedList() {
 		boolean load = true;
 
@@ -194,7 +205,7 @@ public class Food implements Serializable {
 	    System.out.println("createNew failed");
 	    return;
 	}else{
-	    Restaurant r = new Restaurant(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7]);
+	    Restaurant r = new Restaurant(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7], new ArrayList<Review>());
 	    this.addNew(r);
 	}
 	for(int i=0;i<allRestaurants.size();i++){
@@ -209,7 +220,7 @@ public class Food implements Serializable {
     	for (int i = 0; i < 6; i++) {
     		withoutQuotes[i] = info[i].substring(1, info[i].length() - 1);
     	}
-	Restaurant r = new Restaurant(withoutQuotes[0],withoutQuotes[1],withoutQuotes[2],withoutQuotes[3],withoutQuotes[4],withoutQuotes[5],withoutQuotes[6],withoutQuotes[7]);
+	Restaurant r = new Restaurant(withoutQuotes[0],withoutQuotes[1],withoutQuotes[2],withoutQuotes[3],withoutQuotes[4],withoutQuotes[5],withoutQuotes[6],withoutQuotes[7], new ArrayList<Review>());
 	this.addNew(r);
     }
 
@@ -329,14 +340,17 @@ public class Food implements Serializable {
 	    String imageURL = (String) this.RestaurantSpecificInfo(GeneralInfo,"image_url");
 	   
 	    //Use the Google Places API for operating hours cause the Yelp API doesn't have them
+        ArrayList<Review> reviews = new ArrayList<Review>();
         if(phone != null) {
             String comparableYelpPhoneNumber = phone.replaceAll("\\D", "").substring(1);
             for (Place restaurant : detailedRestaurantResults) {
                 
                 if (restaurant.getPhoneNumber() != null) {
                     String comparableGooglePlacesPhoneNumber = restaurant.getPhoneNumber().replaceAll("\\D", "");
-                    //We use phone numbers to determine if the restaurants are the same their really isn't too much of a cleaner way to do this
+                    //We use phone numbers to determine if the restaurants are the same there really isn't too much of a cleaner way to do this
                     if (comparableYelpPhoneNumber.equals(comparableGooglePlacesPhoneNumber)) {
+                        System.out.println("NUMBER OF REVIEWS : " + restaurant.getReviews().size());
+                        reviews = new ArrayList<Review>(restaurant.getReviews());
                         Hours operatingHoursWeekly = restaurant.getHours();
                         List<Hours.Period> operatingHoursByDay = operatingHoursWeekly.getPeriods();
                         if (operatingHoursByDay.size() > 0) {
@@ -344,9 +358,7 @@ public class Food implements Serializable {
                             String nonCleanedOpenTime = dailyHours.getOpeningTime(); // The library puts it in HH:MM format
                             String nonCleanedCloseTime = dailyHours.getClosingTime();
                             openTime = nonCleanedOpenTime.substring(0,2);
-                            System.out.println("OPENENEDD : " + openTime);
                             closeTime = nonCleanedCloseTime.substring(0,2);
-                            System.out.println("CLOSE : " + closeTime);
                         }
                     }
                 }
@@ -354,7 +366,7 @@ public class Food implements Serializable {
             }
             
         }
-        Restaurant restaurant = new Restaurant(openTime, closeTime,name,phone,address, cuisine, imageURL, menu);
+        Restaurant restaurant = new Restaurant(openTime, closeTime,name,phone,address, cuisine, imageURL, menu, reviews);
 	    this.addNew(restaurant);
 	}
      

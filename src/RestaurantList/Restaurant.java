@@ -17,13 +17,15 @@ package edu.ucsb.cs56.projects.utilities.restaurant_list;
 
 import java.util.*;
 import java.io.*;
+// Google Places helper library
+import se.walkercrou.places.*;
 
 
 public class Restaurant implements Serializable {
     String starttime, endtime;
     String name, phonenumber, address, type, menu ;
     String imagePath;
-    
+    private ArrayList<Review> reviews;
 
     /**
        Arg Constructor creates new Restaurant object with the values
@@ -36,7 +38,7 @@ public class Restaurant implements Serializable {
        @param type         type of cuisine
        @param menu         menu of cuisine
      */
-    public Restaurant(String starttime, String endtime, String name, String phonenumber, String address, String type, String menu) {
+    public Restaurant(String starttime, String endtime, String name, String phonenumber, String address, String type, String menu, ArrayList<Review> reviews ) {
 	//Default Restaurant in case of a missing entry
 	if(starttime.equals("")||endtime.equals("")||name.equals("")||phonenumber.equals("")||address.equals("")||type.equals("")||menu.equals("")){
 	    this.starttime = "9";
@@ -47,7 +49,8 @@ public class Restaurant implements Serializable {
 	    this.type = "Chinese";
 	    this.imagePath = "";
 	    this.menu = "Teriyaki Chicken";
-	}else{
+        this.reviews = new ArrayList<Review>();
+	} else {
 	    this.starttime = starttime;
 	    this.endtime = endtime;
 	    this.name = name;
@@ -56,6 +59,7 @@ public class Restaurant implements Serializable {
 	    this.type = type;
 	    this.imagePath = "";
 	    this.menu = menu;
+        this.reviews = reviews;
 	}
     }
 
@@ -72,19 +76,24 @@ public class Restaurant implements Serializable {
        @param menu         menu of items of the restaurant 
     */
 
-    public Restaurant(String starttime, String endtime, String name, String phonenumber, String address, String type, String imagePath, String menu  ) {
-	this.starttime = starttime;
-	this.endtime = endtime;
-	this.name = name;
-	this.phonenumber = phonenumber;
-	this.address = address;
-	this.type = type;
-	this.imagePath = imagePath;
-	this.menu = menu;
+    public Restaurant(String starttime, String endtime, String name, String phonenumber, String address, String type, String imagePath, String menu, ArrayList<Review> reviews  ) {
+        this.starttime = starttime;
+        this.endtime = endtime;
+        this.name = name;
+        this.phonenumber = phonenumber;
+        this.address = address;
+        this.type = type;
+        this.imagePath = imagePath;
+        this.menu = menu;
+        this.reviews = reviews;
     }
     
     
     //getters for the instance variables
+    
+    public ArrayList<Review> getReviews() {
+        return reviews;
+    }
     public String getName() {
       return name;
     }
