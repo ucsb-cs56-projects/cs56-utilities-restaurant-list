@@ -530,16 +530,22 @@ public class GuiUserInput extends JPanel {
         String[] restaurantInfo = food.showAllInfo(cuisineName);
         
         int closingTime = Integer.parseInt(restaurantInfo[2]);
+        int openningTime = Integer.parseInt(restaurantInfo[1]);
         //Convert closing time to 12 hour time frame if needed
-        String t;
+        String closeLabelText, openLabelText;
         if (closingTime > 12) {
-            t = "" + (closingTime - 12);
+            closeLabelText = (closingTime - 12) + " P.M.";
         } else {
-            t = "" + closingTime;
+            closeLabelText = closingTime + " A.M.";
         }
+        if (openningTime > 12) {
+            openLabelText = (openningTime - 12) + " P.M.";
+        } else {
+            openLabelText = openningTime + " A.M.";
+        }
+        JLabel startTime = new JLabel(openLabelText);
+        JLabel endTime = new JLabel(closeLabelText);
         JLabel name = new JLabel(restaurantInfo[0]);
-        JLabel startTime = new JLabel(restaurantInfo[1] + " A.M.");
-        JLabel endTime = new JLabel(t + " P.M."); // TODO these wrongly assume AM & PM easy fix though
         JLabel address = new JLabel(restaurantInfo[3]);
         JLabel phone = new JLabel(restaurantInfo[4]);
         
@@ -778,19 +784,23 @@ public class GuiUserInput extends JPanel {
 		//stores the restaurant's info in the array
 		String[] restaurantInfo = food.showAllInfo(cuisineName);
         
-		//converts the closing time to a 12 hour time frame if needed
-		int closingTime = Integer.parseInt(restaurantInfo[2]);
-        String t;
+		//converts times to AM PM
+        int closingTime = Integer.parseInt(restaurantInfo[2]);
+        int openningTime = Integer.parseInt(restaurantInfo[1]);
+        String closeLabelText, openLabelText;
         if (closingTime > 12) {
-            t = "" + (closingTime - 12);
+            closeLabelText = (closingTime - 12) + " P.M.";
         } else {
-            t = "" + closingTime;
+            closeLabelText = closingTime + " A.M.";
         }
-		
-
+        if (openningTime > 12) {
+            openLabelText = (openningTime - 12) + " P.M.";
+        } else {
+            openLabelText = openningTime + " A.M.";
+        }
+        JLabel startTime = new JLabel(openLabelText);
+        JLabel endTime = new JLabel(closeLabelText);
 		JLabel name = new JLabel(restaurantInfo[0]);
-		JLabel startTime = new JLabel(restaurantInfo[1] + " A.M.");
-		JLabel endTime = new JLabel(t + " P.M."); // TODO this is wrong
 		JLabel address = new JLabel(restaurantInfo[3]);
 		JLabel phone = new JLabel(restaurantInfo[4]);
 
