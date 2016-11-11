@@ -11,6 +11,10 @@
 	@author   Timothy Kwong
 	@author   Alan Tran
 	@version  CS56, Summer 2016
+ 
+    @author   John Rehbein
+    @author   Colin Mai
+    @version  CS56, Fall 2016
  */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
@@ -19,6 +23,8 @@ import java.util.*;
 import java.io.*;
 import java.net.URL;
 import java.net.MalformedURLException;
+
+
 
 import java.awt.event.*;
 import java.awt.image.*;
@@ -31,7 +37,7 @@ public class GuiUserInput extends JPanel {
 
     JLabel restaurant, pageTitle;
     JPanel  eatScreen, editScreen, future, menuScreen; 
-    JButton back, edit, menu, image;
+    JButton back, edit, menu, reviewsButton, image, locationSearchSubmitButton;
     JFrame frame;
     Food food = new Food();
     JTextField name, address, phoneNumber, startTime, endTime, type, futureTime, location, futureLocation;
@@ -40,6 +46,7 @@ public class GuiUserInput extends JPanel {
     String[] info = new String[6];
     String cuisineChoice;
     String[] types = new String[]{"Mexican","Chinese","Thai","Sushi Bars","Seafood","Fast Food","Sandwiches","Pizza","Italian","Coffee & Tea","Vegetarian"};
+    Restaurant selectedRestaurant;
     
     //Constructor
     public GuiUserInput() {
@@ -491,91 +498,103 @@ public class GuiUserInput extends JPanel {
 
 
     public void showChoiceFuture(String cuisineName) {
-	frame.getContentPane().removeAll();
-	
-	JPanel choice = new JPanel();
-	choice.setLayout(new BoxLayout(choice, BoxLayout.Y_AXIS));
-	choice.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-	
-	JPanel infoPanel = new JPanel();
-	infoPanel.setLayout(new GridLayout(6,2));
-	
-	JPanel titlePanel = new JPanel();
-	JPanel buttonPanel = new JPanel();
-
-	JPanel imagePanel = new JPanel(new BorderLayout());
-	
-	back = new JButton("Go Back");
-	back.addActionListener(new FutureListener());
-
-	/*	image = new JButton("Image");
-	image.addActionListener(new imageListener());
-	*/
-	
-	JLabel nameTitle = new JLabel("Name");
-	JLabel startTimeTitle = new JLabel("Opens");
-	JLabel endTimeTitle = new JLabel("Closes");
-	JLabel addressTitle = new JLabel("Address");
-	JLabel phoneTitle = new JLabel("Phone");
-	pageTitle = new JLabel("Restaurant Information");
-
-	//stores the restaurant's info in the array
-	String[] restaurantInfo = food.showAllInfo(cuisineName);
-
-	//converts the closing time to a 12 hour time frame
-	int c = Integer.parseInt(restaurantInfo[2]);
-	String t = String.valueOf(c-12);
-	JLabel name = new JLabel(restaurantInfo[0]);
-	JLabel startTime = new JLabel(restaurantInfo[1] + " A.M.");
-	JLabel endTime = new JLabel(t + " P.M.");
-	JLabel address = new JLabel(restaurantInfo[3]);
-	JLabel phone = new JLabel(restaurantInfo[4]);
-
-	try {
-	    URL url = new URL(restaurantInfo[5]);
-	    BufferedImage img = ImageIO.read(url);
-	    ImageIcon imagePic = new ImageIcon(img);
-
-	    JLabel imageLabel = new JLabel(imagePic);
-	    imagePanel.add(imageLabel);
-
-	}
-	catch (MalformedURLException e) {
-	    e.printStackTrace();
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-
-	menu = new JButton("Menu");
-	menu.addActionListener(new menuButtonListener());
-	//adds all the components to their respective JPanels
-	titlePanel.add(pageTitle);
-
-	infoPanel.add(nameTitle);
-	infoPanel.add(name);
-	infoPanel.add(startTimeTitle);
-	infoPanel.add(startTime);
-	infoPanel.add(endTimeTitle);
-	infoPanel.add(endTime);
-	infoPanel.add(addressTitle);
-	infoPanel.add(address);
-	infoPanel.add(phoneTitle);
-	infoPanel.add(phone);
-
-
-	//buttonPanel.add(back);
-	buttonPanel.add(menu);
-	//	buttonPanel.add(image);
-	buttonPanel.add(back);
-	//Adding the panels to the choice panel
-	choice.add(titlePanel);
-	choice.add(imagePanel);
-	choice.add(infoPanel);
-	choice.add(buttonPanel);
-
-	frame.getContentPane().add(choice);
-	frame.invalidate();
-	frame.validate();
+        frame.getContentPane().removeAll();
+        
+        JPanel choice = new JPanel();
+        choice.setLayout(new BoxLayout(choice, BoxLayout.Y_AXIS));
+        choice.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new GridLayout(6,2));
+        
+        JPanel titlePanel = new JPanel();
+        JPanel buttonPanel = new JPanel();
+        
+        JPanel imagePanel = new JPanel(new BorderLayout());
+        
+        back = new JButton("Go Back");
+        back.addActionListener(new FutureListener());
+        
+        /*	image = new JButton("Image");
+         image.addActionListener(new imageListener());
+         */
+        
+        JLabel nameTitle = new JLabel("Name");
+        JLabel startTimeTitle = new JLabel("Opens");
+        JLabel endTimeTitle = new JLabel("Closes");
+        JLabel addressTitle = new JLabel("Address");
+        JLabel phoneTitle = new JLabel("Phone");
+        pageTitle = new JLabel("Restaurant Information");
+        
+        //stores the restaurant's info in the array
+        String[] restaurantInfo = food.showAllInfo(cuisineName);
+        
+        int closingTime = Integer.parseInt(restaurantInfo[2]);
+        int openningTime = Integer.parseInt(restaurantInfo[1]);
+        //Convert closing time to 12 hour time frame if needed
+        String closeLabelText, openLabelText;
+        if (closingTime > 12) {
+            closeLabelText = (closingTime - 12) + " P.M.";
+        } else {
+            closeLabelText = closingTime + " A.M.";
+        }
+        if (openningTime > 12) {
+            openLabelText = (openningTime - 12) + " P.M.";
+        } else {
+            openLabelText = openningTime + " A.M.";
+        }
+        JLabel startTime = new JLabel(openLabelText);
+        JLabel endTime = new JLabel(closeLabelText);
+        JLabel name = new JLabel(restaurantInfo[0]);
+        JLabel address = new JLabel(restaurantInfo[3]);
+        JLabel phone = new JLabel(restaurantInfo[4]);
+        
+        try {
+            URL url = new URL(restaurantInfo[5]);
+            BufferedImage img = ImageIO.read(url);
+            ImageIcon imagePic = new ImageIcon(img);
+            
+            JLabel imageLabel = new JLabel(imagePic);
+            imagePanel.add(imageLabel);
+            
+        }
+        catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        menu = new JButton("Menu");
+        menu.addActionListener(new menuButtonListener());
+        
+        //adds all the components to their respective JPanels
+        titlePanel.add(pageTitle);
+        
+        infoPanel.add(nameTitle);
+        infoPanel.add(name);
+        infoPanel.add(startTimeTitle);
+        infoPanel.add(startTime);
+        infoPanel.add(endTimeTitle);
+        infoPanel.add(endTime);
+        infoPanel.add(addressTitle);
+        infoPanel.add(address);
+        infoPanel.add(phoneTitle);
+        infoPanel.add(phone);
+        
+        
+        //buttonPanel.add(back);
+        buttonPanel.add(menu);
+        //	buttonPanel.add(image);
+        buttonPanel.add(back);
+        //Adding the panels to the choice panel
+        choice.add(titlePanel);
+        choice.add(imagePanel);
+        choice.add(infoPanel);
+        choice.add(buttonPanel);
+        
+        frame.getContentPane().add(choice);
+        frame.invalidate();
+        frame.validate();
     }
     
     class menuButtonListener implements ActionListener {
@@ -585,88 +604,93 @@ public class GuiUserInput extends JPanel {
     }
         
     public void MenuScreen() {
-	frame.getContentPane().removeAll();
-	menuScreen = new JPanel();
-	menuScreen.setLayout(new BoxLayout(menuScreen, BoxLayout.Y_AXIS));
-	//	menuScreen.setBorder
-
-	String[] restaurantInfo = food.showAllInfo(cuisineChoice);
-	JPanel titlePanel = new JPanel();
-	JPanel buttonPanel = new JPanel();
-	JLabel menuLabel = new JLabel(restaurantInfo[6]);
-	
-	pageTitle = new JLabel("Menu");
-	back = new JButton("Back");
-	back.addActionListener(new backButtonListener());
-
-	titlePanel.add(pageTitle);
-	buttonPanel.add(back);
-
-	menuScreen.add(titlePanel);
-	menuScreen.add(menuLabel);
-	if(restaurantInfo[5].equals("")){
-	    JLabel menuEmptyLabel = new JLabel("This restaurant does not have a menu online.");
-	    menuScreen.add(menuEmptyLabel);
-	}
-	menuScreen.add(buttonPanel);
-	
-	frame.getContentPane().add(menuScreen);
-	frame.invalidate();
-	frame.validate();
+        frame.getContentPane().removeAll();
+        menuScreen = new JPanel();
+        menuScreen.setLayout(new BoxLayout(menuScreen, BoxLayout.Y_AXIS));
+        //	menuScreen.setBorder
+        
+        String[] restaurantInfo = food.showAllInfo(cuisineChoice);
+        JPanel titlePanel = new JPanel();
+        JPanel buttonPanel = new JPanel();
+        JLabel menuLabel = new JLabel(restaurantInfo[6]);
+        
+        pageTitle = new JLabel("Menu");
+        back = new JButton("Back");
+        back.addActionListener(new backButtonListener());
+        
+        titlePanel.add(pageTitle);
+        buttonPanel.add(back);
+        
+        menuScreen.add(titlePanel);
+        menuScreen.add(menuLabel);
+        if(restaurantInfo[5].equals("")){
+            JLabel menuEmptyLabel = new JLabel("This restaurant does not have a menu online.");
+            menuScreen.add(menuEmptyLabel);
+        }
+        menuScreen.add(buttonPanel);
+        
+        frame.getContentPane().add(menuScreen);
+        frame.invalidate();
+        frame.validate();
     }
     
     public void EatScreen() {
-	eatScreen = new JPanel();
-	eatScreen.setLayout(new BoxLayout(eatScreen, BoxLayout.Y_AXIS));
-	frame.getContentPane().removeAll();
-
-	JPanel textPanel = new JPanel();
-	JPanel boxPanel = new JPanel();
-	JPanel buttonPanel = new JPanel();
-	JPanel titlePanel = new JPanel();
-	
-	pageTitle = new JLabel("Find a restaurant open at the current time.");
-
-	JLabel place = new JLabel("Location (i.e. Isla Vista, CA), press enter after input:");
-	//String[] type = food.getCuisineTypes();
-	back = new JButton("Go Back");
-	back.addActionListener(new backButtonListener());
-		
-	//JComboBox listing the cuisines
-	location = new JTextField(20);
-	location.addActionListener(new locationListener());
-	
-	cuisineList = new JComboBox(types);
-	cuisineList.setEnabled(false);
-	
-	restaurantList = new JComboBox();
-	restaurantList.setEnabled(false);
-	
-	cuisineList.addActionListener(new comboBoxListener());	
-	
-	restaurantList.addActionListener(new restaurantListListener());
-
-	textPanel.add(place);
-	textPanel.add(location);
-	boxPanel.add(cuisineList);
-	boxPanel.add(restaurantList);
-	buttonPanel.add(back);
-	titlePanel.add(pageTitle);
-
-	eatScreen.add(titlePanel);
-	eatScreen.add(textPanel);
-	eatScreen.add(boxPanel);
-	eatScreen.add(buttonPanel);
-		
-	frame.getContentPane().add(eatScreen);
-	frame.invalidate();
-	frame.validate();
+        eatScreen = new JPanel();
+        eatScreen.setLayout(new BoxLayout(eatScreen, BoxLayout.Y_AXIS));
+        frame.getContentPane().removeAll();
+        
+        JPanel textPanel = new JPanel();
+        JPanel boxPanel = new JPanel();
+        JPanel buttonPanel = new JPanel();
+        JPanel titlePanel = new JPanel();
+        
+        pageTitle = new JLabel("Find a restaurant open at the current time.");
+        
+        JLabel place = new JLabel("Location (i.e. Isla Vista, CA), press enter after input:");
+        //String[] type = food.getCuisineTypes();
+        back = new JButton("Go Back");
+        back.addActionListener(new backButtonListener());
+        
+        //JComboBox listing the cuisines
+        location = new JTextField(20);
+        location.addActionListener(new locationListener());
+        
+        locationSearchSubmitButton = new JButton("Submit");
+        locationSearchSubmitButton.addActionListener(new locationListener());
+        
+        
+        cuisineList = new JComboBox(types);
+        cuisineList.setEnabled(false);
+        
+        restaurantList = new JComboBox();
+        restaurantList.setEnabled(false);
+        
+        cuisineList.addActionListener(new comboBoxListener());
+        
+        restaurantList.addActionListener(new restaurantListListener());
+        
+        textPanel.add(place);
+        textPanel.add(location);
+        textPanel.add(locationSearchSubmitButton);
+        boxPanel.add(cuisineList);
+        boxPanel.add(restaurantList);
+        buttonPanel.add(back);
+        titlePanel.add(pageTitle);
+        
+        eatScreen.add(titlePanel);
+        eatScreen.add(textPanel);
+        eatScreen.add(boxPanel);
+        eatScreen.add(buttonPanel);
+        
+        frame.getContentPane().add(eatScreen);
+        frame.invalidate();
+        frame.validate();
     }
 
     class locationListener implements ActionListener{
-	public void actionPerformed(ActionEvent event) {
-	    cuisineList.setEnabled(true);
-	}
+        public void actionPerformed(ActionEvent event) {
+            cuisineList.setEnabled(true);
+        }
     }
     /**
      *  Get cuisine chosen by user and adds restaurant names
@@ -680,10 +704,16 @@ public class GuiUserInput extends JPanel {
 		String lct = (String)location.getText();
 	    	String type = (String)cb.getSelectedItem();
 	    	String currentTime = String.valueOf(food.getHour());
-
+            
 		food.clearEntries();
+            String storedTitle = pageTitle.getText();
+            pageTitle.setText("Loading...");
+            // Cause it doesn't update in time otherwise
+            pageTitle.paintImmediately(pageTitle.getVisibleRect());
+            // TODO: This blocks the main thread
 		food.populateRestaurantsDatabase(type, lct);
-
+            pageTitle.setText(storedTitle);
+            pageTitle.paintImmediately(pageTitle.getVisibleRect());
 		String[] listOfRestaurants = food.showOptions(type, currentTime);
 	    	restaurantList.removeAllItems();
 	    
@@ -711,6 +741,7 @@ public class GuiUserInput extends JPanel {
 			System.out.println(restaurantChoice);
 			cuisineChoice = restaurantChoice;
 			showChoiceEat(restaurantChoice);
+            
 		    } 
 		}
     }
@@ -752,14 +783,24 @@ public class GuiUserInput extends JPanel {
 
 		//stores the restaurant's info in the array
 		String[] restaurantInfo = food.showAllInfo(cuisineName);
-	
-		//converts the closing time to a 12 hour time frame
-		int c = Integer.parseInt(restaurantInfo[2]);
-		String t = String.valueOf(c-12);
-
+        
+		//converts times to AM PM
+        int closingTime = Integer.parseInt(restaurantInfo[2]);
+        int openningTime = Integer.parseInt(restaurantInfo[1]);
+        String closeLabelText, openLabelText;
+        if (closingTime > 12) {
+            closeLabelText = (closingTime - 12) + " P.M.";
+        } else {
+            closeLabelText = closingTime + " A.M.";
+        }
+        if (openningTime > 12) {
+            openLabelText = (openningTime - 12) + " P.M.";
+        } else {
+            openLabelText = openningTime + " A.M.";
+        }
+        JLabel startTime = new JLabel(openLabelText);
+        JLabel endTime = new JLabel(closeLabelText);
 		JLabel name = new JLabel(restaurantInfo[0]);
-		JLabel startTime = new JLabel(restaurantInfo[1] + " A.M.");
-		JLabel endTime = new JLabel(t + " P.M.");
 		JLabel address = new JLabel(restaurantInfo[3]);
 		JLabel phone = new JLabel(restaurantInfo[4]);
 
@@ -780,6 +821,8 @@ public class GuiUserInput extends JPanel {
 
 		menu = new JButton("Menu");
 		menu.addActionListener(new menuButtonListener());
+        reviewsButton = new JButton("Reviews");
+        reviewsButton.addActionListener(new reviewsButtonListener());
 		//adds all the components to their respective JPanels
 		titlePanel.add(pageTitle);
 		
@@ -794,6 +837,7 @@ public class GuiUserInput extends JPanel {
 		infoPanel.add(phoneTitle);
 		infoPanel.add(phone);
 		buttonPanel.add(menu);
+        buttonPanel.add(reviewsButton);
 	
 		//buttonPanel.add(back);
 		//	buttonPanel.add(image);
@@ -839,6 +883,14 @@ public class GuiUserInput extends JPanel {
     	EatScreen();
   	}
     
+    class reviewsButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+           Restaurant selectedRestaurant = food.getCuisineWithName(cuisineChoice);
+            System.out.println("NUMBER OF RATINGS FOR " + selectedRestaurant.getName() + " : " + selectedRestaurant.getReviews().size());
+            GuiRatings gr = new GuiRatings(selectedRestaurant.getReviews()); // creates a window with the reviews
+        }
+        
+    }
 
     //Goes back to the starting screen whenever the back button is clicked    
     class backButtonListener implements ActionListener {

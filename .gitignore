@@ -2,3 +2,4 @@ build
 javadoc
 RestaurantList.ser
 *.csv
+.DS_Store

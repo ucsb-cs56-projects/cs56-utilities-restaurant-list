@@ -28,6 +28,7 @@
 	 <pathelement location="lib/jcommander-1.35.jar" />
 	 <pathelement location="lib/json_simple-1.1.jar" />
 	 <pathelement location="lib/scribe-1.3.5.jar"/>
+     <pathelement location="lib/google-places-api-java.jar"/>
   </path>
 
   <target name="compile" description = "Compiles the program">

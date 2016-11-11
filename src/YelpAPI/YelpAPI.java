@@ -183,6 +183,7 @@ public class YelpAPI {
    * @return Businesses an ArrayList of Namd:ID pairs from the YELP API Search
    */
     public static ArrayList<NameAndID> LocalRestaurantNamesAndID(String term, String location) {
+        System.out.println(location);
 	YelpAPI yelpApi = new YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
 	if(term == null)
 	    term = DEFAULT_TERM;

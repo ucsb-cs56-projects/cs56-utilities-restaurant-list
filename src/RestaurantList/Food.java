@@ -11,11 +11,18 @@
    @author Timothy Kwong
    @author Alan Tran
    @version CS56, Summer 2016
+
+   @author Colin Mai
+   @author John Rehbeim
+   @version CS56, Fall 2016
  */
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
 
 import java.util.*;
 import java.io.*;
+
+//Google Places API helper library, Protip: you should frequently update this library because it's not officially supported by Google. Here's a link https://github.com/windy1/google-places-api-java
+import se.walkercrou.places.*;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -34,6 +41,15 @@ import edu.ucsb.cs56.projects.utilities.YelpAPI.NameAndID;
 public class Food implements Serializable {
 
     ArrayList<Restaurant> allRestaurants = new ArrayList<Restaurant>();
+    
+    //Google Place static constants
+    //The GooglePlaces object is the interface to the API so most functionality you need from the library can be got from that object.
+    public static final String GOOGLE_PLACES_API_KEY = "AIzaSyCcfp6MyIu6CuSlqsiF04P_LG74Vk65etQ";
+    public static final GooglePlaces googlePlacesClient;
+    
+    static {
+        googlePlacesClient = new GooglePlaces(GOOGLE_PLACES_API_KEY);
+    }
     
     /**
        noarg Constructor for objects of class Food
@@ -61,7 +77,18 @@ public class Food implements Serializable {
 		    */}
     }
 		
-		
+    public Restaurant getCuisineWithName(String name) {
+        // This is a hack but needed for getting restaurant info in a reasonable fashion
+        for(Restaurant r : allRestaurants) {
+            if(r.getName().equals(name)) {
+                return r;
+            }
+        }
+        
+        int[] array = new int[1]; // crash on purpose cause theres no graceful way to handle a failure
+        array[1] = 0;
+        return allRestaurants.get(0);
+    }
     public boolean readSavedList() {
 		boolean load = true;
 
@@ -178,7 +205,7 @@ public class Food implements Serializable {
 	    System.out.println("createNew failed");
 	    return;
 	}else{
-	    Restaurant r = new Restaurant(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7]);
+	    Restaurant r = new Restaurant(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7], new ArrayList<Review>());
 	    this.addNew(r);
 	}
 	for(int i=0;i<allRestaurants.size();i++){
@@ -193,7 +220,7 @@ public class Food implements Serializable {
     	for (int i = 0; i < 6; i++) {
     		withoutQuotes[i] = info[i].substring(1, info[i].length() - 1);
     	}
-	Restaurant r = new Restaurant(withoutQuotes[0],withoutQuotes[1],withoutQuotes[2],withoutQuotes[3],withoutQuotes[4],withoutQuotes[5],withoutQuotes[6],withoutQuotes[7]);
+	Restaurant r = new Restaurant(withoutQuotes[0],withoutQuotes[1],withoutQuotes[2],withoutQuotes[3],withoutQuotes[4],withoutQuotes[5],withoutQuotes[6],withoutQuotes[7], new ArrayList<Review>());
 	this.addNew(r);
     }
 
@@ -272,15 +299,26 @@ public class Food implements Serializable {
 	//Collect the cuisine-specific local restaurants around an area
 	//Implement using the YelpAPI
 	ArrayList<NameAndID> LocalRestaurants = YelpAPI.LocalRestaurantNamesAndID(cuisine,area);
-	
+    // Query the google Places API using the client helper object googlePlacesClient
+        List<Place> restaurantResults = googlePlacesClient.getPlacesByQuery(cuisine + " in " + area, GooglePlaces.DEFAULT_RESULTS); // This will fetch 20 results at most
+        //, Param.name("type").value("restaurant")); You could add this as a parameter but it narrows your results and removes some restaurants that aren't yet categorized as restaurants
+        
+        List<Place> detailedRestaurantResults = new ArrayList<Place>();
+        for (Place restaurant : restaurantResults) {
+            detailedRestaurantResults.add(restaurant.getDetails());
+        }
+        
+        
 	for(int i = 0; i < LocalRestaurants.size(); i++){
+        String openTime = "8";
+        String closeTime = "22";
 	    String GeneralInfo = YelpAPI.RestaurantGeneralInfo(LocalRestaurants.get(i).id);
 	    System.out.println(GeneralInfo);
 	    //name is a string
 	    String name=(String) this.RestaurantSpecificInfo(GeneralInfo, "name");
 	    System.out.println(name);
 	    //display_phone is a string
-	    String phone=(String) this.RestaurantSpecificInfo(GeneralInfo,"display_phone");
+	    String phone = (String) this.RestaurantSpecificInfo(GeneralInfo,"display_phone");
 	    System.out.println(phone);
 	    String address="";
 	    String menu=(String) this.RestaurantSpecificInfo(GeneralInfo, "menu_provider");
@@ -300,9 +338,37 @@ public class Food implements Serializable {
 		address = "unlisted";
 	    //Potentially could use to generate a picture in the app
 	    String imageURL = (String) this.RestaurantSpecificInfo(GeneralInfo,"image_url");
-	    //YelpAPI does not have the open and closing time, thus make them all 8-22
-	    Restaurant restaurant = new Restaurant("8","22",name,phone,address, cuisine, imageURL, menu);
+	   
+	    //Use the Google Places API for operating hours cause the Yelp API doesn't have them
+        ArrayList<Review> reviews = new ArrayList<Review>();
+        if(phone != null) {
+            String comparableYelpPhoneNumber = phone.replaceAll("\\D", "").substring(1);
+            for (Place restaurant : detailedRestaurantResults) {
+                
+                if (restaurant.getPhoneNumber() != null) {
+                    String comparableGooglePlacesPhoneNumber = restaurant.getPhoneNumber().replaceAll("\\D", "");
+                    //We use phone numbers to determine if the restaurants are the same there really isn't too much of a cleaner way to do this
+                    if (comparableYelpPhoneNumber.equals(comparableGooglePlacesPhoneNumber)) {
+                        System.out.println("NUMBER OF REVIEWS : " + restaurant.getReviews().size());
+                        reviews = new ArrayList<Review>(restaurant.getReviews());
+                        Hours operatingHoursWeekly = restaurant.getHours();
+                        List<Hours.Period> operatingHoursByDay = operatingHoursWeekly.getPeriods();
+                        if (operatingHoursByDay.size() > 0) {
+                            Hours.Period dailyHours = operatingHoursByDay.get(0);
+                            String nonCleanedOpenTime = dailyHours.getOpeningTime(); // The library puts it in HH:MM format
+                            String nonCleanedCloseTime = dailyHours.getClosingTime();
+                            openTime = nonCleanedOpenTime.substring(0,2);
+                            closeTime = nonCleanedCloseTime.substring(0,2);
+                        }
+                    }
+                }
+                
+            }
+            
+        }
+        Restaurant restaurant = new Restaurant(openTime, closeTime,name,phone,address, cuisine, imageURL, menu, reviews);
 	    this.addNew(restaurant);
 	}
+     
     }
 }
