@@ -31,7 +31,7 @@ import org.json.simple.parser.ParseException;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
-import org.scribe.model.Token;
+bbbimport org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
@@ -76,7 +76,12 @@ public class Food implements Serializable {
 		    this.populateRestaurantsDatabase("Vegetarian","Isla Vista, CA");
 		    */}
     }
-		
+  /**
+     Allows us to access and print out the restaurant's name
+     
+     @param name The stirng that holds the name of the restaurant
+     @return r the restaurant which corresponds with the name
+  */		
     public Restaurant getCuisineWithName(String name) {
         // This is a hack but needed for getting restaurant info in a reasonable fashion
         for(Restaurant r : allRestaurants) {
@@ -89,6 +94,13 @@ public class Food implements Serializable {
         array[1] = 0;
         return allRestaurants.get(0);
     }
+
+ /** 
+	Reads the restaurant list 
+	
+	@return load    the list of restaurants
+    */
+    
     public boolean readSavedList() {
 		boolean load = true;
 
@@ -213,6 +225,13 @@ public class Food implements Serializable {
 	}
     }
 
+     /** 
+	 Prints out the restaurant's information. Creates a comma seperated value file
+	
+	@param info      Contains an array of string has lists information
+
+    */
+    
     public void createCSVNew(String[] info)
     {
     	String[] withoutQuotes = new String[7];

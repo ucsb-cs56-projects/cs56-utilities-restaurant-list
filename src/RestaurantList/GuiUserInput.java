@@ -47,6 +47,11 @@ public class GuiUserInput extends JPanel {
     String cuisineChoice;
     String[] types = new String[]{"Mexican","Chinese","Thai","Sushi Bars","Seafood","Fast Food","Sandwiches","Pizza","Italian","Coffee & Tea","Vegetarian"};
     Restaurant selectedRestaurant;
+
+     /**
+     The constructor that creates the entire JFrame
+     
+     */
     
     //Constructor
     public GuiUserInput() {
@@ -441,6 +446,10 @@ public class GuiUserInput extends JPanel {
 		frame.validate();
     }
 
+     /**
+	Modifies the actionPerformed to print out all the restaurants of that particular cuisine.
+     */
+
     class futureLocationListener implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
 	    futureCuisine.removeAllItems();
@@ -451,6 +460,10 @@ public class GuiUserInput extends JPanel {
 	    futureCuisine.setEnabled(true);
 	}
     }
+
+      /**
+	 Turns on location
+     */
     
     class futureTimeListener implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
@@ -458,7 +471,9 @@ public class GuiUserInput extends JPanel {
 	}
     }
 
-
+ /**
+    Prints out the list of restaurants for that cuisine.
+     */
 
     class futureCuisineBoxListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
@@ -480,7 +495,9 @@ public class GuiUserInput extends JPanel {
 	    	futureRestaurant.setEnabled(true);
 		}
     }
-
+    /**
+       Looks for restaurants
+    */
     
     class futureListListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
@@ -495,8 +512,12 @@ public class GuiUserInput extends JPanel {
 	    	}
 		}
     }
+    /**
+       Sets up the gui and prints out all the information about hte restaurant while adding a choice to go back, click on menu, and click on reviews.
 
-
+       @param cuisineName The type of cuisine selected
+*/
+    
     public void showChoiceFuture(String cuisineName) {
         frame.getContentPane().removeAll();
         
@@ -596,12 +617,18 @@ public class GuiUserInput extends JPanel {
         frame.invalidate();
         frame.validate();
     }
-    
+
+    /**
+       When a button is clicked, call MenuScreen
+     */
     class menuButtonListener implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 	    MenuScreen();
 	}
     }
+    /**
+       The gui that is displayed when the user wants to look at the menu
+     */
         
     public void MenuScreen() {
         frame.getContentPane().removeAll();
@@ -633,6 +660,10 @@ public class GuiUserInput extends JPanel {
         frame.invalidate();
         frame.validate();
     }
+
+    /**
+       The gui that is displayed when the user wants to find a place to eat
+     */
     
     public void EatScreen() {
         eatScreen = new JPanel();
@@ -686,6 +717,10 @@ public class GuiUserInput extends JPanel {
         frame.invalidate();
         frame.validate();
     }
+
+    /**
+       ActionPerformed for the cuisine list button
+     */
 
     class locationListener implements ActionListener{
         public void actionPerformed(ActionEvent event) {
@@ -854,6 +889,9 @@ public class GuiUserInput extends JPanel {
     }
 
     //Parses a CSV file and populates database.
+    /**
+       Creates a comma seperated value file
+     */
     public void readCSV(File file) {
     	BufferedReader br = null;
     	String line = "";
@@ -882,6 +920,10 @@ public class GuiUserInput extends JPanel {
     	food.saveList();
     	EatScreen();
   	}
+
+     /**
+       Action Performed for printing the number of ratings for each restaurant
+     */ 
     
     class reviewsButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
@@ -892,14 +934,24 @@ public class GuiUserInput extends JPanel {
         
     }
 
-    //Goes back to the starting screen whenever the back button is clicked    
+    //Goes back to the starting screen whenever the back button is clicked
+
+ /**
+       Action Performed to go back
+     */ 
+    
     class backButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 	    	setup();
 		}
     }
     
-    //Goes back to the eating screen 
+    //Goes back to the eating screen
+
+ /**
+       Action Performed for the exit button to go back to the eating screen
+     */ 
+    
     class backToChoiceButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 	    	EatScreen();
@@ -912,11 +964,19 @@ public class GuiUserInput extends JPanel {
 		}
     }
 
+     /**
+       Action Performed to add a new screen
+     */ 
+
     class NewListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 	    	AddNewScreen();
 		}
     }
+
+     /**
+       Action Performed for opening the file
+     */ 
 
     class NewCSVListener implements ActionListener {	
 		public void actionPerformed(ActionEvent event) {
@@ -932,6 +992,10 @@ public class GuiUserInput extends JPanel {
         		System.out.println("File open cancelled.");
 		}
     }
+
+     /**
+       Action Performed to print out all the information about the restaurant
+     */ 
 
     class CSVSaveListener implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
@@ -963,12 +1027,18 @@ public class GuiUserInput extends JPanel {
 	}
     }
 
+     /**
+       Action Performed for the FutureScreen
+     */ 
+    
     class FutureListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 		    FutureScreen();
 		}
     }
-
+    /**
+       Action Performed for the exit button
+     */ 
     class ExitListener implements ActionListener {
     	public void actionPerformed(ActionEvent event) {
     		System.exit(0);
