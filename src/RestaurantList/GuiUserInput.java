@@ -24,14 +24,14 @@ import java.io.*;
 import java.net.URL;
 import java.net.MalformedURLException;
 
-
-
 import java.awt.event.*;
 import java.awt.image.*;
 import java.awt.*;
 import javax.imageio.*;
 
 import javax.swing.*;
+
+import se.walkercrou.places.*;
 
 public class GuiUserInput extends JPanel {
 
@@ -519,6 +519,11 @@ public class GuiUserInput extends JPanel {
 */
     
     public void showChoiceFuture(String cuisineName) {
+        
+        //stores the restaurant's info in the array
+        String[] restaurantInfo = food.showAllInfo(cuisineName);
+        Place selectedRestaurant = food.getCuisineWithName(cuisineChoice).getPlacesInfo();
+        
         frame.getContentPane().removeAll();
         
         JPanel choice = new JPanel();
@@ -526,7 +531,12 @@ public class GuiUserInput extends JPanel {
         choice.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         
         JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new GridLayout(6,2));
+        if (selectedRestaurant != null) {
+            infoPanel.setLayout(new GridLayout(9,2));
+        } else {
+            infoPanel.setLayout(new GridLayout(6,2));
+        }
+        
         
         JPanel titlePanel = new JPanel();
         JPanel buttonPanel = new JPanel();
@@ -541,31 +551,11 @@ public class GuiUserInput extends JPanel {
          */
         
         JLabel nameTitle = new JLabel("Name");
-        JLabel startTimeTitle = new JLabel("Opens");
-        JLabel endTimeTitle = new JLabel("Closes");
+        JLabel hoursTitleLabel = new JLabel("Hours");
         JLabel addressTitle = new JLabel("Address");
         JLabel phoneTitle = new JLabel("Phone");
         pageTitle = new JLabel("Restaurant Information");
-        
-        //stores the restaurant's info in the array
-        String[] restaurantInfo = food.showAllInfo(cuisineName);
-        
-        int closingTime = Integer.parseInt(restaurantInfo[2]);
-        int openningTime = Integer.parseInt(restaurantInfo[1]);
-        //Convert closing time to 12 hour time frame if needed
-        String closeLabelText, openLabelText;
-        if (closingTime > 12) {
-            closeLabelText = (closingTime - 12) + " P.M.";
-        } else {
-            closeLabelText = closingTime + " A.M.";
-        }
-        if (openningTime > 12) {
-            openLabelText = (openningTime - 12) + " P.M.";
-        } else {
-            openLabelText = openningTime + " A.M.";
-        }
-        JLabel startTime = new JLabel(openLabelText);
-        JLabel endTime = new JLabel(closeLabelText);
+        //JLabel endTime = new JLabel(closeLabelText);
         JLabel name = new JLabel(restaurantInfo[0]);
         JLabel address = new JLabel(restaurantInfo[3]);
         JLabel phone = new JLabel(restaurantInfo[4]);
@@ -593,10 +583,14 @@ public class GuiUserInput extends JPanel {
         
         infoPanel.add(nameTitle);
         infoPanel.add(name);
-        infoPanel.add(startTimeTitle);
-        infoPanel.add(startTime);
-        infoPanel.add(endTimeTitle);
-        infoPanel.add(endTime);
+        infoPanel.add(hoursTitleLabel);
+        if (selectedRestaurant != null) {
+            for (Hours.Period hoursByDay : selectedRestaurant.getHours().getPeriods()) {
+                infoPanel.add(new JLabel(hoursByDay.toString()));
+            }
+        } else {
+            infoPanel.add(new JLabel("Operating hours not available"));
+        }
         infoPanel.add(addressTitle);
         infoPanel.add(address);
         infoPanel.add(phoneTitle);
@@ -787,6 +781,10 @@ public class GuiUserInput extends JPanel {
      *  @param cuisineName  the type of cuisine chosen
      */
     public void showChoiceEat(String cuisineName) {
+        //stores the restaurant's info in the array
+        String[] restaurantInfo = food.showAllInfo(cuisineName);
+        Place selectedRestaurant = food.getCuisineWithName(cuisineChoice).getPlacesInfo();
+        
 		frame.getContentPane().removeAll();
 	
 		JPanel choice = new JPanel();
@@ -795,7 +793,12 @@ public class GuiUserInput extends JPanel {
 		choice.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
 		JPanel infoPanel = new JPanel();
-		infoPanel.setLayout(new GridLayout(6,2));
+        if (selectedRestaurant != null) {
+            infoPanel.setLayout(new GridLayout(9,2));
+        } else {
+            infoPanel.setLayout(new GridLayout(6,2));
+        }
+		
 
 		JPanel titlePanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
@@ -810,31 +813,13 @@ public class GuiUserInput extends JPanel {
 		*/
 		
 		JLabel nameTitle = new JLabel("Name");
-		JLabel startTimeTitle = new JLabel("Opens");
-		JLabel endTimeTitle = new JLabel("Closes");
+		JLabel hoursTitleLabel = new JLabel("Hours");
 		JLabel addressTitle = new JLabel("Address");
 		JLabel phoneTitle = new JLabel("Phone");
 		pageTitle = new JLabel("Restaurant Information");
 
-		//stores the restaurant's info in the array
-		String[] restaurantInfo = food.showAllInfo(cuisineName);
+		
         
-		//converts times to AM PM
-        int closingTime = Integer.parseInt(restaurantInfo[2]);
-        int openningTime = Integer.parseInt(restaurantInfo[1]);
-        String closeLabelText, openLabelText;
-        if (closingTime > 12) {
-            closeLabelText = (closingTime - 12) + " P.M.";
-        } else {
-            closeLabelText = closingTime + " A.M.";
-        }
-        if (openningTime > 12) {
-            openLabelText = (openningTime - 12) + " P.M.";
-        } else {
-            openLabelText = openningTime + " A.M.";
-        }
-        JLabel startTime = new JLabel(openLabelText);
-        JLabel endTime = new JLabel(closeLabelText);
 		JLabel name = new JLabel(restaurantInfo[0]);
 		JLabel address = new JLabel(restaurantInfo[3]);
 		JLabel phone = new JLabel(restaurantInfo[4]);
@@ -863,10 +848,16 @@ public class GuiUserInput extends JPanel {
 		
 		infoPanel.add(nameTitle);
 		infoPanel.add(name);
-		infoPanel.add(startTimeTitle);
-		infoPanel.add(startTime);
-		infoPanel.add(endTimeTitle);
-		infoPanel.add(endTime);
+		infoPanel.add(hoursTitleLabel);
+        if (selectedRestaurant != null) {
+            for (Hours.Period hoursByDay : selectedRestaurant.getHours().getPeriods()) {
+                infoPanel.add(new JLabel(hoursByDay.toString()));
+            }
+                
+        } else {
+            infoPanel.add(new JLabel("Operating hours not available"));
+        }
+        
 		infoPanel.add(addressTitle);
 		infoPanel.add(address);
 		infoPanel.add(phoneTitle);
