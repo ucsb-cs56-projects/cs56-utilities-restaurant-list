@@ -32,21 +32,36 @@ import javax.imageio.*;
 import javax.swing.*;
 
 import se.walkercrou.places.*;
+import org.geonames.*;
 
 public class GuiUserInput extends JPanel {
 
     JLabel restaurant, pageTitle;
     JPanel  eatScreen, editScreen, future, menuScreen; 
-    JButton back, edit, menu, reviewsButton, image, locationSearchSubmitButton;
+    JButton back, edit, menu, reviewsButton, image, searchToggleButton = new JButton("By City");
     JFrame frame;
     Food food = new Food();
-    JTextField name, address, phoneNumber, startTime, endTime, type, futureTime, location, futureLocation;
+    JTextField name, address, phoneNumber, startTime, endTime, type, futureTime, futureLocation;
+    JTextField location = new JTextField(20);
     JComboBox cuisineList, restaurantList, futureCuisine, futureRestaurant;
     String time;
     String[] info = new String[6];
     String cuisineChoice;
     String[] types = new String[]{"Mexican","Chinese","Thai","Sushi Bars","Seafood","Fast Food","Sandwiches","Pizza","Italian","Coffee & Tea","Vegetarian"};
     Restaurant selectedRestaurant;
+    
+    // State and city search GUI objects
+    String[] stateNames = {"Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma", "Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"};
+    final JLabel stateTitleLabel = new JLabel("State");
+    final JLabel cityTitleLabel = new JLabel("City");
+    JComboBox stateDropDown = new JComboBox(stateNames);
+    JComboBox cityDropDown = new JComboBox();
+    JPanel searchControlContainer = new JPanel(); // This makes swapping search Panels easier
+    JPanel naturalLanguageSearchPanel = new JPanel();
+    JPanel stateCitySearchPanel = new JPanel();
+    
+    JButton searchButton = new JButton("Search");
+    
 
      /**
      The constructor that creates the entire JFrame
@@ -59,14 +74,38 @@ public class GuiUserInput extends JPanel {
 		frame = new JFrame("Restaurant Finder");
 	
 		setup();
+        setupOnce();
 	
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(600,400);
 		frame.setVisible(true);
     }
+    
+    /** this is only called one time unlike setup
+     
+     */
+    public void setupOnce() {
+        //Eatscreen Actionlisteners and setup
+        searchToggleButton.addActionListener(e -> { toggleSearchType(); });
+        
+        searchButton.addActionListener( e -> {
+            String lct, type = (String)cuisineList.getSelectedItem();
+            if(isNaturalLanguage) {
+                lct = (String)location.getText();
+            } else {
+                lct = stateDropDown.getSelectedItem() + ", " + cityDropDown.getSelectedItem();
+            }
+            System.out.println("Location: " + lct + "   Type: " + type);
+            search(lct, type);
+        });
+        
+        setupCitySearchPanel();
+    }
+     
 
     public static void main(String[] args) {
 		GuiUserInput gui = new GuiUserInput();
+        
     }
 
     /**
@@ -110,6 +149,8 @@ public class GuiUserInput extends JPanel {
 		CSVSaveButton.addActionListener(new CSVSaveListener());
 		futureButton.addActionListener(new FutureListener());
 		exitButton.addActionListener(new ExitListener());
+        
+        
 
 		
 		titlePanel.add(pageTitle);
@@ -659,33 +700,27 @@ public class GuiUserInput extends JPanel {
        The gui that is displayed when the user wants to find a place to eat
      */
     
+    JLabel place = new JLabel("Location (i.e. Isla Vista, CA), press enter after input:");
     public void EatScreen() {
         eatScreen = new JPanel();
         eatScreen.setLayout(new BoxLayout(eatScreen, BoxLayout.Y_AXIS));
         frame.getContentPane().removeAll();
         
-        JPanel textPanel = new JPanel();
         JPanel boxPanel = new JPanel();
         JPanel buttonPanel = new JPanel();
         JPanel titlePanel = new JPanel();
         
         pageTitle = new JLabel("Find a restaurant open at the current time.");
         
-        JLabel place = new JLabel("Location (i.e. Isla Vista, CA), press enter after input:");
         //String[] type = food.getCuisineTypes();
         back = new JButton("Go Back");
         back.addActionListener(new backButtonListener());
         
         //JComboBox listing the cuisines
-        location = new JTextField(20);
         location.addActionListener(new locationListener());
-        
-        locationSearchSubmitButton = new JButton("Submit");
-        locationSearchSubmitButton.addActionListener(new locationListener());
         
         
         cuisineList = new JComboBox(types);
-        cuisineList.setEnabled(false);
         
         restaurantList = new JComboBox();
         restaurantList.setEnabled(false);
@@ -694,16 +729,25 @@ public class GuiUserInput extends JPanel {
         
         restaurantList.addActionListener(new restaurantListListener());
         
-        textPanel.add(place);
-        textPanel.add(location);
-        textPanel.add(locationSearchSubmitButton);
+        
+        
+        
+        
+        naturalLanguageSearchPanel.add(place);
+        naturalLanguageSearchPanel.add(location);
+        if (searchControlContainer.getComponentCount() == 0) {
+            searchControlContainer.add(naturalLanguageSearchPanel);
+        }
         boxPanel.add(cuisineList);
         boxPanel.add(restaurantList);
+        
+        buttonPanel.add(searchToggleButton);
+        buttonPanel.add(searchButton);
         buttonPanel.add(back);
         titlePanel.add(pageTitle);
         
         eatScreen.add(titlePanel);
-        eatScreen.add(textPanel);
+        eatScreen.add(searchControlContainer);
         eatScreen.add(boxPanel);
         eatScreen.add(buttonPanel);
         
@@ -711,7 +755,91 @@ public class GuiUserInput extends JPanel {
         frame.invalidate();
         frame.validate();
     }
-
+    boolean isNaturalLanguage = true;
+    public void toggleSearchType() {
+        searchControlContainer.removeAll();
+        if (isNaturalLanguage) {
+            searchToggleButton.setText("Natural Language");
+            searchControlContainer.add(stateCitySearchPanel);
+        } else {
+            searchToggleButton.setText("By City");
+            searchControlContainer.add(naturalLanguageSearchPanel);
+        }
+        searchControlContainer.paintImmediately(searchControlContainer.getVisibleRect());
+        isNaturalLanguage = !isNaturalLanguage;
+    }
+    
+    public void setupCitySearchPanel() {
+        
+        
+        stateCitySearchPanel.add(stateTitleLabel);
+        stateDropDown.addActionListener( e -> {
+            JComboBox cb = (JComboBox)e.getSource();
+            String state = (String)cb.getSelectedItem();
+            setupCityComboBox(state);
+        });
+        stateCitySearchPanel.add(stateDropDown);
+        stateCitySearchPanel.add(cityTitleLabel);
+        stateCitySearchPanel.add(cityDropDown);
+        
+        cityDropDown.setEnabled(true);
+        
+    }
+    public void setupCityComboBox(String state) {
+        
+        //clear old cities because we're adding new ones
+        cityDropDown.removeAllItems();
+        
+        //Perform search for cities using the geonames webservice
+        WebService.setUserName("N7Alpha"); // add your username here
+         
+         ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
+        final String[] citiesOnlyCodes = {"PPL", "PPLC", "PPLA"};
+         searchCriteria.setQ("United States, " + state); // Set query
+        searchCriteria.setFeatureCodes(citiesOnlyCodes);
+        ToponymSearchResult searchResult = null;
+        try {
+            searchResult = WebService.search(searchCriteria);
+        } catch (Exception e) {
+            System.out.println(e);
+            return;
+        }
+        ArrayList<String> cityNames = new ArrayList<String>();
+        for (Toponym toponym : searchResult.getToponyms()) {
+            System.out.println("Location: " + toponym.getName() + ", " + toponym.getCountryName());
+            cityNames.add(toponym.getName());
+        }
+        Collections.sort(cityNames);
+         for (String name : cityNames) {
+             cityDropDown.addItem(name);
+         }
+        cityDropDown.setEnabled(true);
+    }
+    /**
+     Performs a search and populates restaurant drop down menu with the results
+     */
+    public void search(String lct, String type) {
+        String currentTime = String.valueOf(food.getHour());
+        food.clearEntries();
+        String storedTitle = pageTitle.getText();
+        pageTitle.setText("Loading...");
+        // Cause it doesn't update in time otherwise
+        pageTitle.paintImmediately(pageTitle.getVisibleRect());
+        // TODO: This blocks the main thread
+        food.populateRestaurantsDatabase(type, lct);
+        pageTitle.setText(storedTitle);
+        pageTitle.paintImmediately(pageTitle.getVisibleRect());
+        String[] listOfRestaurants = food.showOptions(type, currentTime);
+        restaurantList.removeAllItems();
+        
+        for (int i = 0; i < listOfRestaurants.length; i++) {
+            System.out.println(listOfRestaurants[i]);
+            restaurantList.addItem(listOfRestaurants[i]);
+        }
+        
+        restaurantList.setEnabled(true);
+    }
+    
     /**
        ActionPerformed for the cuisine list button
      */
@@ -730,28 +858,6 @@ public class GuiUserInput extends JPanel {
 		public void actionPerformed(ActionEvent event) {
 	    	JComboBox cb = (JComboBox)event.getSource();
 
-		String lct = (String)location.getText();
-	    	String type = (String)cb.getSelectedItem();
-	    	String currentTime = String.valueOf(food.getHour());
-            
-		food.clearEntries();
-            String storedTitle = pageTitle.getText();
-            pageTitle.setText("Loading...");
-            // Cause it doesn't update in time otherwise
-            pageTitle.paintImmediately(pageTitle.getVisibleRect());
-            // TODO: This blocks the main thread
-		food.populateRestaurantsDatabase(type, lct);
-            pageTitle.setText(storedTitle);
-            pageTitle.paintImmediately(pageTitle.getVisibleRect());
-		String[] listOfRestaurants = food.showOptions(type, currentTime);
-	    	restaurantList.removeAllItems();
-	    
-	    	for (int i = 0; i < listOfRestaurants.length; i++) {
-		    System.out.println(listOfRestaurants[i]);
-		    restaurantList.addItem(listOfRestaurants[i]);
-	    	}
-		
-	    	restaurantList.setEnabled(true);
 		}
     }
 
