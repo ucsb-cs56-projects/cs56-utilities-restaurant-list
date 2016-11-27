@@ -76,7 +76,12 @@ public class Food implements Serializable {
 		    this.populateRestaurantsDatabase("Vegetarian","Isla Vista, CA");
 		    */}
     }
-		
+  /**
+     Allows us to access and print out the restaurant's name
+     
+     @param name The stirng that holds the name of the restaurant
+     @return r the restaurant which corresponds with the name
+  */		
     public Restaurant getCuisineWithName(String name) {
         // This is a hack but needed for getting restaurant info in a reasonable fashion
         for(Restaurant r : allRestaurants) {
@@ -89,6 +94,13 @@ public class Food implements Serializable {
         array[1] = 0;
         return allRestaurants.get(0);
     }
+
+ /** 
+	Reads the restaurant list 
+	
+	@return load    the list of restaurants
+    */
+    
     public boolean readSavedList() {
 		boolean load = true;
 
@@ -205,7 +217,7 @@ public class Food implements Serializable {
 	    System.out.println("createNew failed");
 	    return;
 	}else{
-	    Restaurant r = new Restaurant(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7], new ArrayList<Review>());
+	    Restaurant r = new Restaurant(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7], (Place)null);
 	    this.addNew(r);
 	}
 	for(int i=0;i<allRestaurants.size();i++){
@@ -213,6 +225,13 @@ public class Food implements Serializable {
 	}
     }
 
+     /** 
+	 Prints out the restaurant's information. Creates a comma seperated value file
+	
+	@param info      Contains an array of string has lists information
+
+    */
+    
     public void createCSVNew(String[] info)
     {
     	String[] withoutQuotes = new String[7];
@@ -220,7 +239,7 @@ public class Food implements Serializable {
     	for (int i = 0; i < 6; i++) {
     		withoutQuotes[i] = info[i].substring(1, info[i].length() - 1);
     	}
-	Restaurant r = new Restaurant(withoutQuotes[0],withoutQuotes[1],withoutQuotes[2],withoutQuotes[3],withoutQuotes[4],withoutQuotes[5],withoutQuotes[6],withoutQuotes[7], new ArrayList<Review>());
+	Restaurant r = new Restaurant(withoutQuotes[0],withoutQuotes[1],withoutQuotes[2],withoutQuotes[3],withoutQuotes[4],withoutQuotes[5],withoutQuotes[6],withoutQuotes[7], (Place)null);
 	this.addNew(r);
     }
 
@@ -340,6 +359,7 @@ public class Food implements Serializable {
 	    String imageURL = (String) this.RestaurantSpecificInfo(GeneralInfo,"image_url");
 	   
 	    //Use the Google Places API for operating hours cause the Yelp API doesn't have them
+        Place placesRestaurant = null;
         ArrayList<Review> reviews = new ArrayList<Review>();
         if(phone != null) {
             String comparableYelpPhoneNumber = phone.replaceAll("\\D", "").substring(1);
@@ -349,6 +369,7 @@ public class Food implements Serializable {
                     String comparableGooglePlacesPhoneNumber = restaurant.getPhoneNumber().replaceAll("\\D", "");
                     //We use phone numbers to determine if the restaurants are the same there really isn't too much of a cleaner way to do this
                     if (comparableYelpPhoneNumber.equals(comparableGooglePlacesPhoneNumber)) {
+                        placesRestaurant = restaurant;
                         System.out.println("NUMBER OF REVIEWS : " + restaurant.getReviews().size());
                         reviews = new ArrayList<Review>(restaurant.getReviews());
                         Hours operatingHoursWeekly = restaurant.getHours();
@@ -366,7 +387,13 @@ public class Food implements Serializable {
             }
             
         }
-        Restaurant restaurant = new Restaurant(openTime, closeTime,name,phone,address, cuisine, imageURL, menu, reviews);
+        Restaurant restaurant;
+        if (placesRestaurant != null) {
+            restaurant = new Restaurant(openTime, closeTime, name, phone, address, cuisine, imageURL, menu, placesRestaurant);
+        } else {
+            restaurant = new Restaurant(openTime, closeTime, name, phone, address, cuisine, imageURL, menu);
+        }
+        
 	    this.addNew(restaurant);
 	}
      

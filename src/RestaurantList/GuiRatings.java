@@ -26,6 +26,12 @@ public class GuiRatings {
     private JFrame frame;
     private JScrollPane scrollPane;
     private Box reviewTable;
+
+ /**
+    Sets up the gui, creates the boxes and frame
+
+     @param reviews The reviews taken from the API
+     */
     
     public GuiRatings(ArrayList<Review> reviews) {
         //GUI Setup
@@ -42,6 +48,13 @@ public class GuiRatings {
         frame.setSize(600,400);
         frame.setVisible(true);
     }
+
+/**
+    Creates cells in the pannel that holds each review.
+
+     @param reviews The reviews taken from the API
+     */
+    
     public void addReviews(ArrayList<Review> reviews) {
         for (Review review : reviews) {
             RatingTableCellPanel cell = new RatingTableCellPanel(review);

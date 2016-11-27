@@ -27,6 +27,10 @@ public class RatingTableCellPanel extends JPanel {
     private JLabel ratingLabel, ratingScoreLabel;
     private JPanel ratingContainer; // This is so the rating label is always next to the ratingScoreLabel
     private JTextArea reviewText;
+
+    /** 
+	Constructor for each review cell
+    */
     
     public RatingTableCellPanel(Review googlePlacesReview) {
         
@@ -60,6 +64,10 @@ public class RatingTableCellPanel extends JPanel {
     */
     
     // setters
+
+    /**
+       If author is annoymous, print Anonymous
+     */
     public void setAuthor(String author) {
         if (author == null) {
             authorLabel.setText("Anonymous");
@@ -67,6 +75,9 @@ public class RatingTableCellPanel extends JPanel {
             authorLabel.setText(author);
         }
     }
+    /**
+       If no rating, print no rating
+     */ 
     public void setRating(String rating) {
         if (rating == null) {
             ratingScoreLabel.setText("No Rating");
@@ -74,6 +85,9 @@ public class RatingTableCellPanel extends JPanel {
             ratingScoreLabel.setText(rating);
         }
     }
+    /**
+      If no review, print no review
+     */ 
     public void setReview(String review) {
         if (review == null) {
             reviewText.setText("No Review");
