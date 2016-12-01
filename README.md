@@ -47,3 +47,13 @@ Summer M16 Final Remarks
 M16 | pconrad 9am | alanthetran,timnkwong | improves the app to integrate YelpAPI to include restaurant pictures and a more diverse choice of restaurant
 ```
 This app is a neat way to learn about API usage and how to interact with an API specifically Yelp. Not only that but also learn how to work with networks, simple GUI and legacy code. Yelp's API gives you a lot of information in order for you to improve this app more. So far we have implemented a menu button that doesn't work as intended, added location setting for different restaurants, and added a picture of the restaurant. There are issues that needs to be worked on for Fall 2016 and that is your job to fix these issues or come up with new issues that may arise. The edit screen currently does not work and needs to fixed if you choose to tackle this issue. Overall the code is fairly clean and easy to understand. You should have a fun time with this lab!
+
+
+========================
+Fall 16 Final Remarks
+========================
+
+```
+F16 | pconrad 5pm | colinmai,N7Alpha | improves the app to integrate GoogleAPI to include correct restaurant hours and added new features.
+```
+This is probably one of the harder projects, but it is a great way to learn how to use APIs (a very useful skill in real life). You will also develop GUI skills that are applicable to any app you might be working on in the future. Right now, the code is pretty much the same thing as yelp; you can search for restaurants by city and cuisine type. Then you will be presented by menus, hours, reviews, etc. Many features presented in the main menu do not work perfectly yet, such as the option to add your own restaurants. The code right now is a little messy, as the majority of it is dumped into a few files; it might be easier to move seperate parts into new files. Overall, though this code might seem daunting at first, it has great potential and provides a very valuable opportunity to develop real like skill. Good luck and have fun! 
