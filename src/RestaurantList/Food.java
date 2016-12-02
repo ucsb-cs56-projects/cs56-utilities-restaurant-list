@@ -283,7 +283,9 @@ public class Food implements Serializable {
 			return;
 	allRestaurants.add(newRestaurant);
     }
-
+    /** 
+	Clears the list of restaurants
+     */ 
     public void clearEntries() {
 	allRestaurants.clear();
     }
