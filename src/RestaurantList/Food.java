@@ -38,6 +38,7 @@ import org.scribe.oauth.OAuthService;
 
 import edu.ucsb.cs56.projects.utilities.YelpAPI.YelpAPI;
 import edu.ucsb.cs56.projects.utilities.YelpAPI.NameAndID;
+import edu.ucsb.cs56.projects.utilities.YelpAPI.Dotenv;
 
 public class Food implements Serializable {
 
@@ -45,7 +46,7 @@ public class Food implements Serializable {
     
     //Google Place static constants
     //The GooglePlaces object is the interface to the API so most functionality you need from the library can be got from that object.
-    public static final String GOOGLE_PLACES_API_KEY = "AIzaSyCcfp6MyIu6CuSlqsiF04P_LG74Vk65etQ";
+    public static final String GOOGLE_PLACES_API_KEY = Dotenv.get("GOOGLE_PLACES_API_KEY");
     public static final GooglePlaces googlePlacesClient;
     
     static {
