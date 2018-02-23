@@ -1,16 +1,17 @@
-/**
-   Constructors, equals method, getters, and setter for the restaurant objects
+/*
+ *
+  Constructors, equals method, getters, and setter for the restaurant objects
 
-   @author Ameya Savale
-   @author Brandon Hammel
-   @author Andrew Pang
-   @author Thien Hoang
-   @author Brenda Flores
-   @version issue 398, CS56, W16
+  @author Ameya Savale
+  @author Brandon Hammel
+  @author Andrew Pang
+  @author Thien Hoang
+  @author Brenda Flores
+  @version issue 398, CS56, W16
 
-   @author Timothy Kwong
-   @author Alan Tran
-   @version CS56, M16
+  @author Timothy Kwong
+  @author Alan Tran
+  @version CS56, M16
  */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
@@ -28,7 +29,8 @@ public class Restaurant implements Serializable {
     private Place placesInfo;
     private ArrayList<Review> reviews;
 
-    /**
+    /*
+     *
        Arg Constructor creates new Restaurant object with the values
 
        @param starttime    opening hour of the restaurant

@@ -516,8 +516,9 @@ public class GuiUserInput extends JPanel {
 	}
     }
 
- /**
-    Prints out the list of restaurants for that cuisine.
+	/*
+	 *
+    	Prints out the list of restaurants for that cuisine.
      */
 
     class futureCuisineBoxListener implements ActionListener {
@@ -526,12 +527,12 @@ public class GuiUserInput extends JPanel {
 	    	String cuisine = (String)cb.getSelectedItem();
 	    	futureRestaurant.removeAllItems();
 
-		time = futureTime.getText();
-		String lct = (String)futureLocation.getText();
-		
-		food.clearEntries();
-		food.populateRestaurantsDatabase(cuisine, lct);
-		
+			time = futureTime.getText();
+			String lct = (String)futureLocation.getText();
+			
+			food.clearEntries();
+			food.populateRestaurantsDatabase(cuisine, lct);
+
 	    	String[] listOfRestaurants = food.showOptions(cuisine, time); 
 	    	for (int i = 0; i < listOfRestaurants.length; i++) {
 				System.out.println(listOfRestaurants[i]);
@@ -540,8 +541,9 @@ public class GuiUserInput extends JPanel {
 	    	futureRestaurant.setEnabled(true);
 		}
     }
-    /**
-       Looks for restaurants
+    /*
+     *
+     	Looks for restaurants
     */
     
     class futureListListener implements ActionListener {

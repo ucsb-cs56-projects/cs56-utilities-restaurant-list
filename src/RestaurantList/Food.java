@@ -42,6 +42,10 @@ import edu.ucsb.cs56.projects.utilities.YelpAPI.Dotenv;
 
 public class Food implements Serializable {
 
+	private Calendar calendar = Calendar.getInstance();
+	private Day[] days = { Day.MONDAY, Day.TUESDAY, Day.WEDNESDAY, Day.THURSDAY, Day.FRIDAY, Day.SATURDAY, Day.SUNDAY };    
+	private Day current_day = days[calendar.get(Calendar.DAY_OF_WEEK) - 1];
+    
     ArrayList<Restaurant> allRestaurants = new ArrayList<Restaurant>();
     
     //Google Place static constants
@@ -128,7 +132,7 @@ public class Food implements Serializable {
 		@param cuisine    The type of cuisine
 		@param hour       The hour during which the restaurant should be open
 
-		@return choice    The restaurant which the user wnats the information for
+		@return choice    The restaurant which the user wants the information for
     */
     public String[] showOptions(String cuisine, String time) {
 	
@@ -390,7 +394,18 @@ public class Food implements Serializable {
 	                        Hours operatingHoursWeekly = restaurant.getHours();
 	                        List<Hours.Period> operatingHoursByDay = operatingHoursWeekly.getPeriods();
 	                        if (operatingHoursByDay.size() > 0) {
-	                            Hours.Period dailyHours = operatingHoursByDay.get(0);
+	                        	int dayIndex = 0;
+	                        	for(dayIndex = 0; dayIndex < operatingHoursByDay.size(); dayIndex++) {
+	                        		if(operatingHoursByDay.get(dayIndex).getOpeningDay() == current_day) {
+	                        			System.out.println("Found instance of current day at index: " + i + " Day is " + operatingHoursByDay.get(dayIndex).getOpeningDay());
+	                        			break;
+	                        		}
+	                        	}
+	                        	if(dayIndex == operatingHoursByDay.size()) {
+	                        		dayIndex = 0;
+	                        	}
+
+	                            Hours.Period dailyHours = operatingHoursByDay.get(dayIndex);
 	                            String nonCleanedOpenTime = dailyHours.getOpeningTime(); // The library puts it in HH:MM format
 	                            String nonCleanedCloseTime = dailyHours.getClosingTime();
 	                            openTime = nonCleanedOpenTime.substring(0,2);
