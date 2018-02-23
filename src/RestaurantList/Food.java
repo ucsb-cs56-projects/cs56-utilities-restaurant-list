@@ -1,20 +1,21 @@
-/**
-   A program that finds open retaurants depending on the current time. User can also find restaurants that are open are a later hour. Users can also input in new restaurants.
-   
-   @author Ameya Savale
-   @author Brandon Hammel
-   @author Andrew Pang
-   @author Thien Hoang
-   @author Brenda Flores
-   @version CS56, Winter 2016
+/*
+ *
+	A program that finds open retaurants depending on the current time. User can also find restaurants that are open are a later hour. Users can also input in new restaurants.
 
-   @author Timothy Kwong
-   @author Alan Tran
-   @version CS56, Summer 2016
+	@author Ameya Savale
+	@author Brandon Hammel
+	@author Andrew Pang
+	@author Thien Hoang
+	@author Brenda Flores
+	@version CS56, Winter 2016
 
-   @author Colin Mai
-   @author John Rehbeim
-   @version CS56, Fall 2016
+	@author Timothy Kwong
+	@author Alan Tran
+	@version CS56, Summer 2016
+
+	@author Colin Mai
+	@author John Rehbeim
+	@version CS56, Fall 2016
  */
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
 
@@ -51,8 +52,9 @@ public class Food implements Serializable {
         googlePlacesClient = new GooglePlaces(GOOGLE_PLACES_API_KEY);
     }
     
-    /**
-       noarg Constructor for objects of class Food
+    /*
+     *
+		noarg Constructor for objects of class Food
      */
     public Food() {
 		boolean fileLoaded = true;
@@ -76,12 +78,13 @@ public class Food implements Serializable {
 		    this.populateRestaurantsDatabase("Vegetarian","Isla Vista, CA");
 		    */}
     }
-  /**
-     Allows us to access and print out the restaurant's name
-     
-     @param name The stirng that holds the name of the restaurant
-     @return r the restaurant which corresponds with the name
-  */		
+	/*
+	 *
+		Allows us to access and print out the restaurant's name
+
+		@param name The stirng that holds the name of the restaurant
+		@return r the restaurant which corresponds with the name
+	*/		
     public Restaurant getCuisineWithName(String name) {
         // This is a hack but needed for getting restaurant info in a reasonable fashion
         for(Restaurant r : allRestaurants) {
@@ -95,10 +98,10 @@ public class Food implements Serializable {
         return allRestaurants.get(0);
     }
 
- /** 
-	Reads the restaurant list 
-	
-	@return load    the list of restaurants
+	/*
+	 * 
+		Reads the restaurant list 
+		@return load    the list of restaurants
     */
     
     public boolean readSavedList() {
@@ -116,14 +119,15 @@ public class Food implements Serializable {
 		return load;
     }
 
-    /** 
-	goes through the correct arrayList and gets the 
-	list of the different restaurant options that are open within the hour specified
-	
-	@param cuisine    The type of cuisine
-	@param hour       The hour during which the restaurant should be open
+    /*
+     * 
+		goes through the correct arrayList and gets the 
+		list of the different restaurant options that are open within the hour specified
 
-	@return choice    The restaurant which the user wnats the information for
+		@param cuisine    The type of cuisine
+		@param hour       The hour during which the restaurant should be open
+
+		@return choice    The restaurant which the user wnats the information for
     */
     public String[] showOptions(String cuisine, String time) {
 	
@@ -170,10 +174,10 @@ public class Food implements Serializable {
 		}
     }
 
-    /**
-       shows all the information about the restaurant chosen by the user
-       
-       @param choice    The index of the restaurant the user wants to access
+    /*
+     *
+    	shows all the information about the restaurant chosen by the user
+    	@param choice    The index of the restaurant the user wants to access
     */
     public String[] showAllInfo(String choice) {
 
@@ -195,10 +199,10 @@ public class Food implements Serializable {
 	return restaurantInfo;
     }
     
-    /**
-       gives the current hour
-
-       @return hour   current hour of the day
+    /*
+     *
+		gives the current hour
+		@return hour current hour of the day
     */
     
     public int getHour() {
@@ -206,7 +210,8 @@ public class Food implements Serializable {
 	return hour.get(Calendar.HOUR_OF_DAY);
     }
     
-    /**
+    /*
+     *
        creates a new restaurant object which is stored into the correct 
        arrayList with the properties inputed by the user
      */
@@ -225,11 +230,10 @@ public class Food implements Serializable {
 	}
     }
 
-     /** 
-	 Prints out the restaurant's information. Creates a comma seperated value file
-	
-	@param info      Contains an array of string has lists information
-
+     /*
+      * 
+		Prints out the restaurant's information. Creates a comma seperated value file
+		@param info      Contains an array of string has lists information
     */
     
     public void createCSVNew(String[] info)
@@ -268,8 +272,9 @@ public class Food implements Serializable {
 		return cuisine;
     }
     
-    /**
-       Adds the default restaurant objects to the correct arrayList
+    /*
+     *
+     	Adds the default restaurant objects to the correct arrayList
     */
     public void addNew(Restaurant newRestaurant) {
 	if (newRestaurant == null) {
@@ -283,14 +288,16 @@ public class Food implements Serializable {
 			return;
 	allRestaurants.add(newRestaurant);
     }
-    /** 
-	Clears the list of restaurants
+    /*
+     *
+    	Clears the list of restaurants
      */ 
     public void clearEntries() {
 	allRestaurants.clear();
     }
 
-    /**
+    /*
+     *
        Search for a specific infomation about a restaurant from all the
        infomration collected from using the YelpAPI
        @param GeneralInfo  All info of the restaurant from the YelpAPI
@@ -311,7 +318,8 @@ public class Food implements Serializable {
 	return response.get(info);
     }
 
-    /**
+    /*
+     *
        Populate the restaurants database of a cuisine around an area
        @param cuisine   cuisine that is being looked for
        @param area      area where the restaurants are located

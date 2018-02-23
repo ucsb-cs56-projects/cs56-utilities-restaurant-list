@@ -1,8 +1,9 @@
-/**
- Displays a window that displays ratings in a verticle table format
-@author   John Rehbein
-@author   Colin Mai
-@version  CS56, Fall 2016
+/*
+ *
+    Displays a window that displays ratings in a verticle table format
+    @author   John Rehbein
+    @author   Colin Mai
+    @version  CS56, Fall 2016
 */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
@@ -27,10 +28,11 @@ public class GuiRatings {
     private JScrollPane scrollPane;
     private Box reviewTable;
 
- /**
-    Sets up the gui, creates the boxes and frame
+    /*
+     *
+        Sets up the gui, creates the boxes and frame
 
-     @param reviews The reviews taken from the API
+        @param reviews The reviews taken from the API
      */
     
     public GuiRatings(ArrayList<Review> reviews) {
@@ -47,10 +49,11 @@ public class GuiRatings {
         frame.setVisible(true);
     }
 
-/**
-    Creates cells in the pannel that holds each review.
+    /*
+     *
+        Creates cells in the pannel that holds each review.
 
-     @param reviews The reviews taken from the API
+        @param reviews The reviews taken from the API
      */
     
     public void addReviews(ArrayList<Review> reviews) {

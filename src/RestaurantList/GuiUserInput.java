@@ -1,4 +1,5 @@
-/**
+/*
+ *
 	Gui for the restaurant program, interacts with user
 
 	@author   Ameya Savale
@@ -11,10 +12,10 @@
 	@author   Timothy Kwong
 	@author   Alan Tran
 	@version  CS56, Summer 2016
- 
-    @author   John Rehbein
-    @author   Colin Mai
-    @version  CS56, Fall 2016
+
+	@author   John Rehbein
+	@author   Colin Mai
+	@version  CS56, Fall 2016
  */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
@@ -63,10 +64,10 @@ public class GuiUserInput extends JPanel {
     JButton searchButton = new JButton("Search");
     
 
-     /**
-     The constructor that creates the entire JFrame
-     
-     */
+     /*
+      *
+		The constructor that creates the entire JFrame
+      */
     
     //Constructor
     public GuiUserInput() {
@@ -81,8 +82,9 @@ public class GuiUserInput extends JPanel {
 		frame.setVisible(true);
     }
     
-    /** this is only called one time unlike setup
-     
+    /*
+     *
+    	this is only called one time unlike setup
      */
     public void setupOnce() {
         //Eatscreen Actionlisteners and setup
@@ -177,7 +179,7 @@ public class GuiUserInput extends JPanel {
     }
 
     /**
-     *  Changes the gui to the addNewResataurant Screen
+     *  Changes the gui to the addNewRestaurant Screen
      */
 
     public void AddNewScreen() {
@@ -553,11 +555,12 @@ public class GuiUserInput extends JPanel {
 	    	}
 		}
     }
-    /**
+    /*
+     *
        Sets up the gui and prints out all the information about hte restaurant while adding a choice to go back, click on menu, and click on reviews.
 
        @param cuisineName The type of cuisine selected
-*/
+	 */
     
     public void showChoiceFuture(String cuisineName) {
         
@@ -653,7 +656,8 @@ public class GuiUserInput extends JPanel {
         frame.validate();
     }
 
-    /**
+    /*
+     *
        When a button is clicked, call MenuScreen
      */
     class menuButtonListener implements ActionListener {
@@ -661,7 +665,8 @@ public class GuiUserInput extends JPanel {
 	    MenuScreen();
 	}
     }
-    /**
+    /*
+     *
        The gui that is displayed when the user wants to look at the menu
      */
         
@@ -696,8 +701,9 @@ public class GuiUserInput extends JPanel {
         frame.validate();
     }
 
-    /**
-       The gui that is displayed when the user wants to find a place to eat
+    /*
+     *
+		The gui that is displayed when the user wants to find a place to eat
      */
     
     JLabel place = new JLabel("Location (i.e. Isla Vista, CA), press enter after input:");
@@ -815,8 +821,9 @@ public class GuiUserInput extends JPanel {
          }
         cityDropDown.setEnabled(true);
     }
-    /**
-     Performs a search and populates restaurant drop down menu with the results
+    /*
+     *
+		Performs a search and populates restaurant drop down menu with the results
      */
     public void search(String lct, String type) {
         String currentTime = String.valueOf(food.getHour());
@@ -840,8 +847,9 @@ public class GuiUserInput extends JPanel {
         restaurantList.setEnabled(true);
     }
     
-    /**
-       ActionPerformed for the cuisine list button
+    /*
+     *
+		ActionPerformed for the cuisine list button
      */
 
     class locationListener implements ActionListener{

@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project default="compile">
-
-  <!-- build.xml for Mantis issue 0000398
-       name: Brandon Hammel & Andrew Pang for CS56, W14 -->
-
   <property environment="env"/> <!-- load the environment variables --> 
   <property name="webRoot" value="${env.HOME}/public_html/" />
   <property name="webBaseUrl" value="http://www.cs.ucsb.edu/~${env.USER}" />
 
   <property name="course" value="cs56" />
-  <property name="quarter" value="W14" />
+  <property name="quarter" value="W18" />
   <property name="issueNum" value="0000485" />
   <property name="mainClass" value="edu.ucsb.cs56.projects.utilities.restaurant_list.GuiUserInput" />
 
@@ -23,15 +19,15 @@
 
 
   <path id="project.class.path">
-         <pathelement location="build"/>
-         <pathelement location="lib/junit-4.8.2.jar"/>
-	 <pathelement location="lib/jcommander-1.35.jar" />
-	 <pathelement location="lib/json_simple-1.1.jar" />
-	 <pathelement location="lib/scribe-1.3.5.jar"/>
-     <pathelement location="lib/google-places-api-java.jar"/>
-     <pathelement location="lib/geonames-1.1.13.jar"/>
-     <pathelement location="lib/jdom-2.0.6.jar"/>
-     <pathelement location="lib/jdom-1.1.3.jar"/>
+    <pathelement location="build"/>
+    <pathelement location="lib/junit-4.8.2.jar"/>
+    <pathelement location="lib/jcommander-1.35.jar" />
+    <pathelement location="lib/json_simple-1.1.jar" />
+    <pathelement location="lib/scribe-1.3.5.jar"/>
+    <pathelement location="lib/google-places-api-java.jar"/>
+    <pathelement location="lib/geonames-1.1.13.jar"/>
+    <pathelement location="lib/jdom-2.0.6.jar"/>
+    <pathelement location="lib/jdom-1.1.3.jar"/>
   </path>
 
   <target name="compile" description = "Compiles the program">
@@ -68,25 +64,25 @@
    </junit>
   </target>
 
- <target name="javadoc" depends="compile" description = "Creates the javadoc"> 
-   <delete dir="javadoc" quiet="true" /> 
-   <javadoc  destdir="javadoc" author="true" version="true" use="true" >  
+  <target name="javadoc" depends="compile" description = "Creates the javadoc"> 
+    <delete dir="javadoc" quiet="true" /> 
+    <javadoc  destdir="javadoc" author="true" version="true" use="true" >  
       <fileset dir="src" includes="**/*.java"/>  
       <classpath refid="project.class.path" />
-   </javadoc>
-   <!-- delete the old javadoc -->
-   <delete quiet="true" dir="${javadocDest}" /> 
-   <!-- copy everything you just made to the javadoc destination, and then make it readable --> 
-   <copy todir="${javadocDest}" > 
-     <fileset dir="javadoc"/> 
-   </copy> 
-   <!-- Note: this only does the chmod command on the 
-        javadoc subdirectory and its contents.  You MIGHT have to
-	MANUALLY do the chmod on the parent directories.  However,
-	you should only need to do that once. --> 
-   <chmod dir="${javadocDest}" perm="755"  type="dir" includes="**" /> 
-   <chmod dir="${javadocDest}" perm="755"  type="file" includes="**/*" /> 
-   <echo>Javadoc deployed to ${javadocURL}</echo> 
- </target>
+    </javadoc>
+    <!-- delete the old javadoc -->
+    <delete quiet="true" dir="${javadocDest}" /> 
+    <!-- copy everything you just made to the javadoc destination, and then make it readable --> 
+    <copy todir="${javadocDest}"> 
+      <fileset dir="javadoc"/> 
+    </copy> 
+    <!-- Note: this only does the chmod command on the 
+    javadoc subdirectory and its contents.  You MIGHT have to
+    MANUALLY do the chmod on the parent directories.  However,
+    you should only need to do that once. --> 
+    <chmod dir="${javadocDest}" perm="755"  type="dir" includes="**" /> 
+    <chmod dir="${javadocDest}" perm="755"  type="file" includes="**/*" /> 
+    <echo>Javadoc deployed to ${javadocURL}</echo> 
+  </target>
 
 </project>
