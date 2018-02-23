@@ -21,6 +21,8 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 import java.util.ArrayList;
+import java.net.*;
+import java.io.*;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -168,11 +170,11 @@ public class YelpAPI {
 	return businesses;
     }
     
-    private static String RestaurantGeneralInfo(YelpAPI yelpApi, String BusinessID){
-	String businessResponseJSON = yelpApi.searchByBusinessId(BusinessID.toString());
-	System.out.println(String.format("Result for business \"%s\" found:", BusinessID));
-	System.out.println(businessResponseJSON);
-	return businessResponseJSON;
+    private static String RestaurantGeneralInfo(YelpAPI yelpApi, String BusinessID) throws UnsupportedEncodingException {
+      String businessResponseJSON = yelpApi.searchByBusinessId(URLEncoder.encode(BusinessID, "UTF-8"));
+    	System.out.println(String.format("Result for business \"%s\" found:", BusinessID));
+    	System.out.println(businessResponseJSON);
+    	return businessResponseJSON;
     }
     
   /**
@@ -201,9 +203,9 @@ public class YelpAPI {
 	return Businesses;
     }
 
-    public static String RestaurantGeneralInfo(String BusinessID){
-	YelpAPI yelpApi = new YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
-	return YelpAPI.RestaurantGeneralInfo(yelpApi, BusinessID);
+    public static String RestaurantGeneralInfo(String BusinessID) throws UnsupportedEncodingException {
+    	YelpAPI yelpApi = new YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
+    	return YelpAPI.RestaurantGeneralInfo(yelpApi, BusinessID);
     }
     
 }
