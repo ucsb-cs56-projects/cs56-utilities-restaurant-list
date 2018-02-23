@@ -35,6 +35,8 @@ import javax.swing.*;
 import se.walkercrou.places.*;
 import org.geonames.*;
 
+import edu.ucsb.cs56.projects.utilities.YelpAPI.Dotenv;
+
 public class GuiUserInput extends JPanel {
 
     JLabel restaurant, pageTitle;
@@ -106,8 +108,8 @@ public class GuiUserInput extends JPanel {
      
 
     public static void main(String[] args) {
+    	Dotenv.load();
 		GuiUserInput gui = new GuiUserInput();
-        
     }
 
     /**
