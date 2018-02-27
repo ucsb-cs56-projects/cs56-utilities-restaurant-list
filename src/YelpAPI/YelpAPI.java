@@ -168,6 +168,14 @@ public class YelpAPI {
   	return businesses;
   }
   
+
+  /**
+   * Obtain information about a restaurant or business via the Yelp API
+   * @param yelpApi       a yelpApi object
+   * @param BusinessID    name of the business/restaurant
+   * @return Businesses a JSON object of the restaurant properties
+   */
+
   private static String RestaurantGeneralInfo(YelpAPI yelpApi, String BusinessID) throws UnsupportedEncodingException {
     String businessResponseJSON = yelpApi.searchByBusinessId(URLEncoder.encode(BusinessID, "UTF-8"));
   	System.out.println(String.format("Result for business \"%s\" found:", BusinessID));
@@ -200,6 +208,12 @@ public class YelpAPI {
   	}
   	return Businesses;
   }
+
+  /**
+   * Obtain information about a restaurant or business via the Yelp API
+   * @param BusinessID    name of the business/restaurant
+   * @return Businesses a JSON object of the restaurant properties
+   */
 
   public static String RestaurantGeneralInfo(String BusinessID) throws UnsupportedEncodingException {
   	YelpAPI yelpApi = new YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
