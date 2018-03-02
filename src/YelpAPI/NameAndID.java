@@ -8,6 +8,9 @@
 
 package edu.ucsb.cs56.projects.utilities.YelpAPI;
 
+/**
+ * Provides a name and id pair class
+ */
 public class NameAndID{
     public String name;
     public String id;

@@ -21,6 +21,8 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 import java.util.ArrayList;
+import java.net.*;
+import java.io.*;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -48,10 +50,10 @@ public class YelpAPI {
    * Update OAuth credentials below from the Yelp Developers API site:
    * http://www.yelp.com/developers/getting_started/api_access
    */
-  private static final String CONSUMER_KEY = "cxcQVZAIEPFCkOHA9Z_WHQ";
-  private static final String CONSUMER_SECRET = "8n4yJzuli4u5Cs4OvOG7obekhvc";
-  private static final String TOKEN = "9vMaIONm-IA0wcEwq_vNwxI343f5TCuL";
-  private static final String TOKEN_SECRET = "6lRe2CQwW2YH5ulTWXjWY2dxAns";
+  private static final String CONSUMER_KEY = Dotenv.get("CONSUMER_KEY");
+  private static final String CONSUMER_SECRET = Dotenv.get("CONSUMER_SECRET");
+  private static final String TOKEN = Dotenv.get("TOKEN");
+  private static final String TOKEN_SECRET = Dotenv.get("TOKEN_SECRET");
 
   OAuthService service;
   Token accessToken;
@@ -66,10 +68,8 @@ public class YelpAPI {
    */
 
     public YelpAPI(String consumerKey, String consumerSecret, String token, String tokenSecret) {
-	this.service =
-	    new ServiceBuilder().provider(TwoStepOAuth.class).apiKey(consumerKey)
-            .apiSecret(consumerSecret).build();
-	this.accessToken = new Token(token, tokenSecret);
+      this.service = new ServiceBuilder().provider(TwoStepOAuth.class).apiKey(consumerKey).apiSecret(consumerSecret).build();
+      this.accessToken = new Token(token, tokenSecret);
     }
     
     /**
@@ -83,11 +83,11 @@ public class YelpAPI {
      * @return <tt>String</tt> JSON Response
      */
     public String searchForBusinessesByLocation(String term, String location) {
-	OAuthRequest request = createOAuthRequest(SEARCH_PATH);
-	request.addQuerystringParameter("term", term);
-	request.addQuerystringParameter("location", location);
-	request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
-	return sendRequestAndGetResponse(request);
+    	OAuthRequest request = createOAuthRequest(SEARCH_PATH);
+    	request.addQuerystringParameter("term", term);
+    	request.addQuerystringParameter("location", location);
+    	request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
+    	return sendRequestAndGetResponse(request);
     }
 
     /**
@@ -150,30 +150,38 @@ public class YelpAPI {
    * @param term for the term we look for
    * @param location for location we look for
    */
-    private static JSONArray LocalBusinesses(YelpAPI yelpApi, String term, String location) {
-	String searchResponseJSON =
-	    yelpApi.searchForBusinessesByLocation(term, location);
-	
-	JSONParser parser = new JSONParser();
-	JSONObject response = null;
-	try {
-	    response = (JSONObject) parser.parse(searchResponseJSON);
-	} catch (ParseException pe) {
-	    System.out.println("Error: could not parse JSON response:");
-	    System.out.println(searchResponseJSON);
-	    System.exit(1);
-	}
-	
-	JSONArray businesses = (JSONArray) response.get("businesses");
-	return businesses;
-    }
-    
-    private static String RestaurantGeneralInfo(YelpAPI yelpApi, String BusinessID){
-	String businessResponseJSON = yelpApi.searchByBusinessId(BusinessID.toString());
-	System.out.println(String.format("Result for business \"%s\" found:", BusinessID));
-	System.out.println(businessResponseJSON);
-	return businessResponseJSON;
-    }
+  private static JSONArray LocalBusinesses(YelpAPI yelpApi, String term, String location) {
+  	String searchResponseJSON =
+  	    yelpApi.searchForBusinessesByLocation(term, location);
+  	
+  	JSONParser parser = new JSONParser();
+  	JSONObject response = null;
+  	try {
+  	    response = (JSONObject) parser.parse(searchResponseJSON);
+  	} catch (ParseException pe) {
+  	    System.out.println("Error: could not parse JSON response:");
+  	    System.out.println(searchResponseJSON);
+  	    System.exit(1);
+  	}
+  	
+  	JSONArray businesses = (JSONArray) response.get("businesses");
+  	return businesses;
+  }
+  
+
+  /**
+   * Obtain information about a restaurant or business via the Yelp API
+   * @param yelpApi       a yelpApi object
+   * @param BusinessID    name of the business/restaurant
+   * @return Businesses a JSON object of the restaurant properties
+   */
+
+  private static String RestaurantGeneralInfo(YelpAPI yelpApi, String BusinessID) throws UnsupportedEncodingException {
+    String businessResponseJSON = yelpApi.searchByBusinessId(URLEncoder.encode(BusinessID, "UTF-8"));
+  	System.out.println(String.format("Result for business \"%s\" found:", BusinessID));
+  	System.out.println(businessResponseJSON);
+  	return businessResponseJSON;
+  }
     
   /**
    * Main entry for sample Yelp API requests.
@@ -182,28 +190,34 @@ public class YelpAPI {
    * @param location    area of the restaurants
    * @return Businesses an ArrayList of Namd:ID pairs from the YELP API Search
    */
-    public static ArrayList<NameAndID> LocalRestaurantNamesAndID(String term, String location) {
-        System.out.println(location);
-	YelpAPI yelpApi = new YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
-	if(term == null)
-	    term = DEFAULT_TERM;
-	if(location == null)
-	    location = DEFAULT_LOCATION;
-	JSONArray businesses = YelpAPI.LocalBusinesses(yelpApi, term, location);
-	ArrayList<NameAndID> Businesses = new ArrayList<NameAndID>();
-	for(int i=0;i<businesses.size();i++){
-	    NameAndID entry= new NameAndID();
-	    JSONObject Business = (JSONObject) businesses.get(i);
-	    entry.name = Business.get("name").toString();
-	    entry.id=Business.get("id").toString();
-	    Businesses.add(entry);
-	}
-	return Businesses;
-    }
+  public static ArrayList<NameAndID> LocalRestaurantNamesAndID(String term, String location) {
+    System.out.println(location);
+  	YelpAPI yelpApi = new YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
+  	if(term == null)
+  	    term = DEFAULT_TERM;
+  	if(location == null)
+  	    location = DEFAULT_LOCATION;
+  	JSONArray businesses = YelpAPI.LocalBusinesses(yelpApi, term, location);
+  	ArrayList<NameAndID> Businesses = new ArrayList<NameAndID>();
+  	for(int i=0;i<businesses.size();i++){
+  	    NameAndID entry= new NameAndID();
+  	    JSONObject Business = (JSONObject) businesses.get(i);
+  	    entry.name = Business.get("name").toString();
+  	    entry.id=Business.get("id").toString();
+  	    Businesses.add(entry);
+  	}
+  	return Businesses;
+  }
 
-    public static String RestaurantGeneralInfo(String BusinessID){
-	YelpAPI yelpApi = new YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
-	return YelpAPI.RestaurantGeneralInfo(yelpApi, BusinessID);
-    }
+  /**
+   * Obtain information about a restaurant or business via the Yelp API
+   * @param BusinessID    name of the business/restaurant
+   * @return Businesses a JSON object of the restaurant properties
+   */
+
+  public static String RestaurantGeneralInfo(String BusinessID) throws UnsupportedEncodingException {
+  	YelpAPI yelpApi = new YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
+  	return YelpAPI.RestaurantGeneralInfo(yelpApi, BusinessID);
+  }
     
 }

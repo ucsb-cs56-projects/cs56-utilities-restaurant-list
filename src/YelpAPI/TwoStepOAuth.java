@@ -1,5 +1,6 @@
-/**
-   @link https://github.com/Yelp/yelp-api/tree/master/v2/java
+/*
+ *
+    @link https://github.com/Yelp/yelp-api/tree/master/v2/java
  */
 
 package edu.ucsb.cs56.projects.utilities.YelpAPI;

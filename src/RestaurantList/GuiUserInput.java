@@ -1,4 +1,5 @@
-/**
+/*
+ *
 	Gui for the restaurant program, interacts with user
 
 	@author   Ameya Savale
@@ -11,10 +12,10 @@
 	@author   Timothy Kwong
 	@author   Alan Tran
 	@version  CS56, Summer 2016
- 
-    @author   John Rehbein
-    @author   Colin Mai
-    @version  CS56, Fall 2016
+
+	@author   John Rehbein
+	@author   Colin Mai
+	@version  CS56, Fall 2016
  */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
@@ -34,6 +35,11 @@ import javax.swing.*;
 import se.walkercrou.places.*;
 import org.geonames.*;
 
+import edu.ucsb.cs56.projects.utilities.YelpAPI.Dotenv;
+
+/**
+ * The GUI class that generates the Yelp Interface
+ */
 public class GuiUserInput extends JPanel {
 
     JLabel restaurant, pageTitle;
@@ -63,12 +69,10 @@ public class GuiUserInput extends JPanel {
     JButton searchButton = new JButton("Search");
     
 
-     /**
-     The constructor that creates the entire JFrame
-     
+    /**
+	 * The constructor that creates the entire JFrame
      */
     
-    //Constructor
     public GuiUserInput() {
    
 		frame = new JFrame("Restaurant Finder");
@@ -81,8 +85,8 @@ public class GuiUserInput extends JPanel {
 		frame.setVisible(true);
     }
     
-    /** this is only called one time unlike setup
-     
+    /**
+     * this is only called one time unlike setup
      */
     public void setupOnce() {
         //Eatscreen Actionlisteners and setup
@@ -104,8 +108,8 @@ public class GuiUserInput extends JPanel {
      
 
     public static void main(String[] args) {
+    	Dotenv.load();
 		GuiUserInput gui = new GuiUserInput();
-        
     }
 
     /**
@@ -177,7 +181,7 @@ public class GuiUserInput extends JPanel {
     }
 
     /**
-     *  Changes the gui to the addNewResataurant Screen
+     *  Changes the gui to the addNewRestaurant Screen
      */
 
     public void AddNewScreen() {
@@ -346,9 +350,9 @@ public class GuiUserInput extends JPanel {
      * Allow for Editing (Work in Progress)
      */
     class EditListener implements ActionListener {
-	public void actionPerformed(ActionEvent event) {
-	    EditScreen();
-	}
+		public void actionPerformed(ActionEvent event) {
+		    EditScreen();
+		}
     }
     
     /**
@@ -357,48 +361,48 @@ public class GuiUserInput extends JPanel {
      */
 
     public void EditScreen(){
-	editScreen = new JPanel();
-	editScreen.setLayout(new BoxLayout(editScreen, BoxLayout.Y_AXIS));
-	frame.getContentPane().removeAll();
-	
-	JPanel boxPanel = new JPanel();
-	JPanel buttonPanel = new JPanel();
-	JPanel titlePanel = new JPanel();
-	
-	pageTitle = new JLabel("Editing Existing Restaurant Entries");
-	
-	String[] type = food.getCuisineTypes();
-	back = new JButton("Go Back");
-	back.addActionListener(new backButtonListener());
-
-
-	//NEED MAJOR WORK RIGHT HERE
-	edit = new JButton("Edit");
-	edit.addActionListener(new backButtonListener());
-	edit.setEnabled(false);
-	//JComboBox listing the cuisines
-	cuisineList = new JComboBox(type);
-	
-	restaurantList = new JComboBox();
-	restaurantList.setEnabled(false);
-	
-	cuisineList.addActionListener(new comboBoxListener());	
-	
-	restaurantList.addActionListener(new EditRestaurantListListener());
-	
-	boxPanel.add(cuisineList);
-	boxPanel.add(restaurantList);
-	buttonPanel.add(back);
-	buttonPanel.add(edit);
-	titlePanel.add(pageTitle);
-	
-	editScreen.add(titlePanel);
-	editScreen.add(boxPanel);
-	editScreen.add(buttonPanel);
+		editScreen = new JPanel();
+		editScreen.setLayout(new BoxLayout(editScreen, BoxLayout.Y_AXIS));
+		frame.getContentPane().removeAll();
 		
-	frame.getContentPane().add(editScreen);
-	frame.invalidate();
-	frame.validate();
+		JPanel boxPanel = new JPanel();
+		JPanel buttonPanel = new JPanel();
+		JPanel titlePanel = new JPanel();
+		
+		pageTitle = new JLabel("Editing Existing Restaurant Entries");
+		
+		String[] type = food.getCuisineTypes();
+		back = new JButton("Go Back");
+		back.addActionListener(new backButtonListener());
+
+
+		//NEED MAJOR WORK RIGHT HERE
+		edit = new JButton("Edit");
+		edit.addActionListener(new backButtonListener());
+		edit.setEnabled(false);
+		//JComboBox listing the cuisines
+		cuisineList = new JComboBox(type);
+		
+		restaurantList = new JComboBox();
+		restaurantList.setEnabled(false);
+		
+		cuisineList.addActionListener(new comboBoxListener());	
+		
+		restaurantList.addActionListener(new EditRestaurantListListener());
+		
+		boxPanel.add(cuisineList);
+		boxPanel.add(restaurantList);
+		buttonPanel.add(back);
+		buttonPanel.add(edit);
+		titlePanel.add(pageTitle);
+		
+		editScreen.add(titlePanel);
+		editScreen.add(boxPanel);
+		editScreen.add(buttonPanel);
+			
+		frame.getContentPane().add(editScreen);
+		frame.invalidate();
+		frame.validate();
     }
 
     /**
@@ -487,33 +491,31 @@ public class GuiUserInput extends JPanel {
 		frame.validate();
     }
 
-     /**
-	Modifies the actionPerformed to print out all the restaurants of that particular cuisine.
+    /**
+     * Modifies the actionPerformed to print out all the restaurants of that particular cuisine.
      */
-
     class futureLocationListener implements ActionListener{
-	public void actionPerformed(ActionEvent event) {
-	    futureCuisine.removeAllItems();
-	    String[] futureCuisineList = types;
-	    for (int i = 0; i < futureCuisineList.length; i++) {
-		futureCuisine.addItem(futureCuisineList[i]);
-	    }
-	    futureCuisine.setEnabled(true);
-	}
+		public void actionPerformed(ActionEvent event) {
+		    futureCuisine.removeAllItems();
+		    String[] futureCuisineList = types;
+		    for (int i = 0; i < futureCuisineList.length; i++) {
+			futureCuisine.addItem(futureCuisineList[i]);
+		    }
+		    futureCuisine.setEnabled(true);
+		}
     }
 
-      /**
-	 Turns on location
+	/**
+	 * Turns on location
      */
-    
     class futureTimeListener implements ActionListener {
-	public void actionPerformed(ActionEvent event) {
-	    futureLocation.setEnabled(true);
-	}
+		public void actionPerformed(ActionEvent event) {
+		    futureLocation.setEnabled(true);
+		}
     }
 
- /**
-    Prints out the list of restaurants for that cuisine.
+	/**
+	 * Prints out the list of restaurants for that cuisine.
      */
 
     class futureCuisineBoxListener implements ActionListener {
@@ -522,12 +524,12 @@ public class GuiUserInput extends JPanel {
 	    	String cuisine = (String)cb.getSelectedItem();
 	    	futureRestaurant.removeAllItems();
 
-		time = futureTime.getText();
-		String lct = (String)futureLocation.getText();
-		
-		food.clearEntries();
-		food.populateRestaurantsDatabase(cuisine, lct);
-		
+			time = futureTime.getText();
+			String lct = (String)futureLocation.getText();
+			
+			food.clearEntries();
+			food.populateRestaurantsDatabase(cuisine, lct);
+
 	    	String[] listOfRestaurants = food.showOptions(cuisine, time); 
 	    	for (int i = 0; i < listOfRestaurants.length; i++) {
 				System.out.println(listOfRestaurants[i]);
@@ -537,8 +539,8 @@ public class GuiUserInput extends JPanel {
 		}
     }
     /**
-       Looks for restaurants
-    */
+	 * Looks for restaurants
+     */
     
     class futureListListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
@@ -554,10 +556,9 @@ public class GuiUserInput extends JPanel {
 		}
     }
     /**
-       Sets up the gui and prints out all the information about hte restaurant while adding a choice to go back, click on menu, and click on reviews.
-
-       @param cuisineName The type of cuisine selected
-*/
+	 * Sets up the gui and prints out all the information about hte restaurant while adding a choice to go back, click on menu, and click on reviews.
+	 * @param cuisineName The type of cuisine selected
+	 */
     
     public void showChoiceFuture(String cuisineName) {
         
@@ -586,10 +587,6 @@ public class GuiUserInput extends JPanel {
         
         back = new JButton("Go Back");
         back.addActionListener(new FutureListener());
-        
-        /*	image = new JButton("Image");
-         image.addActionListener(new imageListener());
-         */
         
         JLabel nameTitle = new JLabel("Name");
         JLabel hoursTitleLabel = new JLabel("Hours");
@@ -638,11 +635,9 @@ public class GuiUserInput extends JPanel {
         infoPanel.add(phone);
         
         
-        //buttonPanel.add(back);
         buttonPanel.add(menu);
-        //	buttonPanel.add(image);
         buttonPanel.add(back);
-        //Adding the panels to the choice panel
+
         choice.add(titlePanel);
         choice.add(imagePanel);
         choice.add(infoPanel);
@@ -654,15 +649,16 @@ public class GuiUserInput extends JPanel {
     }
 
     /**
-       When a button is clicked, call MenuScreen
+     * When a button is clicked, call MenuScreen
      */
     class menuButtonListener implements ActionListener {
-	public void actionPerformed(ActionEvent event) {
-	    MenuScreen();
-	}
+		public void actionPerformed(ActionEvent event) {
+		    MenuScreen();
+		}
     }
+
     /**
-       The gui that is displayed when the user wants to look at the menu
+	 * The gui that is displayed when the user wants to look at the menu
      */
         
     public void MenuScreen() {
@@ -697,7 +693,7 @@ public class GuiUserInput extends JPanel {
     }
 
     /**
-       The gui that is displayed when the user wants to find a place to eat
+	 * The gui that is displayed when the user wants to find a place to eat
      */
     
     JLabel place = new JLabel("Location (i.e. Isla Vista, CA), press enter after input:");
@@ -729,10 +725,6 @@ public class GuiUserInput extends JPanel {
         
         restaurantList.addActionListener(new restaurantListListener());
         
-        
-        
-        
-        
         naturalLanguageSearchPanel.add(place);
         naturalLanguageSearchPanel.add(location);
         if (searchControlContainer.getComponentCount() == 0) {
@@ -755,7 +747,8 @@ public class GuiUserInput extends JPanel {
         frame.invalidate();
         frame.validate();
     }
-    boolean isNaturalLanguage = true;
+    
+	boolean isNaturalLanguage = true;
     public void toggleSearchType() {
         searchControlContainer.removeAll();
         if (isNaturalLanguage) {
@@ -769,9 +762,10 @@ public class GuiUserInput extends JPanel {
         isNaturalLanguage = !isNaturalLanguage;
     }
     
+    /**
+     * Setup the city search panel GUI
+     */
     public void setupCitySearchPanel() {
-        
-        
         stateCitySearchPanel.add(stateTitleLabel);
         stateDropDown.addActionListener( e -> {
             JComboBox cb = (JComboBox)e.getSource();
@@ -785,6 +779,10 @@ public class GuiUserInput extends JPanel {
         cityDropDown.setEnabled(true);
         
     }
+
+    /**
+     * Setup the city combo (list) GUI
+     */
     public void setupCityComboBox(String state) {
         
         //clear old cities because we're adding new ones
@@ -816,7 +814,7 @@ public class GuiUserInput extends JPanel {
         cityDropDown.setEnabled(true);
     }
     /**
-     Performs a search and populates restaurant drop down menu with the results
+	 * Performs a search and populates restaurant drop down menu with the results
      */
     public void search(String lct, String type) {
         String currentTime = String.valueOf(food.getHour());
@@ -841,7 +839,7 @@ public class GuiUserInput extends JPanel {
     }
     
     /**
-       ActionPerformed for the cuisine list button
+	 * ActionPerformed for the cuisine list button
      */
 
     class locationListener implements ActionListener{
@@ -849,11 +847,11 @@ public class GuiUserInput extends JPanel {
             cuisineList.setEnabled(true);
         }
     }
+
     /**
      *  Get cuisine chosen by user and adds restaurant names
      *  to the second JComboBox
      */
-    //inner class
     class comboBoxListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 	    	JComboBox cb = (JComboBox)event.getSource();
@@ -865,7 +863,6 @@ public class GuiUserInput extends JPanel {
      *  Gets the restaurant selected by user and passes it to showChoiceEat
      *  from the EatScreen
      */
-    //inner class
     class restaurantListListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 		    JComboBox cb = (JComboBox)event.getSource();
@@ -883,7 +880,6 @@ public class GuiUserInput extends JPanel {
     
     /**
      *  Shows all the information of the restaurant chosen by the user
-     *  
      *  @param cuisineName  the type of cuisine chosen
      */
     public void showChoiceEat(String cuisineName) {
@@ -970,11 +966,8 @@ public class GuiUserInput extends JPanel {
 		infoPanel.add(phone);
 		buttonPanel.add(menu);
         buttonPanel.add(reviewsButton);
-	
-		//buttonPanel.add(back);
-		//	buttonPanel.add(image);
 		buttonPanel.add(back);
-		//Adding the panels to the choice panel
+
 		choice.add(titlePanel);
 		choice.add(imagePanel);
 		choice.add(infoPanel);
@@ -985,9 +978,8 @@ public class GuiUserInput extends JPanel {
 		frame.validate();
     }
 
-    //Parses a CSV file and populates database.
     /**
-       Creates a comma seperated value file
+	 * Parses a CSV file and populates database.
      */
     public void readCSV(File file) {
     	BufferedReader br = null;
@@ -1018,8 +1010,8 @@ public class GuiUserInput extends JPanel {
     	EatScreen();
   	}
 
-     /**
-       Action Performed for printing the number of ratings for each restaurant
+	/**
+	 * Action Performed for printing the number of ratings for each restaurant
      */ 
     
     class reviewsButtonListener implements ActionListener {
@@ -1033,8 +1025,8 @@ public class GuiUserInput extends JPanel {
 
     //Goes back to the starting screen whenever the back button is clicked
 
- /**
-       Action Performed to go back
+	/**
+	 * Goes back to the starting screen whenever the back button is clicked
      */ 
     
     class backButtonListener implements ActionListener {
@@ -1043,11 +1035,11 @@ public class GuiUserInput extends JPanel {
 		}
     }
     
-    //Goes back to the eating screen
+    //
 
- /**
-       Action Performed for the exit button to go back to the eating screen
-     */ 
+	/**
+	 * Goes back to the eating screen
+	 */ 
     
     class backToChoiceButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
@@ -1061,9 +1053,9 @@ public class GuiUserInput extends JPanel {
 		}
     }
 
-     /**
-       Action Performed to add a new screen
-     */ 
+	/**
+	 * Action Performed to add a new screen
+	 */ 
 
     class NewListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
@@ -1071,9 +1063,9 @@ public class GuiUserInput extends JPanel {
 		}
     }
 
-     /**
-       Action Performed for opening the file
-     */ 
+	/**
+	 * Action Performed for opening the file
+	 */ 
 
     class NewCSVListener implements ActionListener {	
 		public void actionPerformed(ActionEvent event) {
@@ -1090,52 +1082,52 @@ public class GuiUserInput extends JPanel {
 		}
     }
 
-     /**
-       Action Performed to print out all the information about the restaurant
-     */ 
+	/**
+	 * Action Performed to print out all the information about the restaurant
+	 */ 
 
     class CSVSaveListener implements ActionListener {
-	public void actionPerformed(ActionEvent event) {
-	    try {
-		FileWriter fw = new FileWriter("RestaurantList.csv");
-		PrintWriter pw = new PrintWriter(fw);
-		for (int i = 0; i < food.allRestaurants.size(); i++) {
-		    String startTime = food.allRestaurants.get(i).getStartTime();
-		    String endTime = food.allRestaurants.get(i).getEndTime();
-		    String name = food.allRestaurants.get(i).getName();
-		    String phone = food.allRestaurants.get(i).getPhone();
-		    String address = food.allRestaurants.get(i).getAddress();
-		    String type = food.allRestaurants.get(i).getType();
-		    pw.println('"' + startTime + '"' + "," +
-			       '"' + endTime + '"' + "," +
-			       '"' + name + '"' + "," +
-			       '"' + phone + '"' + "," +
-			       '"' + address + '"' + "," +
-			       '"' + type + '"');
-		    pw.flush();
+		public void actionPerformed(ActionEvent event) {
+		    try {
+			FileWriter fw = new FileWriter("RestaurantList.csv");
+			PrintWriter pw = new PrintWriter(fw);
+			for (int i = 0; i < food.allRestaurants.size(); i++) {
+			    String startTime = food.allRestaurants.get(i).getStartTime();
+			    String endTime = food.allRestaurants.get(i).getEndTime();
+			    String name = food.allRestaurants.get(i).getName();
+			    String phone = food.allRestaurants.get(i).getPhone();
+			    String address = food.allRestaurants.get(i).getAddress();
+			    String type = food.allRestaurants.get(i).getType();
+			    pw.println('"' + startTime + '"' + "," +
+				       '"' + endTime + '"' + "," +
+				       '"' + name + '"' + "," +
+				       '"' + phone + '"' + "," +
+				       '"' + address + '"' + "," +
+				       '"' + type + '"');
+			    pw.flush();
+			}
+			pw.close();
+			fw.close();
+			JOptionPane.showMessageDialog(frame, "Restaurant list saved to RestaurantList.csv",
+	    					      "Save successful", JOptionPane.INFORMATION_MESSAGE);
+		    } catch (IOException ex) {
+			ex.printStackTrace();
+		    }
 		}
-		pw.close();
-		fw.close();
-		JOptionPane.showMessageDialog(frame, "Restaurant list saved to RestaurantList.csv",
-    					      "Save successful", JOptionPane.INFORMATION_MESSAGE);
-	    } catch (IOException ex) {
-		ex.printStackTrace();
-	    }
-	}
     }
 
-     /**
-       Action Performed for the FutureScreen
-     */ 
-    
+	/**
+	 * Action Performed for the FutureScreen
+	 */ 
     class FutureListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 		    FutureScreen();
 		}
     }
-    /**
-       Action Performed for the exit button
-     */ 
+
+	/**
+	 * Action Performed for the exit button
+	 */ 
     class ExitListener implements ActionListener {
     	public void actionPerformed(ActionEvent event) {
     		System.exit(0);

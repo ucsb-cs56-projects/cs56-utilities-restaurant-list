@@ -1,4 +1,5 @@
-/**
+/*
+ *
  Review entry that contains the rating the author's name and review
  @author   John Rehbein
  @author   Colin Mai
@@ -21,7 +22,9 @@ import javax.imageio.*;
 
 import javax.swing.*;
 
-
+/**
+ * A class that holds restaurant reviews
+ */
 public class RatingTableCellPanel extends JPanel {
     private JLabel authorLabel;
     private JLabel ratingLabel, ratingScoreLabel;
@@ -29,8 +32,8 @@ public class RatingTableCellPanel extends JPanel {
     private JTextArea reviewText;
 
     /** 
-	Constructor for each review cell
-    */
+     * Constructor for each review cell
+     */
     
     public RatingTableCellPanel(Review googlePlacesReview) {
         
@@ -66,7 +69,7 @@ public class RatingTableCellPanel extends JPanel {
     // setters
 
     /**
-       If author is annoymous, print Anonymous
+     * If author is annoymous, print Anonymous
      */
     public void setAuthor(String author) {
         if (author == null) {
@@ -76,7 +79,7 @@ public class RatingTableCellPanel extends JPanel {
         }
     }
     /**
-       If no rating, print no rating
+     * If no rating, print no rating
      */ 
     public void setRating(String rating) {
         if (rating == null) {
@@ -86,7 +89,7 @@ public class RatingTableCellPanel extends JPanel {
         }
     }
     /**
-      If no review, print no review
+     * If no review, print no review
      */ 
     public void setReview(String review) {
         if (review == null) {
