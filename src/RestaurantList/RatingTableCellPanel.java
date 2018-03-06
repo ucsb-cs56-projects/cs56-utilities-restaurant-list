@@ -4,6 +4,7 @@
  @author   John Rehbein
  @author   Colin Mai
  @version  CS56, Fall 2016
+
  */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;

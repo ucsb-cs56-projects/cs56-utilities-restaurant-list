@@ -4,6 +4,9 @@
     @author   John Rehbein
     @author   Colin Mai
     @version  CS56, Fall 2016
+
+    @author   Zihao Zhang
+    @version  CS56, Winter 2018
 */
 
 package edu.ucsb.cs56.projects.utilities.restaurant_list;
@@ -30,6 +33,7 @@ public class GuiRatings {
     private JFrame frame;
     private JScrollPane scrollPane;
     private Box reviewTable;
+    private JButton closeButton;   
 
     /**
      * Sets up the gui, creates the boxes and frame
@@ -38,16 +42,26 @@ public class GuiRatings {
     
     public GuiRatings(ArrayList<Review> reviews) {
         //GUI Setup
-        reviewTable = new Box(BoxLayout.Y_AXIS);
-        frame = new JFrame("Reviews");
+  
+	frame = new JFrame("Reviews");
+
+	reviewTable = new Box(BoxLayout.Y_AXIS);
+
+	closeButton = new JButton("Close");
+	closeButton.setPreferredSize(new Dimension(30, 30));
+	closeButton.addActionListener(new CloseListener());
+
         
         scrollPane = new JScrollPane(reviewTable);
         
         addReviews(reviews);
-        frame.add(scrollPane);
-        
+
+        frame.getContentPane().add(BorderLayout.CENTER,scrollPane);
+	frame.getContentPane().add(BorderLayout.NORTH,closeButton);
+	
         frame.setSize(600,400);
         frame.setVisible(true);
+
     }
 
     /**
@@ -61,4 +75,12 @@ public class GuiRatings {
             reviewTable.add(cell);
         }
     }
+
+   
+    class CloseListener implements ActionListener {
+        public void actionPerformed(ActionEvent event){
+	    frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+        }
+    }
+
 }
