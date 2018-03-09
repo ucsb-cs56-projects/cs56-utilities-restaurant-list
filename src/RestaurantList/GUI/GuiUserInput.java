@@ -2,6 +2,10 @@
  *
 	Gui for the restaurant program, interacts with user
 
+    @author   Zihao Zhang
+    @author   Hyun Bum Cho
+    @version  CS56, Winter 2018
+
 	@author   Ameya Savale
 	@author   Brandon Hammel
 	@author   Andrew Pang
@@ -47,11 +51,10 @@ public class GuiUserInput extends JPanel {
     JButton back, edit, menu, reviewsButton, image, searchToggleButton = new JButton("By City");
     JFrame frame;
     Food food = new Food();
-    JTextField name, address, phoneNumber, startTime, endTime, type, futureTime, futureLocation;
+    JTextField futureTime, futureLocation;
     JTextField location = new JTextField(20);
     JComboBox cuisineList, restaurantList, futureCuisine, futureRestaurant;
     String time;
-    String[] info = new String[6];
     String cuisineChoice;
     String[] types = new String[]{"Mexican","Chinese","Thai","Sushi Bars","Seafood","Fast Food","Sandwiches","Pizza","Italian","Coffee & Tea","Vegetarian"};
     Restaurant selectedRestaurant;
@@ -108,7 +111,7 @@ public class GuiUserInput extends JPanel {
      
 
     public static void main(String[] args) {
-    	        Dotenv.load();
+		Dotenv.load();
 		GuiUserInput gui = new GuiUserInput();
     }
 
@@ -147,15 +150,12 @@ public class GuiUserInput extends JPanel {
 		initialScreen.setLayout(new BoxLayout(initialScreen, BoxLayout.PAGE_AXIS));
 
 		eatButton.addActionListener(new EatListener());
-		newButton.addActionListener(new NewListener());
+		newButton.addActionListener(new NewListener(this));
 		editButton.addActionListener(new EditListener());
 		newCSVButton.addActionListener(new NewCSVListener());
 		CSVSaveButton.addActionListener(new CSVSaveListener());
 		futureButton.addActionListener(new FutureListener());
 		exitButton.addActionListener(new ExitListener());
-        
-        
-
 		
 		titlePanel.add(pageTitle);
 		eatPanel.add(eatButton);
@@ -178,172 +178,6 @@ public class GuiUserInput extends JPanel {
 		frame.getContentPane().add(initialScreen);
 		frame.invalidate();
 		frame.validate();
-    }
-
-    /**
-     *  Changes the gui to the addNewRestaurant Screen
-     */
-
-    public void AddNewScreen() {
-		JPanel newScreen = new JPanel();
-		newScreen.setLayout(new BorderLayout());
-		newScreen.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-
-		JPanel screen = new JPanel();
-		screen.setLayout(new GridLayout(6,2));
-
-		JPanel buttonScreen = new JPanel();
-		JPanel titlePanel = new JPanel();
-	
-		pageTitle = new JLabel("Add a New Restaurant");
-
-		JLabel nameTitle = new JLabel("Name");
-		JLabel phoneTitle = new JLabel("Phone Number ex. xxx-xxx-xxxx");
-		JLabel addressTitle = new JLabel("Address");
-		JLabel startTitle = new JLabel("Start Time ex. 8 for 8:00 A.M.");
-		JLabel endTitle = new JLabel("End Time ex. 20 for 8:00 P.M.");
-		JLabel typeTitle = new JLabel("Type of Cuisine");
-		JLabel menuTitle = new JLabel("Menu (if available)");
-	
-		JButton submitButton = new JButton("Submit");
-		submitButton.addActionListener(new submitButtonListener());
-	
-		back = new JButton("Go Back");
-		back.addActionListener(new backButtonListener());
-
-		// Textfields to read in user input.
-		name = new JTextField(20);
-		phoneNumber = new JTextField(15);
-		address = new JTextField(30);
-		startTime = new JTextField(10);
-		endTime = new JTextField(10);
-		type = new JTextField(20);
-
-		// Set the verifiers for user input validation.
-		phoneNumber.setInputVerifier(new phoneVerifier());
-		startTime.setInputVerifier(new timeVerifier());
-		endTime.setInputVerifier(new timeVerifier());
-
-		screen.add(nameTitle);
-		screen.add(name);
-	
-		screen.add(phoneTitle);
-		screen.add(phoneNumber);
-	
-		screen.add(addressTitle);
-		screen.add(address);
-
-		screen.add(startTitle);
-		screen.add(startTime);
-
-		screen.add(endTitle);
-		screen.add(endTime);
-
-		screen.add(typeTitle);
-		screen.add(type);
-
-		buttonScreen.add(submitButton);
-		buttonScreen.add(back);
-
-		titlePanel.add(pageTitle);
-
-		newScreen.add(titlePanel, BorderLayout.NORTH);
-		newScreen.add(screen, BorderLayout.CENTER);
-		newScreen.add(buttonScreen, BorderLayout.SOUTH);
-		frame.getContentPane().removeAll();
-		frame.getContentPane().add(newScreen);
-		frame.invalidate();
-		frame.validate();
-    }
-
-    /**
-     * Ensure that phone number is entered in the right format
-     */
-    class phoneVerifier extends InputVerifier {
-        public boolean verify(JComponent input) {
-	    JTextField tf = (JTextField) input;
-	    String pn = tf.getText();
-	    try {
-		String[] parts = pn.split("-");
-		if (parts[0].length() != 3 || parts[1].length() != 3 || parts[2].length() != 4) {
-		    input.setBackground(Color.red);
-		    JOptionPane.showMessageDialog(frame, "Make sure you use this format: xxx-xxx-xxxx (include dashes)",
-						  "Formatting error", JOptionPane.ERROR_MESSAGE);
-		    tf.setText(null);
-		    return true;
-		}
-		for (int i = 0; i < 3; i++) {
-		    Integer.parseInt(parts[i]);
-		}
-	    } catch (Exception e) {
-		input.setBackground(Color.red);
-		JOptionPane.showMessageDialog(frame, "Make sure you use this format: xxx-xxx-xxxx (include dashes)",
-					      "Formatting error", JOptionPane.ERROR_MESSAGE);
-		tf.setText(null);
-		return true;
-	    }
-	    input.setBackground(UIManager.getColor("TextField.background"));
-	    return true;
-        }
-    }
-
-    /**
-     * Ensure that time is entered in the right format
-     */
-    class timeVerifier extends InputVerifier {
-        public boolean verify(JComponent input) {
-	    JTextField tf = (JTextField) input;
-	    try {
-		int time = Integer.parseInt(tf.getText());
-		if (time >= 0 && time <= 24) {
-		    input.setBackground(UIManager.getColor("TextField.background"));
-		    return true;
-		}
-		else {
-		    input.setBackground(Color.red);
-		    JOptionPane.showMessageDialog(frame, "Please set a valid time (0-24)",
-						  "Formatting error", JOptionPane.ERROR_MESSAGE);
-		    tf.setText(null);
-		    return true;
-		}
-	    } catch (NumberFormatException e) {
-		input.setBackground(Color.red);
-		JOptionPane.showMessageDialog(frame, "Please set a valid time (0-24)",
-					      "Formatting error", JOptionPane.ERROR_MESSAGE);
-		tf.setText(null);
-		return true;
-	    }
-        }
-    }
-
-    /**
-     * Submit the restaurants to the database
-     */
-    class submitButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-		    String st = startTime.getText();
-		    info[0] = st;
-		    
-		    String et = endTime.getText();
-		    info[1] = et;
-		    
-		    String n = name.getText();
-		    info[2] = n;
-		    
-		    String p = phoneNumber.getText();
-		    info[3] = p;
-		    
-		    String a = address.getText();
-		    info[4] = a;
-		    
-		    String cuisineType = type.getText();
-		    String properCuisineType = cuisineType.substring(0,1).toUpperCase() + cuisineType.substring(1).toLowerCase();
-		    info[5] = properCuisineType;
-		    
-		    food.createNew(info);
-		    food.saveList();
-		    EatScreen();
-		}
     }
     
     /**
@@ -373,12 +207,12 @@ public class GuiUserInput extends JPanel {
 		
 		String[] type = food.getCuisineTypes();
 		back = new JButton("Go Back");
-		back.addActionListener(new backButtonListener());
+		back.addActionListener(new BackButtonListener(this));
 
 
 		//NEED MAJOR WORK RIGHT HERE
 		edit = new JButton("Edit");
-		edit.addActionListener(new backButtonListener());
+		edit.addActionListener(new BackButtonListener(this));
 		edit.setEnabled(false);
 		//JComboBox listing the cuisines
 		cuisineList = new JComboBox(type);
@@ -411,16 +245,16 @@ public class GuiUserInput extends JPanel {
      * NEED MAJOR WORK!
      */
     class EditRestaurantListListener implements ActionListener{
-	public void actionPerformed(ActionEvent event){
-	    JComboBox cb = (JComboBox)event.getSource();
-	    int index = restaurantList.getSelectedIndex();
-	    System.out.println(index);
-	    if(index > 0){
-		String restaurantChoice = (String)cb.getSelectedItem();
-		System.out.println(restaurantChoice);
-		edit.setEnabled(true);
-	    }
-	}
+		public void actionPerformed(ActionEvent event){
+		    JComboBox cb = (JComboBox)event.getSource();
+		    int index = restaurantList.getSelectedIndex();
+		    System.out.println(index);
+		    if(index > 0){
+			String restaurantChoice = (String)cb.getSelectedItem();
+			System.out.println(restaurantChoice);
+			edit.setEnabled(true);
+		    }
+		}
     }
     
     /**
@@ -449,7 +283,7 @@ public class GuiUserInput extends JPanel {
 		
 		futureTime = new JTextField(5);
 		futureTime.addActionListener(new futureTimeListener());
-		futureTime.setInputVerifier(new timeVerifier());
+		futureTime.setInputVerifier(new TimeVerifier(frame));
 
 		futureLocation = new JTextField(20);
 		futureLocation.setEnabled(false);
@@ -465,7 +299,7 @@ public class GuiUserInput extends JPanel {
 	
 
 		back = new JButton("Go Back");
-		back.addActionListener(new backButtonListener());
+		back.addActionListener(new BackButtonListener(this));
 	
 		titlePanel.add(pageTitle);
 		textPanel.add(hour);
@@ -674,7 +508,7 @@ public class GuiUserInput extends JPanel {
         
         pageTitle = new JLabel("Menu");
         back = new JButton("Back");
-        back.addActionListener(new backButtonListener());
+        back.addActionListener(new BackButtonListener(this));
         
         titlePanel.add(pageTitle);
         buttonPanel.add(back);
@@ -710,7 +544,7 @@ public class GuiUserInput extends JPanel {
         
         //String[] type = food.getCuisineTypes();
         back = new JButton("Go Back");
-        back.addActionListener(new backButtonListener());
+        back.addActionListener(new BackButtonListener(this));
         
         //JComboBox listing the cuisines
         location.addActionListener(new locationListener());
@@ -989,7 +823,7 @@ public class GuiUserInput extends JPanel {
     	try {
     		br = new BufferedReader(new FileReader(file));
     		while ((line = br.readLine()) != null) {
-    			info = line.split(csvSplitBy);
+    			String[] info = line.split(csvSplitBy);
     			food.createCSVNew(info);
     		}
     	} catch (FileNotFoundException e) {
@@ -1023,18 +857,6 @@ public class GuiUserInput extends JPanel {
         
     }
 
-    //Goes back to the starting screen whenever the back button is clicked
-
-	/**
-	 * Goes back to the starting screen whenever the back button is clicked
-     */ 
-    
-    class backButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-	    	setup();
-		}
-    }
-    
     //
 
 	/**
@@ -1058,8 +880,22 @@ public class GuiUserInput extends JPanel {
 	 */ 
 
     class NewListener implements ActionListener {
+    	GuiUserInput gui;
+
+    	public NewListener(GuiUserInput gui) {
+        	this.gui = gui;
+    	}
+
 		public void actionPerformed(ActionEvent event) {
-	    	AddNewScreen();
+	    	AddNewRestaurantPanel newPanel = new AddNewRestaurantPanel(frame, this.gui, food);
+
+			pageTitle = newPanel.getTitle();
+
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(newPanel.getPanel());
+			frame.invalidate();
+			frame.validate();
+
 		}
     }
 

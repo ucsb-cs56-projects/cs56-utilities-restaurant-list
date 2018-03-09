@@ -6,6 +6,7 @@
     @version  CS56, Fall 2016
 
     @author   Zihao Zhang
+    @author   Hyun Bum Cho
     @version  CS56, Winter 2018
 */
 
@@ -40,28 +41,24 @@ public class GuiRatings {
      * @param reviews The reviews taken from the API
      */
     
-    public GuiRatings(ArrayList<Review> reviews) {
-        //GUI Setup
-  
-	frame = new JFrame("Reviews");
+    public GuiRatings(ArrayList<Review> reviews) {  
+    	frame = new JFrame("Reviews");
 
-	reviewTable = new Box(BoxLayout.Y_AXIS);
+    	reviewTable = new Box(BoxLayout.Y_AXIS);
 
-	closeButton = new JButton("Close");
-	closeButton.setPreferredSize(new Dimension(30, 30));
-	closeButton.addActionListener(new CloseListener());
+    	closeButton = new JButton("Close");
+    	closeButton.setPreferredSize(new Dimension(30, 30));
+    	closeButton.addActionListener(new CloseListener());
 
-        
         scrollPane = new JScrollPane(reviewTable);
         
         addReviews(reviews);
 
         frame.getContentPane().add(BorderLayout.CENTER,scrollPane);
-	frame.getContentPane().add(BorderLayout.NORTH,closeButton);
-	
+    	frame.getContentPane().add(BorderLayout.NORTH,closeButton);
+    	
         frame.setSize(600,400);
         frame.setVisible(true);
-
     }
 
     /**
@@ -79,7 +76,7 @@ public class GuiRatings {
    
     class CloseListener implements ActionListener {
         public void actionPerformed(ActionEvent event){
-	    frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+	       frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         }
     }
 
