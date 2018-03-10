@@ -30,7 +30,7 @@ public class EatPanel {
     
     String cuisineChoice;
     JFrame frame;
-    GuiUserInput gui;
+    MainPanel gui;
     Food food;
     JPanel boxPanel, buttonPanel, titlePanel, eatScreen;
     JLabel pageTitle, place, stateTitleLabel, cityTitleLabel;
@@ -40,7 +40,7 @@ public class EatPanel {
     JTextField location;
     String[] types;
 
-    public EatPanel(JFrame frame, GuiUserInput gui, Food food, String[] types) {
+    public EatPanel(JFrame frame, MainPanel gui, Food food, String[] types) {
         this.gui = gui;
         this.food = food;
         this.frame = frame;

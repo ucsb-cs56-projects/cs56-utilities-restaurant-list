@@ -44,7 +44,7 @@ import edu.ucsb.cs56.projects.utilities.YelpAPI.Dotenv;
 /**
  * The GUI class that generates the Yelp Interface
  */
-public class GuiUserInput extends JPanel {
+public class MainPanel extends JPanel {
 
     JLabel pageTitle;
     JFrame frame;
@@ -54,29 +54,27 @@ public class GuiUserInput extends JPanel {
     /**
 	 * The constructor that creates the entire JFrame
      */
-    public GuiUserInput() {
+    public MainPanel() {
    
 		frame = new JFrame("Restaurant Finder");
 	
 		setup();
 	
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(600,400);
+		frame.setSize(600, 400);
 		frame.setVisible(true);
     }
 
     public static void main(String[] args) {
 		Dotenv.load();
-		GuiUserInput gui = new GuiUserInput();
+		MainPanel gui = new MainPanel();
     }
 
     /**
      *  Initial home screen when the gui is run
      *
      */
-
     public void setup() {
-		frame.getContentPane().removeAll();
 		JPanel titlePanel = new JPanel();
 		pageTitle = new JLabel("Find a Restaurant");
 
@@ -130,6 +128,7 @@ public class GuiUserInput extends JPanel {
 		initialScreen.add(futurePanel);
 		initialScreen.add(exitPanel);
 
+		frame.getContentPane().removeAll();
 		frame.getContentPane().add(initialScreen);
 		frame.invalidate();
 		frame.validate();
@@ -145,16 +144,16 @@ public class GuiUserInput extends JPanel {
 	 */ 
 
     class NewListener implements ActionListener {
-    	GuiUserInput gui;
+    	MainPanel gui;
 
-    	public NewListener(GuiUserInput gui) {
+    	public NewListener(MainPanel gui) {
         	this.gui = gui;
     	}
 
 		public void actionPerformed(ActionEvent event) {
 	    	AddNewRestaurantPanel newPanel = new AddNewRestaurantPanel(frame, this.gui, food);
 
-			GuiUserInput.this.setPageTitle(newPanel.getTitle());
+			MainPanel.this.setPageTitle(newPanel.getTitle());
 
 			frame.getContentPane().removeAll();
 			frame.getContentPane().add(newPanel.getPanel());
@@ -168,15 +167,15 @@ public class GuiUserInput extends JPanel {
      * Allow for Editing
      */
     class EditListener implements ActionListener {
-    	GuiUserInput gui;
+    	MainPanel gui;
 
-    	public EditListener(GuiUserInput gui) {
+    	public EditListener(MainPanel gui) {
         	this.gui = gui;
     	}
 
 		public void actionPerformed(ActionEvent event) {
 		    EditPanel editScreen = new EditPanel(frame, this.gui, food);
-		    GuiUserInput.this.setPageTitle(editScreen.getTitle());
+		    MainPanel.this.setPageTitle(editScreen.getTitle());
 
 			frame.getContentPane().removeAll();
             frame.getContentPane().add(editScreen.getPanel());
@@ -189,15 +188,15 @@ public class GuiUserInput extends JPanel {
 	 * Action Performed for the FutureScreen
 	 */ 
     class FutureListener implements ActionListener {
-    	GuiUserInput gui;
+    	MainPanel gui;
 
-    	public FutureListener(GuiUserInput gui) {
+    	public FutureListener(MainPanel gui) {
         	this.gui = gui;
     	}
 
 		public void actionPerformed(ActionEvent event) {
 			FuturePanel futureScreen = new FuturePanel(frame, this.gui, food, types);
-			GuiUserInput.this.setPageTitle(futureScreen.getTitle());
+			MainPanel.this.setPageTitle(futureScreen.getTitle());
 
 			frame.getContentPane().removeAll();
 			frame.getContentPane().add(futureScreen.getPanel());

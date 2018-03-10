@@ -7,8 +7,8 @@ import java.awt.event.*;
  */ 
 
 class BackButtonListener implements ActionListener {
-	GuiUserInput gui;
-	public BackButtonListener(GuiUserInput gui) {
+	MainPanel gui;
+	public BackButtonListener(MainPanel gui) {
 		this.gui = gui;
 	}
 

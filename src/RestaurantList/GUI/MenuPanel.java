@@ -16,13 +16,13 @@ import javax.swing.*;
 
 public class MenuPanel {
     JFrame frame;
-    GuiUserInput gui;
+    MainPanel gui;
     Food food;
     JPanel menuScreen, titlePanel, buttonPanel;
     JLabel menuLabel, pageTitle;
     JButton back;
 
-    public MenuPanel(JFrame frame, GuiUserInput gui, Food food, String cuisineChoice) {
+    public MenuPanel(JFrame frame, MainPanel gui, Food food, String cuisineChoice) {
         this.gui = gui;
         this.food = food;
         this.frame = frame;

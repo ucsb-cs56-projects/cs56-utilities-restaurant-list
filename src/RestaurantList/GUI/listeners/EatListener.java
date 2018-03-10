@@ -6,12 +6,12 @@ import java.awt.event.*;
  * Action Performed for the EatScreen
  */ 
 class EatListener implements ActionListener {
-    GuiUserInput gui;
+    MainPanel gui;
     JFrame frame;
     Food food;
     String[] types;
 
-    public EatListener(JFrame frame, GuiUserInput gui, Food food, String[] types) {
+    public EatListener(JFrame frame, MainPanel gui, Food food, String[] types) {
         this.gui = gui;
         this.frame = frame;
         this.food = food;

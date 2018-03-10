@@ -8,10 +8,10 @@ import java.awt.event.*;
 class MenuButtonListener implements ActionListener {
     JFrame frame;
     Food food;
-    GuiUserInput gui;
+    MainPanel gui;
     String cuisineChoice;
 
-    public MenuButtonListener(JFrame frame, GuiUserInput gui, Food food, String cuisineChoice) {
+    public MenuButtonListener(JFrame frame, MainPanel gui, Food food, String cuisineChoice) {
         this.frame = frame;
         this.gui = gui;
         this.food = food;

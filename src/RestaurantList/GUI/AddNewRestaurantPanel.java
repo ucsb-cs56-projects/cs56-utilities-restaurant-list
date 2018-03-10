@@ -21,10 +21,10 @@ public class AddNewRestaurantPanel {
     JButton back;
     String[] info;
     JButton submitButton;
-    GuiUserInput gui;
+    MainPanel gui;
     Food food;
 
-    public AddNewRestaurantPanel(JFrame frame, GuiUserInput gui, Food food) {
+    public AddNewRestaurantPanel(JFrame frame, MainPanel gui, Food food) {
         this.gui = gui;
         this.food = food;
         

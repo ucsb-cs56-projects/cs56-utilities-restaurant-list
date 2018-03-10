@@ -20,13 +20,13 @@ import javax.swing.*;
  */
 public class EditPanel {
     JFrame frame;
-    GuiUserInput gui;
+    MainPanel gui;
     JButton editButton, back;
     JComboBox restaurantList, cuisineList;
     JPanel boxPanel, buttonPanel, titlePanel, JPanel, editScreen;
     JLabel pageTitle;
 
-    public EditPanel(JFrame frame, GuiUserInput gui, Food food) {
+    public EditPanel(JFrame frame, MainPanel gui, Food food) {
         this.frame = frame;
         this.gui = gui;
 

@@ -26,7 +26,7 @@ import javax.swing.*;
  */
 public class FuturePanel {
     JFrame frame;
-    GuiUserInput gui;
+    MainPanel gui;
     JButton editButton, back;
     JComboBox restaurantList, cuisineList, futureRestaurant, futureCuisine;
     JLabel pageTitle, hour, place;;
@@ -36,7 +36,7 @@ public class FuturePanel {
     String[] types;
     String cuisineChoice;
 
-    public FuturePanel(JFrame frame, GuiUserInput gui, Food food, String[] types) {
+    public FuturePanel(JFrame frame, MainPanel gui, Food food, String[] types) {
         this.food = food;
         this.frame = frame;
         this.gui = gui;
