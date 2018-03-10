@@ -46,69 +46,24 @@ import edu.ucsb.cs56.projects.utilities.YelpAPI.Dotenv;
  */
 public class GuiUserInput extends JPanel {
 
-    JLabel restaurant, pageTitle;
-    JPanel  eatScreen, editScreen, future, menuScreen; 
-    JButton back, edit, menu, reviewsButton, image, searchToggleButton = new JButton("By City");
+    JLabel pageTitle;
     JFrame frame;
     Food food = new Food();
-    JTextField futureTime, futureLocation;
-    JTextField location = new JTextField(20);
-    JComboBox cuisineList, restaurantList, futureCuisine, futureRestaurant;
-    String time;
-    String cuisineChoice;
     String[] types = new String[]{"Mexican","Chinese","Thai","Sushi Bars","Seafood","Fast Food","Sandwiches","Pizza","Italian","Coffee & Tea","Vegetarian"};
-    Restaurant selectedRestaurant;
-    
-    // State and city search GUI objects
-    String[] stateNames = {"Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma", "Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"};
-    final JLabel stateTitleLabel = new JLabel("State");
-    final JLabel cityTitleLabel = new JLabel("City");
-    JComboBox stateDropDown = new JComboBox(stateNames);
-    JComboBox cityDropDown = new JComboBox();
-    JPanel searchControlContainer = new JPanel(); // This makes swapping search Panels easier
-    JPanel naturalLanguageSearchPanel = new JPanel();
-    JPanel stateCitySearchPanel = new JPanel();
-    
-    JButton searchButton = new JButton("Search");
-    
 
     /**
 	 * The constructor that creates the entire JFrame
      */
-    
     public GuiUserInput() {
    
 		frame = new JFrame("Restaurant Finder");
 	
 		setup();
-        setupOnce();
 	
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(600,400);
 		frame.setVisible(true);
     }
-    
-    /**
-     * this is only called one time unlike setup
-     */
-    public void setupOnce() {
-        //Eatscreen Actionlisteners and setup
-        searchToggleButton.addActionListener(e -> { toggleSearchType(); });
-        
-        searchButton.addActionListener( e -> {
-            String lct, type = (String)cuisineList.getSelectedItem();
-            if(isNaturalLanguage) {
-                lct = (String)location.getText();
-            } else {
-                lct = stateDropDown.getSelectedItem() + ", " + cityDropDown.getSelectedItem();
-            }
-            System.out.println("Location: " + lct + "   Type: " + type);
-            search(lct, type);
-        });
-        
-        setupCitySearchPanel();
-    }
-     
 
     public static void main(String[] args) {
 		Dotenv.load();
@@ -149,12 +104,12 @@ public class GuiUserInput extends JPanel {
 		JPanel initialScreen = new JPanel();
 		initialScreen.setLayout(new BoxLayout(initialScreen, BoxLayout.PAGE_AXIS));
 
-		eatButton.addActionListener(new EatListener());
+		eatButton.addActionListener(new EatListener(frame, this, food, types));
 		newButton.addActionListener(new NewListener(this));
-		editButton.addActionListener(new EditListener());
+		editButton.addActionListener(new EditListener(this));
 		newCSVButton.addActionListener(new NewCSVListener());
 		CSVSaveButton.addActionListener(new CSVSaveListener());
-		futureButton.addActionListener(new FutureListener());
+		futureButton.addActionListener(new FutureListener(this));
 		exitButton.addActionListener(new ExitListener());
 		
 		titlePanel.add(pageTitle);
@@ -180,636 +135,75 @@ public class GuiUserInput extends JPanel {
 		frame.validate();
     }
     
+    public void setPageTitle(JLabel pageTitle) {
+    	this.pageTitle = pageTitle;
+    }
+
+
+	/**
+	 * Action Performed to add a new screen
+	 */ 
+
+    class NewListener implements ActionListener {
+    	GuiUserInput gui;
+
+    	public NewListener(GuiUserInput gui) {
+        	this.gui = gui;
+    	}
+
+		public void actionPerformed(ActionEvent event) {
+	    	AddNewRestaurantPanel newPanel = new AddNewRestaurantPanel(frame, this.gui, food);
+
+			GuiUserInput.this.setPageTitle(newPanel.getTitle());
+
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(newPanel.getPanel());
+			frame.invalidate();
+			frame.validate();
+
+		}
+    }
+
     /**
-     * Allow for Editing (Work in Progress)
+     * Allow for Editing
      */
     class EditListener implements ActionListener {
+    	GuiUserInput gui;
+
+    	public EditListener(GuiUserInput gui) {
+        	this.gui = gui;
+    	}
+
 		public void actionPerformed(ActionEvent event) {
-		    EditScreen();
+		    EditPanel editScreen = new EditPanel(frame, this.gui, food);
+		    GuiUserInput.this.setPageTitle(editScreen.getTitle());
+
+			frame.getContentPane().removeAll();
+            frame.getContentPane().add(editScreen.getPanel());
+	        frame.invalidate();
+	        frame.validate();
 		}
     }
     
     /**
-     * Set up the Edit Screen
-     * NEED MAJOR WORK!
-     */
+	 * Action Performed for the FutureScreen
+	 */ 
+    class FutureListener implements ActionListener {
+    	GuiUserInput gui;
 
-    public void EditScreen(){
-		editScreen = new JPanel();
-		editScreen.setLayout(new BoxLayout(editScreen, BoxLayout.Y_AXIS));
-		frame.getContentPane().removeAll();
-		
-		JPanel boxPanel = new JPanel();
-		JPanel buttonPanel = new JPanel();
-		JPanel titlePanel = new JPanel();
-		
-		pageTitle = new JLabel("Editing Existing Restaurant Entries");
-		
-		String[] type = food.getCuisineTypes();
-		back = new JButton("Go Back");
-		back.addActionListener(new BackButtonListener(this));
+    	public FutureListener(GuiUserInput gui) {
+        	this.gui = gui;
+    	}
 
-
-		//NEED MAJOR WORK RIGHT HERE
-		edit = new JButton("Edit");
-		edit.addActionListener(new BackButtonListener(this));
-		edit.setEnabled(false);
-		//JComboBox listing the cuisines
-		cuisineList = new JComboBox(type);
-		
-		restaurantList = new JComboBox();
-		restaurantList.setEnabled(false);
-		
-		cuisineList.addActionListener(new comboBoxListener());	
-		
-		restaurantList.addActionListener(new EditRestaurantListListener());
-		
-		boxPanel.add(cuisineList);
-		boxPanel.add(restaurantList);
-		buttonPanel.add(back);
-		buttonPanel.add(edit);
-		titlePanel.add(pageTitle);
-		
-		editScreen.add(titlePanel);
-		editScreen.add(boxPanel);
-		editScreen.add(buttonPanel);
-			
-		frame.getContentPane().add(editScreen);
-		frame.invalidate();
-		frame.validate();
-    }
-
-    /**
-     * Enable the edit button to turn on. However, the button
-     * only leads back to the home screen.
-     * NEED MAJOR WORK!
-     */
-    class EditRestaurantListListener implements ActionListener{
-		public void actionPerformed(ActionEvent event){
-		    JComboBox cb = (JComboBox)event.getSource();
-		    int index = restaurantList.getSelectedIndex();
-		    System.out.println(index);
-		    if(index > 0){
-			String restaurantChoice = (String)cb.getSelectedItem();
-			System.out.println(restaurantChoice);
-			edit.setEnabled(true);
-		    }
-		}
-    }
-    
-    /**
-     * Set up the Future Screen
-     */
-    public void FutureScreen() {
-		frame.getContentPane().removeAll();
-		future = new JPanel();
-		future.setLayout(new GridLayout(2,1));
-		
-		pageTitle = new JLabel("Find a Later Time");
-
-		JPanel buttonPanel = new JPanel();
-		
-		JPanel futurePanel = new JPanel();
-		futurePanel.setLayout(new BoxLayout(futurePanel, BoxLayout.Y_AXIS));
-		
-		JPanel textPanel = new JPanel();
-		JPanel textPanel2 = new JPanel();
-		JPanel boxPanel = new JPanel();
-		JPanel titlePanel = new JPanel();
-
-		JLabel hour = new JLabel("Hour (0-24), press enter after input:");
-
-		JLabel place = new JLabel("Location (i.e. Isla Vista, CA), press enter after input:");
-		
-		futureTime = new JTextField(5);
-		futureTime.addActionListener(new futureTimeListener());
-		futureTime.setInputVerifier(new TimeVerifier(frame));
-
-		futureLocation = new JTextField(20);
-		futureLocation.setEnabled(false);
-		futureLocation.addActionListener(new futureLocationListener());
-		
-		futureCuisine = new JComboBox();
-		futureCuisine.setEnabled(false);
-		futureCuisine.addActionListener(new futureCuisineBoxListener());
-
-		futureRestaurant = new JComboBox();
-		futureRestaurant.setEnabled(false);
-		futureRestaurant.addActionListener(new futureListListener());
-	
-
-		back = new JButton("Go Back");
-		back.addActionListener(new BackButtonListener(this));
-	
-		titlePanel.add(pageTitle);
-		textPanel.add(hour);
-		textPanel.add(futureTime);
-
-		textPanel2.add(place);
-		textPanel2.add(futureLocation);
-		
-		boxPanel.add(futureCuisine);
-		boxPanel.add(futureRestaurant);
-		buttonPanel.add(back);
-	
-		futurePanel.add(titlePanel);
-		futurePanel.add(textPanel);
-		futurePanel.add(textPanel2);
-		futurePanel.add(boxPanel);
-
-		future.add(futurePanel);
-		future.add(buttonPanel);
-
-		frame.getContentPane().add(future);
-		frame.invalidate();
-		frame.validate();
-    }
-
-    /**
-     * Modifies the actionPerformed to print out all the restaurants of that particular cuisine.
-     */
-    class futureLocationListener implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
-		    futureCuisine.removeAllItems();
-		    String[] futureCuisineList = types;
-		    for (int i = 0; i < futureCuisineList.length; i++) {
-			futureCuisine.addItem(futureCuisineList[i]);
-		    }
-		    futureCuisine.setEnabled(true);
+			FuturePanel futureScreen = new FuturePanel(frame, this.gui, food, types);
+			GuiUserInput.this.setPageTitle(futureScreen.getTitle());
+
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(futureScreen.getPanel());
+	        frame.invalidate();
+	        frame.validate();
 		}
-    }
-
-	/**
-	 * Turns on location
-     */
-    class futureTimeListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-		    futureLocation.setEnabled(true);
-		}
-    }
-
-	/**
-	 * Prints out the list of restaurants for that cuisine.
-     */
-
-    class futureCuisineBoxListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-	    	JComboBox cb = (JComboBox)event.getSource();
-	    	String cuisine = (String)cb.getSelectedItem();
-	    	futureRestaurant.removeAllItems();
-
-			time = futureTime.getText();
-			String lct = (String)futureLocation.getText();
-			
-			food.clearEntries();
-			food.populateRestaurantsDatabase(cuisine, lct);
-
-	    	String[] listOfRestaurants = food.showOptions(cuisine, time); 
-	    	for (int i = 0; i < listOfRestaurants.length; i++) {
-				System.out.println(listOfRestaurants[i]);
-				futureRestaurant.addItem(listOfRestaurants[i]);
-	    	}
-	    	futureRestaurant.setEnabled(true);
-		}
-    }
-    /**
-	 * Looks for restaurants
-     */
-    
-    class futureListListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-	    	JComboBox cb = (JComboBox)event.getSource();
-	    	int index = futureRestaurant.getSelectedIndex();
-	    	System.out.println(index);
-	    	if (index > 0) {
-	    		String restaurantChoice = (String)cb.getSelectedItem();
-				System.out.println(restaurantChoice);
-				cuisineChoice = restaurantChoice;
-				showChoiceFuture(restaurantChoice);
-	    	}
-		}
-    }
-    /**
-	 * Sets up the gui and prints out all the information about hte restaurant while adding a choice to go back, click on menu, and click on reviews.
-	 * @param cuisineName The type of cuisine selected
-	 */
-    
-    public void showChoiceFuture(String cuisineName) {
-        
-        //stores the restaurant's info in the array
-        String[] restaurantInfo = food.showAllInfo(cuisineName);
-        Place selectedRestaurant = food.getCuisineWithName(cuisineChoice).getPlacesInfo();
-        
-        frame.getContentPane().removeAll();
-        
-        JPanel choice = new JPanel();
-        choice.setLayout(new BoxLayout(choice, BoxLayout.Y_AXIS));
-        choice.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-        
-        JPanel infoPanel = new JPanel();
-        if (selectedRestaurant != null) {
-            infoPanel.setLayout(new GridLayout(9,2));
-        } else {
-            infoPanel.setLayout(new GridLayout(6,2));
-        }
-        
-        
-        JPanel titlePanel = new JPanel();
-        JPanel buttonPanel = new JPanel();
-        
-        JPanel imagePanel = new JPanel(new BorderLayout());
-        
-        back = new JButton("Go Back");
-        back.addActionListener(new FutureListener());
-        
-        JLabel nameTitle = new JLabel("Name");
-        JLabel hoursTitleLabel = new JLabel("Hours");
-        JLabel addressTitle = new JLabel("Address");
-        JLabel phoneTitle = new JLabel("Phone");
-        pageTitle = new JLabel("Restaurant Information");
-        //JLabel endTime = new JLabel(closeLabelText);
-        JLabel name = new JLabel(restaurantInfo[0]);
-        JLabel address = new JLabel(restaurantInfo[3]);
-        JLabel phone = new JLabel(restaurantInfo[4]);
-        
-        try {
-            URL url = new URL(restaurantInfo[5]);
-            BufferedImage img = ImageIO.read(url);
-            ImageIcon imagePic = new ImageIcon(img);
-            
-            JLabel imageLabel = new JLabel(imagePic);
-            imagePanel.add(imageLabel);
-            
-        }
-        catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        menu = new JButton("Menu");
-        menu.addActionListener(new menuButtonListener());
-        
-        //adds all the components to their respective JPanels
-        titlePanel.add(pageTitle);
-        
-        infoPanel.add(nameTitle);
-        infoPanel.add(name);
-        infoPanel.add(hoursTitleLabel);
-        if (selectedRestaurant != null) {
-            for (Hours.Period hoursByDay : selectedRestaurant.getHours().getPeriods()) {
-                infoPanel.add(new JLabel(hoursByDay.toString()));
-            }
-        } else {
-            infoPanel.add(new JLabel("Operating hours not available"));
-        }
-        infoPanel.add(addressTitle);
-        infoPanel.add(address);
-        infoPanel.add(phoneTitle);
-        infoPanel.add(phone);
-        
-        
-        buttonPanel.add(menu);
-        buttonPanel.add(back);
-
-        choice.add(titlePanel);
-        choice.add(imagePanel);
-        choice.add(infoPanel);
-        choice.add(buttonPanel);
-        
-        frame.getContentPane().add(choice);
-        frame.invalidate();
-        frame.validate();
-    }
-
-    /**
-     * When a button is clicked, call MenuScreen
-     */
-    class menuButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-		    MenuScreen();
-		}
-    }
-
-    /**
-	 * The gui that is displayed when the user wants to look at the menu
-     */
-        
-    public void MenuScreen() {
-        frame.getContentPane().removeAll();
-        menuScreen = new JPanel();
-        menuScreen.setLayout(new BoxLayout(menuScreen, BoxLayout.Y_AXIS));
-        //	menuScreen.setBorder
-        
-        String[] restaurantInfo = food.showAllInfo(cuisineChoice);
-        JPanel titlePanel = new JPanel();
-        JPanel buttonPanel = new JPanel();
-        JLabel menuLabel = new JLabel(restaurantInfo[6]);
-        
-        pageTitle = new JLabel("Menu");
-        back = new JButton("Back");
-        back.addActionListener(new BackButtonListener(this));
-        
-        titlePanel.add(pageTitle);
-        buttonPanel.add(back);
-        
-        menuScreen.add(titlePanel);
-        menuScreen.add(menuLabel);
-        if(restaurantInfo[5].equals("")){
-            JLabel menuEmptyLabel = new JLabel("This restaurant does not have a menu online.");
-            menuScreen.add(menuEmptyLabel);
-        }
-        menuScreen.add(buttonPanel);
-        
-        frame.getContentPane().add(menuScreen);
-        frame.invalidate();
-        frame.validate();
-    }
-
-    /**
-	 * The gui that is displayed when the user wants to find a place to eat
-     */
-    
-    JLabel place = new JLabel("Location (i.e. Isla Vista, CA), press enter after input:");
-    public void EatScreen() {
-        eatScreen = new JPanel();
-        eatScreen.setLayout(new BoxLayout(eatScreen, BoxLayout.Y_AXIS));
-        frame.getContentPane().removeAll();
-        
-        JPanel boxPanel = new JPanel();
-        JPanel buttonPanel = new JPanel();
-        JPanel titlePanel = new JPanel();
-        
-        pageTitle = new JLabel("Find a restaurant open at the current time.");
-        
-        //String[] type = food.getCuisineTypes();
-        back = new JButton("Go Back");
-        back.addActionListener(new BackButtonListener(this));
-        
-        //JComboBox listing the cuisines
-        location.addActionListener(new locationListener());
-        
-        
-        cuisineList = new JComboBox(types);
-        
-        restaurantList = new JComboBox();
-        restaurantList.setEnabled(false);
-        
-        cuisineList.addActionListener(new comboBoxListener());
-        
-        restaurantList.addActionListener(new restaurantListListener());
-        
-        naturalLanguageSearchPanel.add(place);
-        naturalLanguageSearchPanel.add(location);
-        if (searchControlContainer.getComponentCount() == 0) {
-            searchControlContainer.add(naturalLanguageSearchPanel);
-        }
-        boxPanel.add(cuisineList);
-        boxPanel.add(restaurantList);
-        
-        buttonPanel.add(searchToggleButton);
-        buttonPanel.add(searchButton);
-        buttonPanel.add(back);
-        titlePanel.add(pageTitle);
-        
-        eatScreen.add(titlePanel);
-        eatScreen.add(searchControlContainer);
-        eatScreen.add(boxPanel);
-        eatScreen.add(buttonPanel);
-        
-        frame.getContentPane().add(eatScreen);
-        frame.invalidate();
-        frame.validate();
-    }
-    
-	boolean isNaturalLanguage = true;
-    public void toggleSearchType() {
-        searchControlContainer.removeAll();
-        if (isNaturalLanguage) {
-            searchToggleButton.setText("Natural Language");
-            searchControlContainer.add(stateCitySearchPanel);
-        } else {
-            searchToggleButton.setText("By City");
-            searchControlContainer.add(naturalLanguageSearchPanel);
-        }
-        searchControlContainer.paintImmediately(searchControlContainer.getVisibleRect());
-        isNaturalLanguage = !isNaturalLanguage;
-    }
-    
-    /**
-     * Setup the city search panel GUI
-     */
-    public void setupCitySearchPanel() {
-        stateCitySearchPanel.add(stateTitleLabel);
-        stateDropDown.addActionListener( e -> {
-            JComboBox cb = (JComboBox)e.getSource();
-            String state = (String)cb.getSelectedItem();
-            setupCityComboBox(state);
-        });
-        stateCitySearchPanel.add(stateDropDown);
-        stateCitySearchPanel.add(cityTitleLabel);
-        stateCitySearchPanel.add(cityDropDown);
-        
-        cityDropDown.setEnabled(true);
-        
-    }
-
-    /**
-     * Setup the city combo (list) GUI
-     */
-    public void setupCityComboBox(String state) {
-        
-        //clear old cities because we're adding new ones
-        cityDropDown.removeAllItems();
-        
-        //Perform search for cities using the geonames webservice
-        WebService.setUserName("N7Alpha"); // add your username here
-         
-         ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
-        final String[] citiesOnlyCodes = {"PPL", "PPLC", "PPLA"};
-         searchCriteria.setQ("United States, " + state); // Set query
-        searchCriteria.setFeatureCodes(citiesOnlyCodes);
-        ToponymSearchResult searchResult = null;
-        try {
-            searchResult = WebService.search(searchCriteria);
-        } catch (Exception e) {
-            System.out.println(e);
-            return;
-        }
-        ArrayList<String> cityNames = new ArrayList<String>();
-        for (Toponym toponym : searchResult.getToponyms()) {
-            System.out.println("Location: " + toponym.getName() + ", " + toponym.getCountryName());
-            cityNames.add(toponym.getName());
-        }
-        Collections.sort(cityNames);
-         for (String name : cityNames) {
-             cityDropDown.addItem(name);
-         }
-        cityDropDown.setEnabled(true);
-    }
-    /**
-	 * Performs a search and populates restaurant drop down menu with the results
-     */
-    public void search(String lct, String type) {
-        String currentTime = String.valueOf(food.getHour());
-        food.clearEntries();
-        String storedTitle = pageTitle.getText();
-        pageTitle.setText("Loading...");
-        // Cause it doesn't update in time otherwise
-        pageTitle.paintImmediately(pageTitle.getVisibleRect());
-        // TODO: This blocks the main thread
-        food.populateRestaurantsDatabase(type, lct);
-        pageTitle.setText(storedTitle);
-        pageTitle.paintImmediately(pageTitle.getVisibleRect());
-        String[] listOfRestaurants = food.showOptions(type, currentTime);
-        restaurantList.removeAllItems();
-        
-        for (int i = 0; i < listOfRestaurants.length; i++) {
-            System.out.println(listOfRestaurants[i]);
-            restaurantList.addItem(listOfRestaurants[i]);
-        }
-        
-        restaurantList.setEnabled(true);
-    }
-    
-    /**
-	 * ActionPerformed for the cuisine list button
-     */
-
-    class locationListener implements ActionListener{
-        public void actionPerformed(ActionEvent event) {
-            cuisineList.setEnabled(true);
-        }
-    }
-
-    /**
-     *  Get cuisine chosen by user and adds restaurant names
-     *  to the second JComboBox
-     */
-    class comboBoxListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-	    	JComboBox cb = (JComboBox)event.getSource();
-
-		}
-    }
-
-    /**
-     *  Gets the restaurant selected by user and passes it to showChoiceEat
-     *  from the EatScreen
-     */
-    class restaurantListListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-		    JComboBox cb = (JComboBox)event.getSource();
-		    int index = restaurantList.getSelectedIndex();
-		    System.out.println(index);
-		    if (index > 0) {
-			String restaurantChoice = (String)cb.getSelectedItem();
-			System.out.println(restaurantChoice);
-			cuisineChoice = restaurantChoice;
-			showChoiceEat(restaurantChoice);
-            
-		    } 
-		}
-    }
-    
-    /**
-     *  Shows all the information of the restaurant chosen by the user
-     *  @param cuisineName  the type of cuisine chosen
-     */
-    public void showChoiceEat(String cuisineName) {
-        //stores the restaurant's info in the array
-        String[] restaurantInfo = food.showAllInfo(cuisineName);
-        Place selectedRestaurant = food.getCuisineWithName(cuisineChoice).getPlacesInfo();
-        
-		frame.getContentPane().removeAll();
-	
-		JPanel choice = new JPanel();
-		
-		choice.setLayout(new BoxLayout(choice, BoxLayout.Y_AXIS));
-		choice.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-
-		JPanel infoPanel = new JPanel();
-        if (selectedRestaurant != null) {
-            infoPanel.setLayout(new GridLayout(9,2));
-        } else {
-            infoPanel.setLayout(new GridLayout(6,2));
-        }
-		
-
-		JPanel titlePanel = new JPanel();
-		JPanel buttonPanel = new JPanel();
-
-		JPanel imagePanel = new JPanel(new BorderLayout());
-
-		back = new JButton("Go Back");
-		back.addActionListener(new EatListener());
-
-		/*	image = new JButton("Image");
-		image.addActionListener(new imageListener());
-		*/
-		
-		JLabel nameTitle = new JLabel("Name");
-		JLabel hoursTitleLabel = new JLabel("Hours");
-		JLabel addressTitle = new JLabel("Address");
-		JLabel phoneTitle = new JLabel("Phone");
-		pageTitle = new JLabel("Restaurant Information");
-
-		
-        
-		JLabel name = new JLabel(restaurantInfo[0]);
-		JLabel address = new JLabel(restaurantInfo[3]);
-		JLabel phone = new JLabel(restaurantInfo[4]);
-
-		try {
-		    URL url = new URL(restaurantInfo[5]);
-		    BufferedImage img = ImageIO.read(url);
-		    ImageIcon imagePic = new ImageIcon(img);
-		    
-		    JLabel imageLabel = new JLabel(imagePic, JLabel.CENTER);
-		    imagePanel.add(imageLabel, BorderLayout.CENTER);
-
-		}
-		catch (MalformedURLException e) {
-		    e.printStackTrace();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
-
-		menu = new JButton("Menu");
-		menu.addActionListener(new menuButtonListener());
-        reviewsButton = new JButton("Reviews");
-        reviewsButton.addActionListener(new reviewsButtonListener());
-		//adds all the components to their respective JPanels
-		titlePanel.add(pageTitle);
-		
-		infoPanel.add(nameTitle);
-		infoPanel.add(name);
-		infoPanel.add(hoursTitleLabel);
-        if (selectedRestaurant != null) {
-            for (Hours.Period hoursByDay : selectedRestaurant.getHours().getPeriods()) {
-                infoPanel.add(new JLabel(hoursByDay.toString()));
-            }
-                
-        } else {
-            infoPanel.add(new JLabel("Operating hours not available"));
-        }
-        
-		infoPanel.add(addressTitle);
-		infoPanel.add(address);
-		infoPanel.add(phoneTitle);
-		infoPanel.add(phone);
-		buttonPanel.add(menu);
-        buttonPanel.add(reviewsButton);
-		buttonPanel.add(back);
-
-		choice.add(titlePanel);
-		choice.add(imagePanel);
-		choice.add(infoPanel);
-		choice.add(buttonPanel);
-
-		frame.getContentPane().add(choice);
-		frame.invalidate();
-		frame.validate();
     }
 
     /**
@@ -841,68 +235,19 @@ public class GuiUserInput extends JPanel {
     	}
 
     	food.saveList();
-    	EatScreen();
+
+    	EditPanel editScreen = new EditPanel(frame, this, food);
+	    pageTitle = editScreen.getTitle();
+
+		frame.getContentPane().removeAll();
+        frame.getContentPane().add(editScreen.getPanel());
+        frame.invalidate();
+        frame.validate();
   	}
-
-	/**
-	 * Action Performed for printing the number of ratings for each restaurant
-     */ 
-    
-    class reviewsButtonListener implements ActionListener {
-        public void actionPerformed(ActionEvent event) {
-           Restaurant selectedRestaurant = food.getCuisineWithName(cuisineChoice);
-            System.out.println("NUMBER OF RATINGS FOR " + selectedRestaurant.getName() + " : " + selectedRestaurant.getReviews().size());
-            GuiRatings gr = new GuiRatings(selectedRestaurant.getReviews()); // creates a window with the reviews
-        }
-        
-    }
-
-    //
-
-	/**
-	 * Goes back to the eating screen
-	 */ 
-    
-    class backToChoiceButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-	    	EatScreen();
-		}
-    }
-
-    class EatListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-	    	EatScreen();
-		}
-    }
-
-	/**
-	 * Action Performed to add a new screen
-	 */ 
-
-    class NewListener implements ActionListener {
-    	GuiUserInput gui;
-
-    	public NewListener(GuiUserInput gui) {
-        	this.gui = gui;
-    	}
-
-		public void actionPerformed(ActionEvent event) {
-	    	AddNewRestaurantPanel newPanel = new AddNewRestaurantPanel(frame, this.gui, food);
-
-			pageTitle = newPanel.getTitle();
-
-			frame.getContentPane().removeAll();
-			frame.getContentPane().add(newPanel.getPanel());
-			frame.invalidate();
-			frame.validate();
-
-		}
-    }
 
 	/**
 	 * Action Performed for opening the file
 	 */ 
-
     class NewCSVListener implements ActionListener {	
 		public void actionPerformed(ActionEvent event) {
 	    	final JFileChooser fc = new JFileChooser();
@@ -949,15 +294,6 @@ public class GuiUserInput extends JPanel {
 		    } catch (IOException ex) {
 			ex.printStackTrace();
 		    }
-		}
-    }
-
-	/**
-	 * Action Performed for the FutureScreen
-	 */ 
-    class FutureListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-		    FutureScreen();
 		}
     }
 
