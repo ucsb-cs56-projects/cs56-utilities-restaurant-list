@@ -20,12 +20,17 @@ public class MenuPanel {
     Food food;
     JPanel menuScreen, titlePanel, buttonPanel;
     JLabel menuLabel, pageTitle;
-    JButton back;
+    JButton backToRestaurant;
+    JFrame newframe;
 
     public MenuPanel(JFrame frame, MainPanel gui, Food food, String cuisineChoice) {
         this.gui = gui;
         this.food = food;
-        this.frame = frame;
+        //this.frame = frame;
+        
+        newframe = new JFrame();
+        newframe.setSize(600,400);
+        newframe.setVisible(true);
 
         menuScreen = new JPanel();
         menuScreen.setLayout(new BoxLayout(menuScreen, BoxLayout.Y_AXIS));
@@ -37,11 +42,11 @@ public class MenuPanel {
         menuLabel = new JLabel(restaurantInfo[6]);
         
         pageTitle = new JLabel("Menu");
-        back = new JButton("Back");
-        back.addActionListener(new BackButtonListener(this.gui));
+        backToRestaurant = new JButton("Back");
+        backToRestaurant.addActionListener(new BackOfMenuButtonListener());
 
         titlePanel.add(pageTitle);
-        buttonPanel.add(back);
+        buttonPanel.add(backToRestaurant);
         
         menuScreen.add(titlePanel);
         menuScreen.add(menuLabel);
@@ -50,6 +55,8 @@ public class MenuPanel {
             menuScreen.add(menuEmptyLabel);
         }
         menuScreen.add(buttonPanel);
+        
+        newframe.getContentPane().add(menuScreen);
     }
 
     public JLabel getTitle() {
@@ -59,4 +66,37 @@ public class MenuPanel {
     public JPanel getPanel() {
         return menuScreen;
     }
+    
+    class BackOfMenuButtonListener implements ActionListener{
+      public void actionPerformed(ActionEvent event){
+   	     newframe.dispatchEvent(new WindowEvent(newframe, WindowEvent.WINDOW_CLOSING));
+      }
+    }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
 }

@@ -22,9 +22,5 @@ class MenuButtonListener implements ActionListener {
         MenuPanel menuScreen = new MenuPanel(this.frame, this.gui, this.food, this.cuisineChoice);
         this.gui.setPageTitle(menuScreen.getTitle());
 
-        frame.getContentPane().removeAll();        
-        frame.getContentPane().add(menuScreen.getPanel());
-        frame.invalidate();
-        frame.validate();
     }
 }
