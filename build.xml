@@ -5,7 +5,7 @@
 
   <property name="course" value="cs56" />
   <property name="quarter" value="W18" />
-  <property name="mainClass" value="edu.ucsb.cs56.projects.utilities.restaurant_list.GuiUserInput" />
+  <property name="mainClass" value="edu.ucsb.cs56.projects.utilities.restaurant_list.MainPanel" />
   <property name="javadocDest" value="docs/javadoc" /> 
 
 
