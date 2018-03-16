@@ -64,6 +64,6 @@ Winter 18 Final Remarks
 ========================
 
 ```
-W18 | pconrad 12pm | dannycho7,DennisZZH | improves the app to integrate GoogleAPI to include correct restaurant hours and added new features.
+W18 | pconrad 11am | dannycho7,DennisZZH | improves the app to integrate GoogleAPI to include correct restaurant hours and added new features.
 ```
 It is a good way to learn about Java GUIs and industry standard APIs. Coming into the project, we mainly worked on fixing the bugs that existed from the prior year. This involved having to debug network exception issues (url parsing) and other misc errors. Towards the end, we worked to make the code structure more organized; the current state of the code is more object-oriented. One very important thing to do is to upgrade to the Yelp API v3, which is the newest/latest version of the yelp api. If this upgrade hasn't been made by June 2018, the project will likely no longer function. One thing we'd like to see this project implement is a way to incorporate a "recommendations" system based on other restaurant preferences. Overall, this is an okay project, functionally, but provides value if you are looking to learn about networking, APIs, and the Java GUI.
