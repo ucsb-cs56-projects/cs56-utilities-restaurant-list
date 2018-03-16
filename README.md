@@ -56,4 +56,14 @@ Fall 16 Final Remarks
 ```
 F16 | pconrad 5pm | colinmai,N7Alpha | improves the app to integrate GoogleAPI to include correct restaurant hours and added new features.
 ```
-This is probably one of the harder projects, but it is a great way to learn how to use APIs (a very useful skill in real life). You will also develop GUI skills that are applicable to any app you might be working on in the future. Right now, the code is pretty much the same thing as yelp; you can search for restaurants by city and cuisine type. Then you will be presented by menus, hours, reviews, etc. Many features presented in the main menu do not work perfectly yet, such as the option to add your own restaurants. The code right now is a little messy, as the majority of it is dumped into a few files; it might be easier to move seperate parts into new files. Overall, though this code might seem daunting at first, it has great potential and provides a very valuable opportunity to develop real like skill. Good luck and have fun! 
+This is probably one of the harder projects, but it is a great way to learn how to use APIs (a very useful skill in real life). You will also develop GUI skills that are applicable to any app you might be working on in the future. Right now, the code is pretty much the same thing as yelp; you can search for restaurants by city and cuisine type. Then you will be presented by menus, hours, reviews, etc. Many features presented in the main menu do not work perfectly yet, such as the option to add your own restaurants. The code right now is a little messy, as the majority of it is dumped into a few files; it might be easier to move seperate parts into new files. Overall, though this code might seem daunting at first, it has great potential and provides a very valuable opportunity to develop real like skill. Good luck and have fun!
+
+
+========================
+Winter 18 Final Remarks
+========================
+
+```
+W18 | pconrad 11am | dannycho7,DennisZZH | improves the app to integrate GoogleAPI to include correct restaurant hours and added new features.
+```
+It is a good way to learn about Java GUIs and industry standard APIs. Coming into the project, we mainly worked on fixing the bugs that existed from the prior year. This involved having to debug network exception issues (url parsing) and other misc errors. Towards the end, we worked to make the code structure more organized; the current state of the code is more object-oriented. One very important thing to do is to upgrade to the Yelp API v3, which is the newest/latest version of the yelp api. If this upgrade hasn't been made by June 2018, the project will likely no longer function. One thing we'd like to see this project implement is a way to incorporate a "recommendations" system based on other restaurant preferences. Overall, this is an okay project, functionally, but provides value if you are looking to learn about networking, APIs, and the Java GUI.
